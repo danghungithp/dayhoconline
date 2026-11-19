@@ -1,0 +1,127 @@
+import React, { lazy } from 'react';
+import { SimulationMetadata, SchoolLevel, GradeLevel, SubjectId } from '../../types/simulation.types';
+import { CURRICULUM_CATALOG } from '../../data/curriculumCatalog';
+
+// Lazy loading cho các simulation modules đã hoàn thiện
+const AtomBuilderModule = lazy(() => import('../../simulations/chemistry/atom-builder'));
+const SolidGeometry3DModule = lazy(() => import('../../simulations/math-geometry/solid-geometry-3d'));
+const ProjectileMotionModule = lazy(() => import('../../simulations/physics/projectile-motion'));
+const VisualTensesVoiceModule = lazy(() => import('../../simulations/english/visual-tenses-voice'));
+const QuadraticParabolaModule = lazy(() => import('../../simulations/math/quadratic-parabola'));
+
+// Mapping module đã triển khai vào catalog
+export const SIMULATION_REGISTRY: SimulationMetadata[] = CURRICULUM_CATALOG.map(item => {
+  if (item.id === 'chem-atom-builder') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: AtomBuilderModule,
+    };
+  }
+  if (item.id === 'geom-quadrilaterals-thales-pyramids') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: SolidGeometry3DModule,
+    };
+  }
+  if (item.id === 'phys-projectile-collision-energy') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: ProjectileMotionModule,
+    };
+  }
+  if (item.id === 'eng-present-simple-continuous' || item.id === 'eng-past-cont-conditionals-passive') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: VisualTensesVoiceModule,
+    };
+  }
+  if (item.id === 'math-linear-systems-quadratic') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: QuadraticParabolaModule,
+    };
+  }
+  return item;
+});
+
+/**
+ * Lấy danh sách mô phỏng theo bộ lọc
+ */
+export function getFilteredSimulations(filters: {
+  level?: SchoolLevel | 'ALL';
+  grade?: GradeLevel | 'ALL';
+  subject?: SubjectId | 'ALL';
+  searchTerm?: string;
+}): SimulationMetadata[] {
+  return SIMULATION_REGISTRY.filter(sim => {
+    // Lọc cấp học
+    if (filters.level && filters.level !== 'ALL' && sim.level !== filters.level) {
+      return false;
+    }
+
+    // Lọc lớp học
+    if (filters.grade && filters.grade !== 'ALL' && sim.grade !== filters.grade) {
+      return false;
+    }
+
+    // Lọc môn học
+    if (filters.subject && filters.subject !== 'ALL' && sim.subject !== filters.subject) {
+      return false;
+    }
+
+    // Tìm kiếm từ khóa
+    if (filters.searchTerm && filters.searchTerm.trim() !== '') {
+      const q = filters.searchTerm.toLowerCase().trim();
+      const matchTitle = sim.title.toLowerCase().includes(q) || sim.titleEn.toLowerCase().includes(q);
+      const matchDesc = sim.description.toLowerCase().includes(q);
+      const matchTopic = sim.topic.toLowerCase().includes(q);
+      const matchTags = sim.tags.some(t => t.toLowerCase().includes(q));
+      const matchCode = sim.curriculumCode.toLowerCase().includes(q);
+
+      if (!matchTitle && !matchDesc && !matchTopic && !matchTags && !matchCode) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+}
+
+/**
+ * Tìm mô phỏng theo ID
+ */
+export function getSimulationById(id: string): SimulationMetadata | undefined {
+  return SIMULATION_REGISTRY.find(s => s.id === id);
+}
+
+/**
+ * Thống kê tổng quan số lượng bài học theo môn và cấp lớp
+ */
+export function getCurriculumStats() {
+  const total = SIMULATION_REGISTRY.length;
+  const thcsCount = SIMULATION_REGISTRY.filter(s => s.level === 'THCS').length;
+  const thptCount = SIMULATION_REGISTRY.filter(s => s.level === 'THPT').length;
+  const implementedCount = SIMULATION_REGISTRY.filter(s => s.isImplemented).length;
+
+  const subjectCounts: Record<SubjectId, number> = {
+    'toan': SIMULATION_REGISTRY.filter(s => s.subject === 'toan').length,
+    'hinh-hoc': SIMULATION_REGISTRY.filter(s => s.subject === 'hinh-hoc').length,
+    'khtn': SIMULATION_REGISTRY.filter(s => s.subject === 'khtn').length,
+    'vat-ly': SIMULATION_REGISTRY.filter(s => s.subject === 'vat-ly').length,
+    'hoa-hoc': SIMULATION_REGISTRY.filter(s => s.subject === 'hoa-hoc').length,
+    'tieng-anh': SIMULATION_REGISTRY.filter(s => s.subject === 'tieng-anh').length,
+  };
+
+  return {
+    total,
+    thcsCount,
+    thptCount,
+    implementedCount,
+    subjectCounts,
+  };
+}
