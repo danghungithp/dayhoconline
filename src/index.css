@@ -4,7 +4,13 @@
 
 @layer base {
   body {
-    @apply bg-slate-950 text-slate-100 antialiased selection:bg-cyan-500 selection:text-white;
+    @apply antialiased selection:bg-cyan-500 selection:text-white transition-colors duration-200;
+  }
+  html.dark body {
+    @apply bg-slate-950 text-slate-100;
+  }
+  html.light body {
+    @apply bg-slate-50 text-slate-900;
   }
 }
 
