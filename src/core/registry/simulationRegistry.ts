@@ -21,6 +21,14 @@ const ForcesSimpleMachinesModule = lazy(() => import('../../simulations/physics/
 const IntegersFractionsModule = lazy(() => import('../../simulations/math/integers-fractions'));
 const AnglesSymmetryModule = lazy(() => import('../../simulations/math-geometry/angles-symmetry'));
 
+// Modules lớp 8
+const ReactionBalancingModule = lazy(() => import('../../simulations/chemistry/reaction-balancing'));
+const BuoyancyOpticsModule = lazy(() => import('../../simulations/physics/buoyancy-optics'));
+const IdentitiesLinearFuncModule = lazy(() => import('../../simulations/math/identities-linear-func'));
+
+// Modules THPT (Lớp 10)
+const InequalitiesTrigCircleModule = lazy(() => import('../../simulations/math/inequalities-trig-circle'));
+
 // Mapping module đã triển khai vào catalog
 export const SIMULATION_REGISTRY: SimulationMetadata[] = CURRICULUM_CATALOG.map(item => {
   if (item.id === 'chem-atom-builder') {
@@ -112,6 +120,34 @@ export const SIMULATION_REGISTRY: SimulationMetadata[] = CURRICULUM_CATALOG.map(
       ...item,
       isImplemented: true,
       component: AnglesSymmetryModule,
+    };
+  }
+  if (item.id === 'chem-balancing-reactions') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: ReactionBalancingModule,
+    };
+  }
+  if (item.id === 'phys-buoyancy-refraction') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: BuoyancyOpticsModule,
+    };
+  }
+  if (item.id === 'math-identities-linear-func') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: IdentitiesLinearFuncModule,
+    };
+  }
+  if (item.id === 'math-inequalities-trig-circle') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: InequalitiesTrigCircleModule,
     };
   }
   return item;

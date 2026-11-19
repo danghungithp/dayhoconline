@@ -50,7 +50,7 @@ export const CURRICULUM_CATALOG: SimulationMetadata[] = [
     estimatedMinutes: 25,
     tags: ['Cân bằng PTHH', 'Bảo toàn khối lượng', 'Độ tan', 'Nồng độ mol'],
     technology: 'canvas2d',
-    isImplemented: false,
+    isImplemented: true,
   },
   {
     id: 'chem-orbitals-bonding',
@@ -150,7 +150,7 @@ export const CURRICULUM_CATALOG: SimulationMetadata[] = [
     estimatedMinutes: 30,
     tags: ['Ác-si-mét', 'Áp suất', 'Khúc xạ', 'Thấu kính', 'Tiêu cự'],
     technology: 'canvas2d',
-    isImplemented: false,
+    isImplemented: true,
   },
   {
     id: 'phys-dc-circuits-induction',
@@ -266,7 +266,7 @@ export const CURRICULUM_CATALOG: SimulationMetadata[] = [
     estimatedMinutes: 25,
     tags: ['Hằng đẳng thức', 'Diện tích', 'Đồ thị bậc nhất', 'Hệ số góc'],
     technology: 'graph',
-    isImplemented: false,
+    isImplemented: true,
   },
   {
     id: 'math-linear-systems-quadratic',
@@ -298,7 +298,7 @@ export const CURRICULUM_CATALOG: SimulationMetadata[] = [
     estimatedMinutes: 35,
     tags: ['Miền nghiệm', 'Quy hoạch tuyến tính', 'Vòng tròn lượng giác', 'Sin-Cos'],
     technology: 'graph',
-    isImplemented: false,
+    isImplemented: true,
   },
   {
     id: 'math-trig-derivatives-tangent',

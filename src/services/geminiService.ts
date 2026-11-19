@@ -514,6 +514,149 @@ ${uncompleted.length > 0 ? `🎯 **Nhiệm vụ:** *${uncompleted[0].title}*!` :
     }
   }
 
+  // Xử lý bài Hóa học 8: Cân bằng PTHH & Bảo toàn khối lượng
+  if (simulationId === 'chem-balancing-reactions') {
+    const { activeReactionIndex = 0, isBalanced = false, activeTab = 'balance', totalMassReactants = 0, totalMassProducts = 0 } = currentState;
+    const uncompleted = activeQuests.filter(q => !q.completed);
+
+    if (activeTab === 'balance') {
+      return `### 🧪 Gia sư Hóa học 8 (Cân bằng Phương trình Hóa học):
+- **Trạng thái cân bằng:** ${isBalanced ? '✅ **ĐÃ CÂN BẰNG HOÀN TOÀN!** Số nguyên tử của mỗi nguyên tố ở hai vế đã bằng nhau.' : '⚠️ **CHƯA CÂN BẰNG.** Số lượng nguyên tử ở vế trái (chất tham gia) và vế phải (sản phẩm) chưa khớp.'}
+- **Quy tắc vàng:** Em chỉ được thay đổi **Hệ số** đứng trước công thức hóa học, tuyệt đối **không được thay đổi chỉ số chân** trong công thức phân tử!
+- Khi cân bằng: Nên ưu tiên kim loại ➔ phi kim ➔ hiđro ➔ oxi cuối cùng.
+
+${uncompleted.length > 0 ? `🎯 **Thử thách tiếp theo:** *${uncompleted[0].title}*!` : '🎉 Em đã cân bằng xuất sắc các phương trình!'}`;
+    } else {
+      const massMatch = Math.abs(totalMassReactants - totalMassProducts) < 0.01;
+      return `### ⚖️ Gia sư Hóa học 8 (Định luật Bảo toàn khối lượng - Lomonosov & Lavoisier):
+- **Tổng khối lượng chất tham gia:** $m_{trước} = ${Number(totalMassReactants).toFixed(2)}$ g.
+- **Tổng khối lượng sản phẩm:** $m_{sau} = ${Number(totalMassProducts).toFixed(2)}$ g.
+- **Nội dung định luật:** Trong một phản ứng hóa học, tổng khối lượng của các chất sản phẩm bằng tổng khối lượng của các chất tham gia phản ứng:
+  $$\\sum m_{tham\\_gia} = \\sum m_{san\\_pham}$$
+- ${massMatch ? '✨ Khối lượng được bảo toàn chính xác trên đòn cân!' : '⚠️ Hãy cân bằng đúng hệ số để đòn cân thăng bằng nhé!'}`;
+    }
+  }
+
+  // Xử lý bài KHTN 8: Lực đẩy Ác-si-mét & Thấu kính hội tụ
+  if (simulationId === 'phys-buoyancy-refraction') {
+    const { activeTab = 'buoyancy', fluidDensity = 1000, objectDensity = 800, objectVolume = 0.002, lensFocalLength = 10, objectDistance = 25 } = currentState;
+    const uncompleted = activeQuests.filter(q => !q.completed);
+
+    if (activeTab === 'buoyancy') {
+      let stateDesc = objectDensity < fluidDensity ? 'Vật sẽ NỔI lên mặt nước' : objectDensity === fluidDensity ? 'Vật sẽ LƠ LỬNG trong chất lỏng' : 'Vật sẽ CHÌM xuống đáy';
+      return `### 🌊 Gia sư KHTN 8 (Lực đẩy Ác-si-mét & Điều kiện chìm nổi):
+- **Khối lượng riêng chất lỏng:** $D_{lỏng} = ${fluidDensity}$ kg/m³
+- **Khối lượng riêng vật:** $D_{vật} = ${objectDensity}$ kg/m³
+- **Hiện tượng:** **${stateDesc}** (vì $D_{vật} ${objectDensity < fluidDensity ? '<' : objectDensity > fluidDensity ? '>' : '='} D_{lỏng}$).
+- **Công thức Ác-si-mét:** $F_A = d \\cdot V = 10 \\cdot D_{lỏng} \\cdot V_{chìm}$.
+- Khi vật nổi cân bằng: $F_A = P$ (Lực đẩy Ác-si-mét bằng đúng trọng lượng vật).
+
+${uncompleted.length > 0 ? `🎯 **Gợi ý nhiệm vụ:** *${uncompleted[0].title}*!` : '🎉 Tuyệt vời! Em đã thành thạo định luật Ác-si-mét!'}`;
+    } else {
+      const isReal = objectDistance > lensFocalLength;
+      return `### 🔍 Gia sư KHTN 8 (Thấu kính hội tụ & Tạo ảnh quang học):
+- **Tiêu cự thấu kính:** $f = ${lensFocalLength}$ cm.
+- **Khoảng cách vật:** $d = ${objectDistance}$ cm.
+- **Đặc điểm ảnh:** ${isReal ? 'Ảnh **THẬT**, ngược chiều với vật' : 'Ảnh **ẢO**, cùng chiều và lớn hơn vật'}.
+- **Công thức thấu kính:** $\\frac{1}{f} = \\frac{1}{d} + \\frac{1}{d'} \\implies d' = \\frac{d \\cdot f}{d - f}$.
+💡 *Ứng dụng:* Kính lúp (đặt vật $d < f$ tạo ảnh ảo phóng đại), Máy ảnh & Mắt (vật $d > 2f$ tạo ảnh thật thu nhỏ trên võng mạc).
+
+${uncompleted.length > 0 ? `🎯 **Thử thách:** *${uncompleted[0].title}*!` : '🎉 Em đã làm chủ quang học thấu kính!'}`;
+    }
+  }
+
+  // Xử lý bài Toán 8: Hằng đẳng thức diện tích & Hàm số bậc nhất y = ax + b
+  if (simulationId === 'math-identities-linear-func') {
+    const { activeTab = 'identities', identityType = 'square-sum', paramA = 4, paramB = 3, slope1 = 1, intercept1 = 0, slope2 = -1, intercept2 = 2 } = currentState;
+    const uncompleted = activeQuests.filter(q => !q.completed);
+
+    if (activeTab === 'identities') {
+      if (identityType === 'square-sum') {
+        const total = (Number(paramA) + Number(paramB)) ** 2;
+        return `### 📐 Gia sư Toán 8 (Hằng đẳng thức: Bình phương một tổng):
+- **Công thức:** $(a + b)^2 = a^2 + 2ab + b^2$
+- **Phân rã diện tích:** $( ${paramA} + ${paramB} )^2 = ${paramA}^2 + 2 \\cdot ${paramA} \\cdot ${paramB} + ${paramB}^2 = ${Number(paramA)**2} + ${2*Number(paramA)*Number(paramB)} + ${Number(paramB)**2} = ${total}$
+- Hình vuông lớn cạnh $(a+b)$ được chia chính xác thành 4 mảnh: 1 hình vuông xanh ($a^2$), 2 hình chữ nhật ($ab$), và 1 hình vuông đỏ ($b^2$)!
+
+${uncompleted.length > 0 ? `🎯 **Thử thách tiếp theo:** *${uncompleted[0].title}*!` : '🎉 Xuất sắc!'}`;
+      } else {
+        return `### 📐 Gia sư Toán 8 (Hằng đẳng thức diện tích):
+- **Hiệu hai bình phương:** $a^2 - b^2 = (a - b)(a + b)$
+- Khi cắt bỏ hình vuông nhỏ $b^2$ khỏi hình vuông lớn $a^2$, phần diện tích còn lại có dạng chữ L. Khi xoay mảnh chữ nhật và ghép vào cạnh bên, ta thu được đúng một hình chữ nhật có kích thước $(a - b) \\times (a + b)$!
+
+${uncompleted.length > 0 ? `🎯 **Thử thách:** *${uncompleted[0].title}*!` : '🎉 Hoàn hảo!'}`;
+      }
+    } else if (activeTab === 'linear-func') {
+      const a = Number(slope1);
+      const b = Number(intercept1);
+      return `### 📈 Gia sư Toán 8 (Hàm số bậc nhất y = ax + b):
+- **Phương trình:** $y = ${a !== 0 ? `${a}x` : ''} ${b > 0 ? '+ ' + b : b < 0 ? '- ' + Math.abs(b) : ''}$
+- **Hệ số góc $a = ${a}$:** ${a > 0 ? 'Đường thẳng đồng biến (dốc lên từ trái sang phải)' : a < 0 ? 'Đường thẳng nghịch biến (dốc xuống)' : 'Đường thẳng song song trục hoành Ox'}.
+- **Tung độ gốc $b = ${b}$:** Đồ thị luôn cắt trục tung Oy tại điểm $A(0, ${b})$.
+- **Giao điểm với trục hoành Ox:** ${a !== 0 ? `Điểm $B(${(-b/a).toFixed(2)}, 0)$` : 'Không cắt Ox (song song)'}.
+
+${uncompleted.length > 0 ? `🎯 **Nhiệm vụ:** *${uncompleted[0].title}*!` : '🎉 Em đã làm chủ đồ thị hàm số bậc nhất!'}`;
+    } else {
+      const a1 = Number(slope1);
+      const b1 = Number(intercept1);
+      const a2 = Number(slope2);
+      const b2 = Number(intercept2);
+      const isParallel = Math.abs(a1 - a2) < 0.001;
+      const isPerp = Math.abs(a1 * a2 + 1) < 0.001;
+
+      return `### ⚔️ Gia sư Toán 8 (Vị trí tương đối của hai đường thẳng):
+- Đường thẳng $(d_1): y = ${a1}x + ${b1}$ và $(d_2): y = ${a2}x + ${b2}$
+- **Quy tắc ghi nhớ:**
+  * **Song song ($d_1 // d_2$):** khi $a_1 = a_2$ và $b_1 \\neq b_2$.
+  * **Trùng nhau ($d_1 \\equiv d_2$):** khi $a_1 = a_2$ và $b_1 = b_2$.
+  * **Cắt nhau:** khi $a_1 \\neq a_2$.
+  * **Đặc biệt: Vuông góc ($d_1 \\perp d_2$):** khi tích hệ số góc $a_1 \\cdot a_2 = -1$.
+- **Trạng thái hiện tại:** ${isPerp ? '✅ Hai đường thẳng **VUÔNG GÓC** ($a_1 \\cdot a_2 = -1$)' : isParallel ? '✅ Hai đường thẳng **SONG SONG** ($a_1 = a_2$)' : 'Hai đường thẳng **CẮT NHAU** tại một điểm'}.
+
+${uncompleted.length > 0 ? `🎯 **Gợi ý nhiệm vụ:** *${uncompleted[0].title}*!` : '🎉 Em đã thành thạo quan hệ hai đường thẳng!'}`;
+    }
+  }
+
+  // Xử lý bài Toán 10: Vòng tròn lượng giác & Miền nghiệm BPT 2 ẩn
+  if (simulationId === 'math-inequalities-trig-circle') {
+    const { activeTab = 'unit-circle', angleDeg = 45, testPoint = { x: 2, y: 2 }, objectiveA = 4, objectiveB = 3 } = currentState;
+    const uncompleted = activeQuests.filter(q => !q.completed);
+
+    if (activeTab === 'unit-circle') {
+      const rad = ((Number(angleDeg) % 360) * Math.PI) / 180;
+      const sinVal = Math.sin(rad).toFixed(3);
+      const cosVal = Math.cos(rad).toFixed(3);
+
+      return `### ⭕ Gia sư Toán 10 (Vòng tròn lượng giác & Giá trị lượng giác):
+- **Góc hiện tại:** $\\alpha = ${angleDeg}^\\circ$
+- **Tọa độ điểm ngọn M:** $(\\cos \\alpha, \\sin \\alpha) = (${cosVal}, ${sinVal})$
+- **Quy tắc dấu trên 4 góc phần tư:**
+  * Góc phần tư I ($0^\\circ < \\alpha < 90^\\circ$): $\\sin > 0, \\cos > 0, \\tan > 0, \\cot > 0$.
+  * Góc phần tư II ($90^\\circ < \\alpha < 180^\\circ$): $\\sin > 0, \\cos < 0, \\tan < 0, \\cot < 0$.
+  * Góc phần tư III ($180^\\circ < \\alpha < 270^\\circ$): $\\sin < 0, \\cos < 0, \\tan > 0, \\cot > 0$.
+  * Góc phần tư IV ($270^\\circ < \\alpha < 360^\\circ$): $\\sin < 0, \\cos > 0, \\tan < 0, \\cot < 0$.
+- **Hằng đẳng thức lượng giác gốc:** $\\sin^2 \\alpha + \\cos^2 \\alpha = 1$.
+
+${uncompleted.length > 0 ? `🎯 **Thử thách tiếp theo:** *${uncompleted[0].title}*!` : '🎉 Tuyệt vời! Em đã nắm vững vòng tròn lượng giác!'}`;
+    } else {
+      const px = typeof testPoint === 'object' && testPoint !== null ? (testPoint as any).x ?? 2 : 2;
+      const py = typeof testPoint === 'object' && testPoint !== null ? (testPoint as any).y ?? 2 : 2;
+      const fVal = Number(objectiveA) * px + Number(objectiveB) * py;
+
+      return `### 📊 Gia sư Toán 10 (Miền nghiệm hệ BPT & Quy hoạch tuyến tính):
+- **Điểm thử nghiệm:** $M(${px}, ${py})$
+- **Giá trị hàm mục tiêu:** $F(${px}, ${py}) = ${objectiveA} \\cdot ${px} + ${objectiveB} \\cdot ${py} = ${fVal}$
+- **Định lý tối ưu hóa tuyến tính:** Giá trị lớn nhất hoặc nhỏ nhất của biểu thức $F(x, y) = ax + by$ trên miền đa giác nghiệm luôn luôn đạt được tại **ít nhất một trong các đỉnh** của miền đa giác đó!
+- **Phương pháp giải bài toán thực tế:**
+  1. Xác định hệ bất phương trình từ bài toán.
+  2. Vẽ miền nghiệm (đa giác lồi).
+  3. Tìm tọa độ tất cả các đỉnh của đa giác.
+  4. Tính giá trị $F$ tại từng đỉnh và chọn giá trị lớn nhất/nhỏ nhất!
+
+${uncompleted.length > 0 ? `🎯 **Gợi ý nhiệm vụ:** *${uncompleted[0].title}*!` : '🎉 Hoàn hảo! Em đã làm chủ quy hoạch tuyến tính!'}`;
+    }
+  }
+
   // Phản hồi mẫu chung cho các bài học khác
   return `### 🎓 Gia sư STEM & English Lab
 Em đang thao tác bài **${context.simulationTitle}** (Lớp ${context.grade}).

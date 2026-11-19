@@ -22,15 +22,23 @@
 
 ## PHẦN II: DANH MỤC CÁC BÀI DẠY ĐÃ TRIỂN KHAI VÀ LIÊN KẾT MÔ PHỎNG
 
-| Khối lớp | Môn học | Tên bài dạy mô phỏng | Mã bài (ID) | Đường dẫn học trực tiếp |
-| :--- | :--- | :--- | :--- | :--- |
-| **Lớp 7** | KHTN | Cấu tạo nguyên tử & Ghép phân tử | `chem-atom-builder` | `https://dayhoconlineliart.vercel.app/?sim=chem-atom-builder` |
-| **Lớp 7** | KHTN | Quang học phản xạ & Dao động âm thanh | `phys-light-optics-sound` | `https://dayhoconlineliart.vercel.app/?sim=phys-light-optics-sound` |
-| **Lớp 7** | Toán | Số thực, Tỉ lệ thuận/nghịch & Xác suất | `math-real-numbers-proportions` | `https://dayhoconlineliart.vercel.app/?sim=math-real-numbers-proportions` |
-| **Lớp 7** | Hình học | Tam giác bằng nhau & 4 đường đồng quy | `geom-triangles-special-lines` | `https://dayhoconlineliart.vercel.app/?sim=geom-triangles-special-lines` |
-| **Lớp 7** | Tiếng Anh | So sánh hơn/nhất & Past vs. Future | `eng-past-future-comparatives` | `https://dayhoconlineliart.vercel.app/?sim=eng-past-future-comparatives` |
-| **Lớp 8** | Hình học | Tứ giác & Hình học không gian 3D | `geom-quadrilaterals-thales-pyramids` | `https://dayhoconlineliart.vercel.app/?sim=geom-quadrilaterals-thales-pyramids` |
-| **Lớp 8** | Tiếng Anh | Past Continuous & Câu điều kiện loại 1 | `eng-past-cont-conditionals-passive` | `https://dayhoconlineliart.vercel.app/?sim=eng-past-cont-conditionals-passive` |
-| **Lớp 9** | Toán | Hệ phương trình & Parabol bậc hai | `math-linear-systems-quadratic` | `https://dayhoconlineliart.vercel.app/?sim=math-linear-systems-quadratic` |
-| **Lớp 10** | Vật lí | Chuyển động ném xiên & Bảo toàn năng lượng | `phys-projectile-collision-energy` | `https://dayhoconlineliart.vercel.app/?sim=phys-projectile-collision-energy` |
-| **Lớp 6** | Tiếng Anh | Trục thời gian Hiện tại đơn & Tiếp diễn | `eng-present-simple-continuous` | `https://dayhoconlineliart.vercel.app/?sim=eng-present-simple-continuous` |
+| Khối lớp | Môn học | Tên bài dạy mô phỏng | Mã bài (ID) | Trạng thái | Đường dẫn học trực tiếp |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Lớp 6** | KHTN | Các thể của chất & Sự chuyển thể | `chem-states-of-matter` | ✅ Hoàn thành | `https://dayhoconlineliart.vercel.app/?sim=chem-states-of-matter` |
+| **Lớp 6** | KHTN | Lực, Đòn bẩy & Mặt phẳng nghiêng | `phys-forces-simple-machines` | ✅ Hoàn thành | `https://dayhoconlineliart.vercel.app/?sim=phys-forces-simple-machines` |
+| **Lớp 6** | Toán | Số nguyên trên trục số & Phân số trực quan | `math-integers-fractions` | ✅ Hoàn thành | `https://dayhoconlineliart.vercel.app/?sim=math-integers-fractions` |
+| **Lớp 6** | Hình học | Thước đo góc 360°, Trục đối xứng & Tâm đối xứng | `geom-angles-symmetry` | ✅ Hoàn thành | `https://dayhoconlineliart.vercel.app/?sim=geom-angles-symmetry` |
+| **Lớp 6** | Tiếng Anh | Trục thời gian Hiện tại đơn & Tiếp diễn | `eng-present-simple-continuous` | ✅ Hoàn thành | `https://dayhoconlineliart.vercel.app/?sim=eng-present-simple-continuous` |
+| **Lớp 7** | KHTN | Cấu tạo nguyên tử & Ghép phân tử | `chem-atom-builder` | ✅ Hoàn thành | `https://dayhoconlineliart.vercel.app/?sim=chem-atom-builder` |
+| **Lớp 7** | KHTN | Quang học phản xạ & Dao động âm thanh | `phys-light-optics-sound` | ✅ Hoàn thành | `https://dayhoconlineliart.vercel.app/?sim=phys-light-optics-sound` |
+| **Lớp 7** | Toán | Số thực, Tỉ lệ thuận/nghịch & Xác suất | `math-real-numbers-proportions` | ✅ Hoàn thành | `https://dayhoconlineliart.vercel.app/?sim=math-real-numbers-proportions` |
+| **Lớp 7** | Hình học | Tam giác bằng nhau & 4 đường đồng quy | `geom-triangles-special-lines` | ✅ Hoàn thành | `https://dayhoconlineliart.vercel.app/?sim=geom-triangles-special-lines` |
+| **Lớp 7** | Tiếng Anh | So sánh hơn/nhất & Past vs. Future | `eng-past-future-comparatives` | ✅ Hoàn thành | `https://dayhoconlineliart.vercel.app/?sim=eng-past-future-comparatives` |
+| **Lớp 8** | KHTN | Bảo toàn khối lượng & Cân bằng PTHH | `chem-balancing-reactions` | ✅ Hoàn thành | `https://dayhoconlineliart.vercel.app/?sim=chem-balancing-reactions` |
+| **Lớp 8** | KHTN | Lực đẩy Ác-si-mét & Thấu kính hội tụ | `phys-buoyancy-refraction` | ✅ Hoàn thành | `https://dayhoconlineliart.vercel.app/?sim=phys-buoyancy-refraction` |
+| **Lớp 8** | Toán | Hằng đẳng thức diện tích & Hàm bậc nhất $y=ax+b$ | `math-identities-linear-func` | ✅ Hoàn thành | `https://dayhoconlineliart.vercel.app/?sim=math-identities-linear-func` |
+| **Lớp 8** | Hình học | Tứ giác & Hình học không gian 3D | `geom-quadrilaterals-thales-pyramids` | ✅ Hoàn thành | `https://dayhoconlineliart.vercel.app/?sim=geom-quadrilaterals-thales-pyramids` |
+| **Lớp 8** | Tiếng Anh | Past Continuous, Conditionals & Bị động | `eng-past-cont-conditionals-passive` | ✅ Hoàn thành | `https://dayhoconlineliart.vercel.app/?sim=eng-past-cont-conditionals-passive` |
+| **Lớp 9** | Toán | Hệ phương trình & Parabol bậc hai | `math-linear-systems-quadratic` | ✅ Hoàn thành | `https://dayhoconlineliart.vercel.app/?sim=math-linear-systems-quadratic` |
+| **Lớp 10** | Toán | Vòng tròn lượng giác & Miền nghiệm BPT 2 ẩn | `math-inequalities-trig-circle` | ✅ Hoàn thành | `https://dayhoconlineliart.vercel.app/?sim=math-inequalities-trig-circle` |
+| **Lớp 10** | Vật lí | Chuyển động ném xiên & Bảo toàn năng lượng | `phys-projectile-collision-energy` | ✅ Hoàn thành | `https://dayhoconlineliart.vercel.app/?sim=phys-projectile-collision-energy` |
