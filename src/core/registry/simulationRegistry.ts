@@ -15,6 +15,12 @@ const ProportionsProbabilityModule = lazy(() => import('../../simulations/math/p
 const TrianglesCongruenceModule = lazy(() => import('../../simulations/math-geometry/triangles-congruence'));
 const PastFutureComparativesModule = lazy(() => import('../../simulations/english/past-future-comparatives'));
 
+// Modules lớp 6
+const StatesOfMatterModule = lazy(() => import('../../simulations/chemistry/states-of-matter'));
+const ForcesSimpleMachinesModule = lazy(() => import('../../simulations/physics/forces-simple-machines'));
+const IntegersFractionsModule = lazy(() => import('../../simulations/math/integers-fractions'));
+const AnglesSymmetryModule = lazy(() => import('../../simulations/math-geometry/angles-symmetry'));
+
 // Mapping module đã triển khai vào catalog
 export const SIMULATION_REGISTRY: SimulationMetadata[] = CURRICULUM_CATALOG.map(item => {
   if (item.id === 'chem-atom-builder') {
@@ -78,6 +84,34 @@ export const SIMULATION_REGISTRY: SimulationMetadata[] = CURRICULUM_CATALOG.map(
       ...item,
       isImplemented: true,
       component: PastFutureComparativesModule,
+    };
+  }
+  if (item.id === 'chem-states-of-matter') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: StatesOfMatterModule,
+    };
+  }
+  if (item.id === 'phys-forces-simple-machines') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: ForcesSimpleMachinesModule,
+    };
+  }
+  if (item.id === 'math-integers-fractions') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: IntegersFractionsModule,
+    };
+  }
+  if (item.id === 'geom-angles-symmetry') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: AnglesSymmetryModule,
     };
   }
   return item;

@@ -18,7 +18,7 @@ export const CURRICULUM_CATALOG: SimulationMetadata[] = [
     estimatedMinutes: 20,
     tags: ['Nhiệt độ', 'Thể chất', 'Hạt phân tử', 'Động học nhiệt'],
     technology: 'canvas2d',
-    isImplemented: false,
+    isImplemented: true,
   },
   {
     id: 'chem-atom-builder',
@@ -118,7 +118,7 @@ export const CURRICULUM_CATALOG: SimulationMetadata[] = [
     estimatedMinutes: 25,
     tags: ['Lực kế', 'Đòn bẩy', 'Mặt phẳng nghiêng', 'Ma sát'],
     technology: 'canvas2d',
-    isImplemented: false,
+    isImplemented: true,
   },
   {
     id: 'phys-light-optics-sound',
@@ -234,7 +234,7 @@ export const CURRICULUM_CATALOG: SimulationMetadata[] = [
     estimatedMinutes: 20,
     tags: ['Trục số', 'Số nguyên âm', 'Phép nhân chia', 'Phân số'],
     technology: 'canvas2d',
-    isImplemented: false,
+    isImplemented: true,
   },
   {
     id: 'math-real-numbers-proportions',
@@ -350,7 +350,7 @@ export const CURRICULUM_CATALOG: SimulationMetadata[] = [
     estimatedMinutes: 20,
     tags: ['Thước đo góc', 'Đối xứng trục', 'Đối xứng tâm'],
     technology: 'canvas2d',
-    isImplemented: false,
+    isImplemented: true,
   },
   {
     id: 'geom-triangles-special-lines',

@@ -407,6 +407,113 @@ ${uncompleted.length > 0 ? `🎯 **Active Quest:** *${uncompleted[0].title}*!` :
     }
   }
 
+  // Xử lý bài KHTN 6: Các thể của chất & Chuyển thể
+  if (simulationId === 'chem-states-of-matter') {
+    const { substance = 'water', temperatureC = 25, pistonHeight = 0.8 } = currentState;
+    const uncompleted = activeQuests.filter(q => !q.completed);
+
+    let stateStr = temperatureC < 0 ? 'Thể rắn (Băng đá / Tinh thể cố định)' : temperatureC >= 100 ? 'Thể khí / Hơi nước (Bay tự do khắp bình)' : 'Thể lỏng (Linh hoạt ở đáy bình)';
+
+    return `### 🧪 Gia sư KHTN 6 (Các thể của chất & Sự chuyển thể):
+Em đang khảo sát chất **${substance === 'water' ? 'Nước (H₂O)' : substance === 'oxygen' ? 'Khí Oxy (O₂)' : 'Argon'}** ở nhiệt độ: **${temperatureC}°C**:
+- **Trạng thái hiện tại:** **${stateStr}**.
+- **Động học phân tử:**
+  * Thể rắn: Các phân tử liên kết chặt chẽ theo mạng tinh thể, chỉ dao động nhỏ quanh vị trí cân bằng cố định.
+  * Thể lỏng: Liên kết yếu hơn, các hạt trượt tự do quanh nhau, có thể tích xác định nhưng hình dạng theo bình chứa.
+  * Thể khí: Các hạt chuyển động hỗn loạn không ngừng, va chạm vào thành bình tạo ra áp suất.
+- **Áp suất bình:** Tỉ lệ nghịch với thể tích (chiều cao Piston = ${Math.round(pistonHeight * 100)}%).
+
+${uncompleted.length > 0 ? `🎯 **Gợi ý nhiệm vụ:** Thử sức với: *${uncompleted[0].title}*!` : '🎉 Tuyệt vời! Em đã hoàn thành toàn bộ bài chuyển thể chất!'}`;
+  }
+
+  // Xử lý bài KHTN 6: Lực, Đòn bẩy & Mặt phẳng nghiêng
+  if (simulationId === 'phys-forces-simple-machines') {
+    const { mode = 'spring', massGrams = 200, springConstant = 50, loadForceN = 40, loadArmM = 1.0, effortArmM = 2.0, inclineAngleDeg = 30 } = currentState;
+    const uncompleted = activeQuests.filter(q => !q.completed);
+
+    if (mode === 'spring') {
+      const elongCm = ((massGrams * 0.0098) / springConstant * 100).toFixed(1);
+      return `### ⚙️ Gia sư KHTN 6 (Lực kế lò xo & Định luật Hooke):
+- **Quả nặng treo vào:** $m = ${massGrams}$ g ➔ Trọng lượng $P = ${(massGrams * 0.0098).toFixed(2)}$ N.
+- **Độ dãn lò xo:** $\\Delta l = ${elongCm}$ cm.
+- **Định luật Hooke:** Trong giới hạn đàn hồi, lực đàn hồi của lò xo tỉ lệ thuận với độ biến dạng của nó: $F_{đh} = k \\cdot \\Delta l$.
+
+${uncompleted.length > 0 ? `🎯 **Thử thách:** *${uncompleted[0].title}*!` : '🎉 Xuất sắc!'}`;
+    } else if (mode === 'lever') {
+      const advantage = (effortArmM / loadArmM).toFixed(1);
+      const effortN = ((loadForceN * loadArmM) / effortArmM).toFixed(1);
+      return `### ⚙️ Gia sư KHTN 6 (Cơ chế Đòn bẩy có điểm tựa O):
+- **Vật nặng cần nâng:** $F_1 = ${loadForceN}$ N (ở khoảng cách $d_1 = ${loadArmM}$ m).
+- **Lực nâng tác dụng:** $F_2 = ${effortN}$ N (ở khoảng cách $d_2 = ${effortArmM}$ m).
+- **Quy tắc đòn bẩy:** $F_1 \\cdot d_1 = F_2 \\cdot d_2$. Vì $d_2 > d_1$ nên em được **lợi ${advantage} lần về lực**!
+
+${uncompleted.length > 0 ? `🎯 **Nhiệm vụ:** *${uncompleted[0].title}*!` : '🎉 Tuyệt vời!'}`;
+    } else {
+      return `### ⚙️ Gia sư KHTN 6 (Mặt phẳng nghiêng):
+- **Góc nghiêng của dốc:** $\\alpha = ${inclineAngleDeg}^\\circ$.
+- **Lực kéo:** $F = P \\cdot \\sin(\\alpha) = P \\cdot \\frac{h}{l}$.
+💡 *Nguyên lý vàng:* Dốc càng thoai thoải (góc $\\alpha$ càng nhỏ) thì lực kéo vật lên dốc càng nhỏ, giúp tiết kiệm lực nâng!
+
+${uncompleted.length > 0 ? `🎯 **Nhiệm vụ:** *${uncompleted[0].title}*!` : '🎉 Hoàn hảo!'}`;
+    }
+  }
+
+  // Xử lý bài Toán 6: Số nguyên & Phân số
+  if (simulationId === 'math-integers-fractions') {
+    const { mode = 'integers', firstNum = 3, operation = '+', secondNum = -5, numerator = 3, denominator = 4 } = currentState;
+    const uncompleted = activeQuests.filter(q => !q.completed);
+
+    if (mode === 'integers') {
+      const res = operation === '+' ? firstNum + secondNum : firstNum - secondNum;
+      return `### 🔢 Gia sư Toán 6 (Số nguyên trên trục số):
+Em đang thực hiện phép tính: **${firstNum} ${operation} ${secondNum < 0 ? '(' + secondNum + ')' : secondNum} = ${res}**
+- Trên trục số: Gốc $0$ ở giữa, chiều dương sang phải, chiều âm sang trái.
+- Cộng số âm tương đương với đi lùi sang trái.
+- Trừ đi số âm: $a - (-b) = a + b$ (trừ đi số âm biến thành cộng số đối).
+
+${uncompleted.length > 0 ? `🎯 **Gợi ý nhiệm vụ:** *${uncompleted[0].title}*!` : '🎉 Em đã làm chủ phép tính số nguyên!'}`;
+    } else {
+      const pct = ((numerator / denominator) * 100).toFixed(1);
+      return `### 🍕 Gia sư Toán 6 (Phân số trực quan):
+Em đang khảo sát phân số: **$\\frac{${numerator}}{${denominator}}$**
+- **Ý nghĩa:** Một đại lượng được chia đều làm **${denominator} phần bằng nhau**, ta lấy **${numerator} phần** (${pct}%).
+- **Phân số tối giản:** Rút gọn bằng cách chia cả tử và mẫu cho ước chung lớn nhất $\\gcd(${numerator}, ${denominator})$.
+
+${uncompleted.length > 0 ? `🎯 **Thử thách:** *${uncompleted[0].title}*!` : '🎉 Xuất sắc!'}`;
+    }
+  }
+
+  // Xử lý bài Hình học 6: Góc & Đối xứng
+  if (simulationId === 'geom-angles-symmetry') {
+    const { mode = 'angles', angleDeg = 45, foldProgress = 0, rotationAngleDeg = 0 } = currentState;
+    const uncompleted = activeQuests.filter(q => !q.completed);
+
+    if (mode === 'angles') {
+      let angleName = angleDeg === 90 ? 'Góc vuông' : angleDeg === 180 ? 'Góc bẹt' : angleDeg < 90 ? 'Góc nhọn' : 'Góc tù';
+      return `### 📐 Gia sư Hình học 6 (Số đo góc & Thước đo độ):
+- **Số đo góc $\\widehat{xOy}$:** **${angleDeg}^\\circ** (${angleName}).
+- **Quy tắc phân loại:**
+  * Góc nhọn: $0^\\circ < \\alpha < 90^\\circ$.
+  * Góc vuông: $\\alpha = 90^\\circ$ (ký hiệu góc vuông $\\llcorner$).
+  * Góc tù: $90^\\circ < \\alpha < 180^\\circ$.
+  * Góc bẹt: $\\alpha = 180^\\circ$ (hai tia đối nhau).
+
+${uncompleted.length > 0 ? `🎯 **Nhiệm vụ:** *${uncompleted[0].title}*!` : '🎉 Tuyệt vời!'}`;
+    } else if (mode === 'axis-symmetry') {
+      return `### 🦋 Gia sư Hình học 6 (Trục đối xứng):
+- Đường thẳng $d$ là trục đối xứng nếu khi gấp hình theo $d$, hai phần của hình trùng khít lên nhau hoàn toàn.
+- Tiến độ gấp hiện tại: **${Math.round(foldProgress * 100)}\\%** ${foldProgress >= 0.95 ? '(Đã gấp khít hoàn toàn!)' : ''}.
+
+${uncompleted.length > 0 ? `🎯 **Gợi ý nhiệm vụ:** *${uncompleted[0].title}*!` : '🎉 Xuất sắc!'}`;
+    } else {
+      return `### 🔄 Gia sư Hình học 6 (Tâm đối xứng):
+- Điểm $O$ là tâm đối xứng nếu khi quay hình quanh $O$ một góc **180°**, hình trùng khít với chính nó ban đầu.
+- Góc xoay hiện tại: **${rotationAngleDeg}^\\circ** ${rotationAngleDeg === 180 ? '(Đã trùng khít tại 180°!)' : ''}.
+
+${uncompleted.length > 0 ? `🎯 **Nhiệm vụ:** *${uncompleted[0].title}*!` : '🎉 Rất tốt!'}`;
+    }
+  }
+
   // Phản hồi mẫu chung cho các bài học khác
   return `### 🎓 Gia sư STEM & English Lab
 Em đang thao tác bài **${context.simulationTitle}** (Lớp ${context.grade}).
