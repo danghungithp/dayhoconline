@@ -1,94 +1,58 @@
-import { CalculatedAtomOutputs } from './physicsEngine';
+import { CustomQuestItem } from '../../../types/assignment.types';
 
-export interface SimulationStateInput {
-  protons: number;
-  neutrons: number;
-  electrons: number;
-  mode: 'atom' | 'molecule';
-  selectedMoleculeId: string | null;
-  outputs: CalculatedAtomOutputs;
-}
-
-export interface SimulationQuest {
-  id: string;
-  title: string;
-  description: string;
-  hint: string;
-  xpReward: number;
-  checkCompleted: (state: SimulationStateInput) => boolean;
-  targetCondition: (state: any) => boolean; // Tương thích SandboxLayout
-}
-
-export const ATOM_BUILDER_QUESTS: SimulationQuest[] = [
+export const DEFAULT_ATOM_QUESTS: CustomQuestItem[] = [
   {
-    id: 'quest-carbon-12',
-    title: 'Nhiệm vụ 1: Tạo nguyên tử Cacbon-12 trung hòa (¹²C)',
-    description: 'Lắp ráp 6 Proton, 6 Neutron và 6 Electron. Đây là nguyên tử chuẩn mốc 1 amu (đơn vị khối lượng nguyên tử quốc tế).',
-    hint: 'Nhấn nút "+" ở cả 3 ô sao cho Proton = 6, Neutron = 6, Electron = 6. Lúc này điện tích ròng q = 0.',
-    xpReward: 30,
-    checkCompleted: state => {
-      return state.protons === 6 && state.neutrons === 6 && state.electrons === 6 && state.outputs.netCharge === 0;
-    },
-    targetCondition: (state: any) => {
-      const p = state.protons;
-      const n = state.neutrons;
-      const e = state.electrons;
-      return p === 6 && n === 6 && e === 6;
-    },
+    id: 'atom-q1-carbon-12',
+    title: '1. Tạo nguyên tử Cacbon-12 trung hòa',
+    instruction: 'Thiết lập 6 Proton, 6 Neutron và 6 Electron để tạo nguyên tử 12C trung hòa điện.',
+    points: 20,
+    logic: 'ALL',
+    conditions: [
+      { id: 'c1', source: 'parameters', fieldKey: 'protons', fieldLabel: 'Số proton', operator: 'eq', value: 6 },
+      { id: 'c2', source: 'parameters', fieldKey: 'neutrons', fieldLabel: 'Số neutron', operator: 'eq', value: 6 },
+      { id: 'c3', source: 'parameters', fieldKey: 'electrons', fieldLabel: 'Số electron', operator: 'eq', value: 6 },
+    ],
+    hint: 'Cacbon có số hiệu nguyên tử Z = 6, số khối A = 12 nên số neutron = 12 - 6 = 6.',
   },
   {
-    id: 'quest-sodium-cation',
-    title: 'Nhiệm vụ 2: Tạo Cation Natri (Na⁺)',
-    description: 'Tạo ion Natri dương bằng cách lắp 11 Proton, 12 Neutron và chỉ 10 Electron (nhường 1 electron ở lớp ngoài cùng M).',
-    hint: 'Chỉnh Proton = 11, Neutron = 12, Electron = 10. Quan sát điện tích đổi thành +1 và lớp vỏ M(1) biến mất.',
-    xpReward: 40,
-    checkCompleted: state => {
-      return state.protons === 11 && state.neutrons === 12 && state.electrons === 10 && state.outputs.netCharge === 1;
-    },
-    targetCondition: (state: any) => {
-      return state.protons === 11 && state.neutrons === 12 && state.electrons === 10;
-    },
+    id: 'atom-q2-sodium-cation',
+    title: '2. Tạo ion dương Natri (Na+)',
+    instruction: 'Tạo hạt có 11 Proton, 12 Neutron và nhường bớt 1 electron so với nguyên tử trung hòa (còn 10 Electron).',
+    points: 25,
+    logic: 'ALL',
+    conditions: [
+      { id: 'c4', source: 'parameters', fieldKey: 'protons', fieldLabel: 'Số proton', operator: 'eq', value: 11 },
+      { id: 'c5', source: 'parameters', fieldKey: 'neutrons', fieldLabel: 'Số neutron', operator: 'eq', value: 12 },
+      { id: 'c6', source: 'parameters', fieldKey: 'electrons', fieldLabel: 'Số electron', operator: 'eq', value: 10 },
+      { id: 'c7', source: 'calculatedOutputs', fieldKey: 'charge', fieldLabel: 'Điện tích', operator: 'eq', value: 1 },
+    ],
+    hint: 'Khi số proton (11) lớn hơn số electron (10), hạt mang điện tích +1.',
   },
   {
-    id: 'quest-chloride-anion',
-    title: 'Nhiệm vụ 3: Tạo Anion Clorua (Cl⁻)',
-    description: 'Tạo ion Clo âm bằng cách lắp 17 Proton, 18 Neutron và 18 Electron (nhận thêm 1 electron để đạt cấu hình bền khí hiếm Argon).',
-    hint: 'Chỉnh Proton = 17, Neutron = 18, Electron = 18. Điện tích đạt -1 và lớp ngoài cùng M đạt 8 electron bão hòa.',
-    xpReward: 40,
-    checkCompleted: state => {
-      return state.protons === 17 && state.neutrons === 18 && state.electrons === 18 && state.outputs.netCharge === -1;
-    },
-    targetCondition: (state: any) => {
-      return state.protons === 17 && state.neutrons === 18 && state.electrons === 18;
-    },
+    id: 'atom-q3-chloride-anion',
+    title: '3. Tạo ion âm Clorua (Cl-)',
+    instruction: 'Tạo hạt có 17 Proton, 18 Neutron và nhận thêm 1 electron (tổng 18 Electron) để đạt điện tích -1.',
+    points: 25,
+    logic: 'ALL',
+    conditions: [
+      { id: 'c8', source: 'parameters', fieldKey: 'protons', fieldLabel: 'Số proton', operator: 'eq', value: 17 },
+      { id: 'c9', source: 'parameters', fieldKey: 'neutrons', fieldLabel: 'Số neutron', operator: 'eq', value: 18 },
+      { id: 'c10', source: 'parameters', fieldKey: 'electrons', fieldLabel: 'Số electron', operator: 'eq', value: 18 },
+      { id: 'c11', source: 'calculatedOutputs', fieldKey: 'charge', fieldLabel: 'Điện tích', operator: 'eq', value: -1 },
+    ],
+    hint: 'Clo có Z = 17; nhận thêm 1 electron sẽ có 18 electron và điện tích -1.',
   },
   {
-    id: 'quest-carbon-14',
-    title: 'Nhiệm vụ 4: Tạo đồng vị phóng xạ Cacbon-14 (¹⁴C)',
-    description: 'Chế tạo hạt nhân Cacbon-14 gồm 6 Proton, 8 Neutron và 6 Electron. Đây là đồng vị phóng xạ β⁻ nổi tiếng dùng để định tuổi hóa thạch cổ vật.',
-    hint: 'Giữ Proton = 6, Electron = 6, nhưng tăng Neutron lên 8. Xem hạt nhân kích hoạt rung lắc cảnh báo phóng xạ!',
-    xpReward: 50,
-    checkCompleted: state => {
-      return state.protons === 6 && state.neutrons === 8 && state.electrons === 6 && !state.outputs.isStable;
-    },
-    targetCondition: (state: any) => {
-      return state.protons === 6 && state.neutrons === 8 && state.electrons === 6;
-    },
-  },
-  {
-    id: 'quest-water-or-co2',
-    title: 'Nhiệm vụ 5: Ghép thành công phân tử Nước (H₂O) hoặc CO₂',
-    description: 'Chuyển sang "Chế độ Ghép phân tử" và chọn xem phân tử Nước (H₂O) hoặc Cacbon Đioxit (CO₂) để quan sát cấu trúc liên kết cộng hóa trị.',
-    hint: 'Nhấp sang tab "Ghép phân tử" trên bảng điều khiển, sau đó chọn H₂O hoặc CO₂.',
-    xpReward: 60,
-    checkCompleted: state => {
-      return state.mode === 'molecule' && (state.selectedMoleculeId === 'H2O' || state.selectedMoleculeId === 'CO2');
-    },
-    targetCondition: (state: any) => {
-      return (
-        state.mode === 'molecule' &&
-        (state.selectedMoleculeId === 'H2O' || state.selectedMoleculeId === 'CO2' || state.activeMolecule === 'H2O' || state.activeMolecule === 'CO2')
-      );
-    },
+    id: 'atom-q4-carbon-14',
+    title: '4. Tạo đồng vị phóng xạ Cacbon-14',
+    instruction: 'Giữ 6 Proton và 6 Electron, tăng số Neutron lên 8 để tạo đồng vị 14C.',
+    points: 30,
+    logic: 'ALL',
+    conditions: [
+      { id: 'c12', source: 'parameters', fieldKey: 'protons', fieldLabel: 'Số proton', operator: 'eq', value: 6 },
+      { id: 'c13', source: 'parameters', fieldKey: 'neutrons', fieldLabel: 'Số neutron', operator: 'eq', value: 8 },
+      { id: 'c14', source: 'calculatedOutputs', fieldKey: 'massNumber', fieldLabel: 'Số khối A', operator: 'eq', value: 14 },
+    ],
+    hint: 'Số khối A = Proton + Neutron = 6 + 8 = 14.',
   },
 ];

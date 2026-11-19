@@ -1,5 +1,20 @@
 import { AISnapshotContext } from '../types/simulation.types';
 
+export interface SimulationAIContext {
+  simulationId: string;
+  title: string;
+  subject: string;
+  grade: number;
+  parameters: Record<string, unknown>;
+  calculatedOutputs: Record<string, unknown>;
+  activeQuest?: {
+    id: string;
+    prompt: string;
+    isCompleted: boolean;
+  };
+  summaryForAI: string;
+}
+
 const GEMINI_API_KEY_STORAGE = 'STEM_LAB_GEMINI_API_KEY';
 
 export function getStoredGeminiKey(): string {
