@@ -134,7 +134,7 @@ export const CURRICULUM_CATALOG: SimulationMetadata[] = [
     estimatedMinutes: 25,
     tags: ['Tia sáng', 'Gương phẳng', 'Sóng âm', 'Tần số', 'Biên độ'],
     technology: 'canvas2d',
-    isImplemented: false,
+    isImplemented: true,
   },
   {
     id: 'phys-buoyancy-refraction',
@@ -250,7 +250,7 @@ export const CURRICULUM_CATALOG: SimulationMetadata[] = [
     estimatedMinutes: 25,
     tags: ['Căn bậc hai', 'Tỉ lệ thuận', 'Tỉ lệ nghịch', 'Xác suất thực nghiệm'],
     technology: 'graph',
-    isImplemented: false,
+    isImplemented: true,
   },
   {
     id: 'math-identities-linear-func',
@@ -366,7 +366,7 @@ export const CURRICULUM_CATALOG: SimulationMetadata[] = [
     estimatedMinutes: 30,
     tags: ['Tam giác', 'Trọng tâm', 'Trực tâm', 'Đồng quy', 'Tam giác bằng nhau'],
     technology: 'canvas2d',
-    isImplemented: false,
+    isImplemented: true,
   },
   {
     id: 'geom-quadrilaterals-thales-pyramids',
@@ -482,7 +482,7 @@ export const CURRICULUM_CATALOG: SimulationMetadata[] = [
     estimatedMinutes: 25,
     tags: ['Quá khứ đơn', 'Tương lai đơn', 'So sánh hơn', 'So sánh nhất'],
     technology: 'speech-ai',
-    isImplemented: false,
+    isImplemented: true,
   },
   {
     id: 'eng-past-cont-conditionals-passive',

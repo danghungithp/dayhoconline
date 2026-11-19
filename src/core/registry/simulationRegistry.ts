@@ -9,6 +9,12 @@ const ProjectileMotionModule = lazy(() => import('../../simulations/physics/proj
 const VisualTensesVoiceModule = lazy(() => import('../../simulations/english/visual-tenses-voice'));
 const QuadraticParabolaModule = lazy(() => import('../../simulations/math/quadratic-parabola'));
 
+// Modules lớp 7
+const LightOpticsSoundModule = lazy(() => import('../../simulations/physics/light-optics-sound'));
+const ProportionsProbabilityModule = lazy(() => import('../../simulations/math/proportions-probability'));
+const TrianglesCongruenceModule = lazy(() => import('../../simulations/math-geometry/triangles-congruence'));
+const PastFutureComparativesModule = lazy(() => import('../../simulations/english/past-future-comparatives'));
+
 // Mapping module đã triển khai vào catalog
 export const SIMULATION_REGISTRY: SimulationMetadata[] = CURRICULUM_CATALOG.map(item => {
   if (item.id === 'chem-atom-builder') {
@@ -44,6 +50,34 @@ export const SIMULATION_REGISTRY: SimulationMetadata[] = CURRICULUM_CATALOG.map(
       ...item,
       isImplemented: true,
       component: QuadraticParabolaModule,
+    };
+  }
+  if (item.id === 'phys-light-optics-sound') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: LightOpticsSoundModule,
+    };
+  }
+  if (item.id === 'math-real-numbers-proportions') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: ProportionsProbabilityModule,
+    };
+  }
+  if (item.id === 'geom-triangles-special-lines') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: TrianglesCongruenceModule,
+    };
+  }
+  if (item.id === 'eng-past-future-comparatives') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: PastFutureComparativesModule,
     };
   }
   return item;

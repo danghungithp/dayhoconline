@@ -281,6 +281,132 @@ ${uncompleted.length > 0 ? `\n🎯 **Thử thách tiếp theo:** *${uncompleted[
     }
   }
 
+  // Xử lý bài KHTN 7: Quang học phản xạ & Dao động âm thanh
+  if (simulationId === 'phys-light-optics-sound') {
+    const { activeTab = 'optics', mirrorType = 'plane', incidentAngleDeg = 45, frequency = 440, amplitude = 60, isPlaying = false } = currentState;
+    const uncompleted = activeQuests.filter(q => !q.completed);
+
+    if (activeTab === 'optics') {
+      const absI = Math.abs(incidentAngleDeg);
+      return `### 💡 Gia sư KHTN 7 (Quang học phản xạ & Khúc xạ ánh sáng):
+Em đang thực hiện thí nghiệm quang học với:
+- **Dụng cụ:** ${mirrorType === 'plane' ? 'Gương phẳng' : mirrorType === 'concave' ? 'Gương cầu lõm' : mirrorType === 'convex' ? 'Gương cầu lồi' : 'Mặt phân cách khúc xạ'}.
+- **Góc tới:** $i = ${absI}^\\circ$ (so với pháp tuyến $N$).
+- **Góc phản xạ:** $i' = ${absI}^\\circ$ ${mirrorType === 'plane' ? '(Định luật phản xạ: Góc phản xạ luôn luôn bằng góc tới $i\' = i$ và nằm trong cùng mặt phẳng tới).' : ''}
+${mirrorType === 'refraction' ? '👉 Khi tia sáng đi qua mặt phân cách giữa 2 môi trường có chiết suất khác nhau, tia sáng bị gãy khúc theo định luật Snell-Descartes: $n_1 \\sin(i) = n_2 \\sin(r)$.' : ''}
+
+${uncompleted.length > 0 ? `🎯 **Gợi ý nhiệm vụ:** Hãy thử hoàn thành: *${uncompleted[0].title}*!` : '🎉 Xuất sắc! Em đã nắm vững định luật quang học!'}`;
+    } else {
+      const periodMs = ((1 / frequency) * 1000).toFixed(2);
+      const wavelengthM = (343 / frequency).toFixed(2);
+      return `### 🎵 Gia sư KHTN 7 (Dao động âm thanh & Sóng âm):
+Em đang khảo sát nguồn âm phát ra:
+- **Tần số (Độ cao của âm):** $f = ${frequency}$ Hz ➔ Chu kỳ $T = ${periodMs}$ ms, Bước sóng $\\lambda = ${wavelengthM}$ m trong không khí ($v = 343$ m/s).
+- **Phân loại âm:** ${frequency < 250 ? 'Âm trầm (Bass)' : frequency > 1000 ? 'Âm bổng (Treble)' : 'Âm trung (Midtone)'}.
+- **Biên độ (Độ to của âm):** $A = ${amplitude}\\%$ — ${isPlaying ? '🔊 Âm thanh đang phát trực tiếp.' : 'Đang tạm dừng.'}
+💡 *Ghi nhớ:* Tần số quyết định **độ cao** (bổng/trầm), còn biên độ dao động quyết định **độ to** (to/nhỏ) của âm thanh!
+
+${uncompleted.length > 0 ? `🎯 **Thử thách tiếp theo:** *${uncompleted[0].title}*!` : '🎉 Tuyệt vời! Em đã hoàn thành các nhiệm vụ về âm thanh!'}`;
+    }
+  }
+
+  // Xử lý bài Toán 7: Số thực, Đại lượng tỉ lệ & Xác suất
+  if (simulationId === 'math-real-numbers-proportions') {
+    const { mode = 'direct', k = 2, a = 12, squareArea = 49, stats = { totalSpins: 0 } } = currentState;
+    const uncompleted = activeQuests.filter(q => !q.completed);
+
+    if (mode === 'direct') {
+      return `### 📐 Gia sư Toán 7 (Đại lượng tỉ lệ thuận $y = kx$):
+Em đang khảo sát hàm số tỉ lệ thuận với hệ số tỉ lệ: **$k = ${k}$**
+- **Phương trình:** $y = ${k}x$.
+- **Đồ thị:** Là đường thẳng luôn đi qua gốc tọa độ $O(0, 0)$.
+- **Tính chất trọng tâm:** Tỉ số giữa hai giá trị tương ứng luôn bằng hệ số tỉ lệ: $\\frac{y_1}{x_1} = \\frac{y_2}{x_2} = k = ${k}$.
+
+${uncompleted.length > 0 ? `🎯 **Nhiệm vụ gợi ý:** *${uncompleted[0].title}*!` : '🎉 Quá đỉnh! Em đã làm chủ đại lượng tỉ lệ thuận!'}`;
+    } else if (mode === 'inverse') {
+      return `### 📐 Gia sư Toán 7 (Đại lượng tỉ lệ nghịch $y = \\frac{a}{x}$):
+Em đang khảo sát hàm số tỉ lệ nghịch với hệ số tỉ lệ: **$a = ${a}$**
+- **Phương trình:** $y = \\frac{${a}}{x} \\iff x \\cdot y = ${a}$.
+- **Ý nghĩa hình học:** Điểm $M(x, y)$ trên đường cong cùng gốc tọa độ luôn tạo thành hình chữ nhật có diện tích không đổi **$S = x \\cdot y = ${a}$**!
+
+${uncompleted.length > 0 ? `🎯 **Nhiệm vụ gợi ý:** *${uncompleted[0].title}*!` : '🎉 Quá đỉnh! Em đã làm chủ đại lượng tỉ lệ nghịch!'}`;
+    } else if (mode === 'sqrt') {
+      const side = Math.sqrt(squareArea);
+      return `### 🟩 Gia sư Toán 7 (Căn bậc hai số học):
+Em đang khảo sát diện tích hình vuông: **$S = ${squareArea}$**
+- Căn bậc hai số học của $S$ là độ dài cạnh hình vuông: **$a = \\sqrt{${squareArea}} = ${side.toFixed(2)}$**.
+- Phép toán: $(\\sqrt{${squareArea}})^2 = ${squareArea}$. ${Number.isInteger(side) ? `Đây là số chính phương ($${side}^2 = ${squareArea}$).` : 'Đây là số vô tỉ trong tập số thực $\\mathbb{R}$.'}
+
+${uncompleted.length > 0 ? `🎯 **Nhiệm vụ gợi ý:** *${uncompleted[0].title}*!` : '🎉 Xuất sắc!'}`;
+    } else {
+      return `### 🎯 Gia sư Toán 7 (Xác suất thực nghiệm & Luật số lớn):
+Em đã thực hiện quay vòng quay may mắn: **${stats.totalSpins} lượt**.
+- Khi số lần quay càng lớn ($N \\to \\infty$), tần số xuất hiện của mỗi màu sẽ dần tiến sát về **xác suất lý thuyết 25%** ($1/4$).
+- Đây chính là **Định luật số lớn (Law of Large Numbers)** do nhà toán học Bernoulli chứng minh!
+
+${uncompleted.length > 0 ? `🎯 **Nhiệm vụ tiếp theo:** *${uncompleted[0].title}*!` : '🎉 Tuyệt vời! Em đã hoàn thành kiểm nghiệm xác suất!'}`;
+    }
+  }
+
+  // Xử lý bài Hình học 7: Tam giác bằng nhau & 4 đường đồng quy
+  if (simulationId === 'geom-triangles-special-lines') {
+    const { activeTab = 'concurrence', showMedians, showAngleBisectors, showPerpendicularBisectors, showAltitudes, showEulerLine, showPythagorasSquares } = currentState;
+    const uncompleted = activeQuests.filter(q => !q.completed);
+
+    if (activeTab === 'concurrence') {
+      return `### 📐 Gia sư Hình học 7 (4 Đường đồng quy trong tam giác):
+Em đang khảo sát các đường đặc biệt:
+- **3 đường trung tuyến:** Cắt nhau tại **Trọng tâm $G$** (Centroid). Tính chất: $GA = \\frac{2}{3} AM$.
+- **3 đường phân giác:** Cắt nhau tại **Tâm đường tròn nội tiếp $I$** (Incenter) cách đều 3 cạnh.
+- **3 đường trung trực:** Cắt nhau tại **Tâm đường tròn ngoại tiếp $O$** (Circumcenter) cách đều 3 đỉnh.
+- **3 đường cao:** Cắt nhau tại **Trực tâm $H$** (Orthocenter).
+${showEulerLine ? '👉 **Đường thẳng Euler:** Ba điểm $O, G, H$ luôn luôn thẳng hàng trong mọi tam giác!' : ''}
+
+${uncompleted.length > 0 ? `🎯 **Gợi ý nhiệm vụ:** *${uncompleted[0].title}*!` : '🎉 Rất xuất sắc! Em đã thông thạo 4 đường đồng quy!'}`;
+    } else if (activeTab === 'congruence') {
+      return `### 📐 Gia sư Hình học 7 (Các trường hợp bằng nhau của tam giác):
+- **c-c-c (Cạnh - Cạnh - Cạnh):** 3 cặp cạnh bằng nhau.
+- **c-g-c (Cạnh - Góc - Cạnh):** 2 cạnh và góc xen giữa bằng nhau.
+- **g-c-g (Góc - Cạnh - Góc):** 1 cạnh và 2 góc kề bằng nhau.
+- **Tam giác vuông:** Cạnh huyền - Góc nhọn hoặc Cạnh huyền - Cạnh góc vuông.
+
+${uncompleted.length > 0 ? `🎯 **Gợi ý nhiệm vụ:** *${uncompleted[0].title}*!` : '🎉 Hoàn hảo!'}`;
+    } else {
+      return `### 📐 Gia sư Hình học 7 (Định lý Pythagore trong tam giác vuông):
+- Trong một tam giác vuông, bình phương của cạnh huyền bằng tổng bình phương hai cạnh góc vuông:
+  $$a^2 = b^2 + c^2$$
+- Mô hình diện tích minh họa trực quan: Tổng diện tích 2 hình vuông trên 2 cạnh góc vuông đúng bằng diện tích hình vuông trên cạnh huyền!
+
+${uncompleted.length > 0 ? `🎯 **Gợi ý nhiệm vụ:** *${uncompleted[0].title}*!` : '🎉 Em đã làm chủ định lý Pythagore!'}`;
+    }
+  }
+
+  // Xử lý bài Tiếng Anh 7: Past Simple vs Future & Comparatives
+  if (simulationId === 'eng-past-future-comparatives') {
+    const { activeTab = 'comparatives', attribute = 'speed', category = 'animals' } = currentState;
+    const uncompleted = activeQuests.filter(q => !q.completed);
+
+    if (activeTab === 'comparatives') {
+      return `### 🌟 English 7 Tutor (Comparatives & Superlatives):
+You are practicing comparisons with **${category}** by **${attribute}**:
+- **Comparative structure (So sánh hơn):**
+  - Short Adjective: \`Subject + is/are + adj-er + than + Object\` (e.g., *faster than*, *heavier than*, *taller than*).
+  - Long Adjective: \`Subject + is/are + more + adj + than + Object\` (e.g., *more dangerous than*).
+- **Superlative structure (So sánh nhất):**
+  - \`Subject + is/are + the + adj-est\` (e.g., *the fastest animal*, *the tallest giraffe*).
+💡 *Tip:* Click the speaker button to listen to native pronunciation!
+
+${uncompleted.length > 0 ? `🎯 **Active Quest:** *${uncompleted[0].title}*!` : '🎉 Awesome job! You have mastered English comparatives!'}`;
+    } else {
+      return `### 🌟 English 7 Tutor (Past Simple vs Future Tenses):
+- **Past Simple (Quá khứ đơn):** Actions completed in the past with specific time tags (*yesterday, last year, 2 days ago*). Formula: \`S + V-ed / V2\`.
+- **Future with Will (Tương lai đơn):** Instant decisions made at the moment of speaking or subjective predictions without present evidence. Formula: \`S + will + V-inf\`.
+- **Future with Be going to (Tương lai gần):** Prior plans, intentions, or predictions based on clear present evidence. Formula: \`S + am/is/are + going to + V-inf\`.
+
+${uncompleted.length > 0 ? `🎯 **Active Quest:** *${uncompleted[0].title}*!` : '🎉 Well done!'}`;
+    }
+  }
+
   // Phản hồi mẫu chung cho các bài học khác
   return `### 🎓 Gia sư STEM & English Lab
 Em đang thao tác bài **${context.simulationTitle}** (Lớp ${context.grade}).
