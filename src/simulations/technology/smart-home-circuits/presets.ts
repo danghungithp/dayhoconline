@@ -1,0 +1,58 @@
+import { PresetState } from '../../../types/simulation.types';
+
+export const SMART_HOME_PRESETS: PresetState[] = [
+  {
+    id: 'preset-night-lights',
+    name: 'Kịch bản Ban đêm: Đèn ban công tự bật',
+    description: 'Ánh sáng môi trường giảm xuống 40 Lux (Đêm tối), cảm biến quang trở LDR kích hoạt rơ-le tự động bật sáng đèn chiếu sáng.',
+    state: {
+      viewMode: 'house-view',
+      ambientLightLux: 40,
+      temperatureC: 27,
+      motionDetected: false,
+      lightThresholdLux: 200,
+      tempThresholdC: 32,
+      isAutoMode: true,
+      isBalconyLightOn: true,
+      isLivingRoomLightOn: false,
+      isCoolingFanOn: false,
+      alarmBuzzerActive: false,
+    },
+  },
+  {
+    id: 'preset-hot-summer-fan',
+    name: 'Kịch bản Mùa hè: Quạt làm mát tự động',
+    description: 'Nhiệt độ phòng tăng lên 36°C (vượt ngưỡng 32°C), cảm biến nhiệt kích hoạt động cơ quạt quay tít làm mát tự động.',
+    state: {
+      viewMode: 'house-view',
+      ambientLightLux: 800,
+      temperatureC: 36,
+      motionDetected: false,
+      lightThresholdLux: 200,
+      tempThresholdC: 32,
+      isAutoMode: true,
+      isBalconyLightOn: false,
+      isLivingRoomLightOn: false,
+      isCoolingFanOn: true,
+      alarmBuzzerActive: false,
+    },
+  },
+  {
+    id: 'preset-motion-welcome',
+    name: 'Kịch bản Chào đón: PIR phát hiện người bước vào',
+    description: 'Cảm biến chuyển động PIR nhận diện người ở cửa ra vào, tự động kích hoạt đèn phòng khách sáng rực rỡ.',
+    state: {
+      viewMode: 'house-view',
+      ambientLightLux: 100,
+      temperatureC: 28,
+      motionDetected: true,
+      lightThresholdLux: 200,
+      tempThresholdC: 32,
+      isAutoMode: true,
+      isBalconyLightOn: true,
+      isLivingRoomLightOn: true,
+      isCoolingFanOn: false,
+      alarmBuzzerActive: false,
+    },
+  },
+];

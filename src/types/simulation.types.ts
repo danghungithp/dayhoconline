@@ -36,7 +36,11 @@ export interface Quest {
   targetCondition: (state: any) => boolean;
   completed?: boolean;
   xpReward: number;
+  points?: number;
+  isCompleted?: (state: any) => boolean;
 }
+
+export type CustomQuestItem = Quest;
 
 export interface PresetState<T = any> {
   id: string;

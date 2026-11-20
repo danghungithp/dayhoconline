@@ -34,6 +34,13 @@ const GeneticsMendelModule = lazy(() => import('../../simulations/biology/geneti
 const BinaryLogicModule = lazy(() => import('../../simulations/informatics/binary-logic'));
 const EarthSeasonsModule = lazy(() => import('../../simulations/geography/earth-seasons'));
 
+// Các modules phòng thí nghiệm thực hành bổ sung mới
+const DcCircuitsInductionModule = lazy(() => import('../../simulations/physics/dc-circuits-induction'));
+const DissociationPhModule = lazy(() => import('../../simulations/chemistry/dissociation-ph'));
+const AlgorithmsFlowchartModule = lazy(() => import('../../simulations/informatics/algorithms-flowchart'));
+const CellDivisionMitosisModule = lazy(() => import('../../simulations/biology/cell-division-mitosis'));
+const SmartHomeCircuitsModule = lazy(() => import('../../simulations/technology/smart-home-circuits'));
+
 // Mapping module đã triển khai vào catalog
 export const SIMULATION_REGISTRY: SimulationMetadata[] = CURRICULUM_CATALOG.map(item => {
   if (item.id === 'chem-atom-builder') {
@@ -174,6 +181,41 @@ export const SIMULATION_REGISTRY: SimulationMetadata[] = CURRICULUM_CATALOG.map(
       ...item,
       isImplemented: true,
       component: EarthSeasonsModule,
+    };
+  }
+  if (item.id === 'phys-dc-circuits-induction') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: DcCircuitsInductionModule,
+    };
+  }
+  if (item.id === 'chem-dissociation-organic-3d') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: DissociationPhModule,
+    };
+  }
+  if (item.id === 'cs-algorithms-flowchart') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: AlgorithmsFlowchartModule,
+    };
+  }
+  if (item.id === 'bio-cell-division-mitosis') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: CellDivisionMitosisModule,
+    };
+  }
+  if (item.id === 'tech-circuits-smart-home') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: SmartHomeCircuitsModule,
     };
   }
   return item;

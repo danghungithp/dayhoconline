@@ -20,7 +20,17 @@ if (!apiKey) {
   process.exit(1);
 }
 
-const ai = new GoogleGenAI({ apiKey });
+// Cấu hình Model Gemini (Tự động thích ứng phiên bản mới nhất theo thông báo từ Google API)
+let activeModel = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
+const CANDIDATE_MODELS = [...new Set([
+  activeModel,
+  'gemini-3.8-flash',
+  'gemini-2.5-flash',
+  'gemini-2.0-flash',
+  'gemini-1.5-flash'
+])];
+
+console.log(`🤖 Model Gemini mặc định: ${activeModel}`);
 
 // Bảng chuẩn hóa tên môn học tiếng Việt
 const SUBJECT_MAP = {
@@ -136,17 +146,44 @@ YÊU CẦU ĐẶC BIỆT:
 4. Nội dung tuyệt đối bám sát chương trình phổ thông Việt Nam (SGK Kết nối tri thức, Chân trời sáng tạo, Cánh diều).
 `;
 
-  const response = await ai.models.generateContent({
-    model: 'gemini-2.5-flash',
-    contents: prompt,
-    config: {
-      responseMimeType: 'application/json',
-      responseSchema: seoResponseSchema,
-      temperature: 0.3, // Độ chính xác cao, ít bịa đặt
-    },
-  });
+  let lastError = null;
+  for (const modelCandidate of CANDIDATE_MODELS) {
+    try {
+      const response = await ai.models.generateContent({
+        model: modelCandidate,
+        contents: prompt,
+        config: {
+          responseMimeType: 'application/json',
+          responseSchema: seoResponseSchema,
+          temperature: 0.3, // Độ chính xác cao, ít bịa đặt
+        },
+      });
 
-  return JSON.parse(response.text);
+      // Nếu model này thành công, lưu lại làm activeModel cho các bài tiếp theo
+      activeModel = modelCandidate;
+
+      let outputText = response.text;
+      if (!outputText && response.candidates?.[0]?.content?.parts?.[0]?.text) {
+        outputText = response.candidates[0].content.parts[0].text;
+      }
+
+      return JSON.parse(outputText);
+    } catch (err) {
+      lastError = err;
+      const isNotFound =
+        err.message?.includes('404') ||
+        err.message?.includes('NOT_FOUND') ||
+        err.message?.includes('no longer available');
+
+      if (isNotFound) {
+        console.warn(`⚠️ Model "${modelCandidate}" không khả dụng trên tài khoản này, đang tự động chuyển sang model dự phòng...`);
+        continue;
+      }
+      throw err;
+    }
+  }
+
+  throw lastError;
 }
 
 // =========================================================================
