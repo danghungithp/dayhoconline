@@ -35,14 +35,22 @@ import {
   Award,
   Sun,
   Moon,
-  Globe
+  Globe,
+  Users,
+  ShieldCheck
 } from 'lucide-react';
 
 interface HomePageProps {
   onSelectSimulation: (simId: string) => void;
+  onOpenAdmin?: () => void;
+  onOpenClassroom?: (code?: string) => void;
 }
 
-export const HomePage: React.FC<HomePageProps> = ({ onSelectSimulation }) => {
+export const HomePage: React.FC<HomePageProps> = ({ 
+  onSelectSimulation,
+  onOpenAdmin,
+  onOpenClassroom
+}) => {
   const { theme, toggleTheme } = useTheme();
   const { language, toggleLanguage, t, getLocalizedTitle, getLocalizedDescription, getSubjectName } = useLanguage();
 
@@ -154,8 +162,28 @@ export const HomePage: React.FC<HomePageProps> = ({ onSelectSimulation }) => {
               <span>{t('brand.badge')}</span>
             </div>
 
-            {/* Language & Theme Controls */}
-            <div className="flex items-center gap-2">
+            {/* Language & Theme Controls & Admin / Classroom links */}
+            <div className="flex items-center gap-2 flex-wrap justify-end">
+              {/* Virtual Classroom Button (For Students) */}
+              <button
+                onClick={() => onOpenClassroom?.()}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50 dark:bg-indigo-950/80 hover:bg-indigo-100 dark:hover:bg-indigo-900 text-xs font-bold text-indigo-700 dark:text-indigo-300 shadow-sm transition-all active:scale-95"
+                title="Vào lớp học ảo làm bài kiểm tra"
+              >
+                <Users className="w-3.5 h-3.5" />
+                <span>Lớp Học Ảo</span>
+              </button>
+
+              {/* Admin & Teacher Login */}
+              <button
+                onClick={() => onOpenAdmin?.()}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-cyan-300 dark:border-cyan-700 bg-cyan-50 dark:bg-cyan-950/80 hover:bg-cyan-100 dark:hover:bg-cyan-900 text-xs font-bold text-cyan-700 dark:text-cyan-300 shadow-sm transition-all active:scale-95"
+                title="Quản trị nội dung & Giáo viên"
+              >
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>Quản Trị & GV</span>
+              </button>
+
               {/* Language Switcher */}
               <button
                 onClick={toggleLanguage}
