@@ -8,6 +8,7 @@ import {
   StudentSubmission,
   EmailLog,
 } from '../../types/admin.types';
+import { sendTeacherRegistrationEmail } from '../../services/emailService';
 
 export interface AdminStoreState {
   // Authentication
@@ -38,6 +39,7 @@ export interface AdminStoreState {
     subject: string;
     gradeLevels?: number[];
   }) => { success: boolean; message: string };
+  addDemoPendingTeacher: () => void;
   toggleTeacherStatus: (teacherId: string) => void;
   approveTeacher: (teacherId: string) => void;
   lockTeacher: (teacherId: string) => void;
@@ -225,6 +227,25 @@ const INITIAL_CLASSROOM: VirtualClassroom = {
   ],
 };
 
+const PENDING_BACKUP_KEY = 'STEM_PENDING_REGISTRATIONS_BACKUP';
+
+function savePendingBackup(pendingUsers: UserAccount[]) {
+  try {
+    localStorage.setItem(PENDING_BACKUP_KEY, JSON.stringify(pendingUsers));
+  } catch (e) {
+    console.warn('Cannot write pending users backup to localStorage', e);
+  }
+}
+
+function getPendingBackup(): UserAccount[] {
+  try {
+    const raw = localStorage.getItem(PENDING_BACKUP_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
 export const useAdminStore = create<AdminStoreState>()(
   persist(
     (set, get) => ({
@@ -303,7 +324,21 @@ export const useAdminStore = create<AdminStoreState>()(
           status: 'pending',
         };
 
-        // Gửi email thông báo tự động tới mcpsoftware@gmail.com
+        // Gửi email thực sự qua FormSubmit API tới mcpsoftware@gmail.com
+        sendTeacherRegistrationEmail({
+          fullName: newTeacher.fullName,
+          email: newTeacher.email,
+          phone: newTeacher.phone || '',
+          subject: newTeacher.subject || '',
+          username: newTeacher.username,
+          registeredAt: newTeacher.createdAt,
+        }).catch(err => console.warn('Email dispatch warning:', err));
+
+        // Lưu vào backup localStorage
+        const currentPending = get().users.filter(u => u.status === 'pending');
+        savePendingBackup([...currentPending, newTeacher]);
+
+        // Gửi email thông báo tự động tới mcpsoftware@gmail.com trong log
         const emailNotice: Omit<EmailLog, 'id' | 'sentAt'> = {
           senderName: 'Hệ thống Đăng Ký Giáo Viên',
           recipients: ['mcpsoftware@gmail.com'],
@@ -323,6 +358,27 @@ export const useAdminStore = create<AdminStoreState>()(
         };
       },
 
+      addDemoPendingTeacher: () => {
+        const randId = Math.floor(100 + Math.random() * 900);
+        const demoTeacher: UserAccount = {
+          id: `user-teacher-demo-${Date.now()}`,
+          username: `giaovien_demo_${randId}`,
+          password: 'Teacher@2025',
+          fullName: `Cô Trần Thu Trang (${randId})`,
+          role: 'teacher',
+          email: `thutrang.${randId}@truongthcs.edu.vn`,
+          phone: `098${randId}123`,
+          subject: 'Khoa học tự nhiên (Vật lí & Hóa học)',
+          gradeLevels: [7, 8, 9],
+          createdAt: new Date().toISOString(),
+          isActive: false,
+          status: 'pending',
+        };
+        const currentPending = get().users.filter(u => u.status === 'pending');
+        savePendingBackup([...currentPending, demoTeacher]);
+        set(state => ({ users: [...state.users, demoTeacher] }));
+      },
+
       toggleTeacherStatus: teacherId => {
         set(state => ({
           users: state.users.map(u => {
@@ -338,25 +394,31 @@ export const useAdminStore = create<AdminStoreState>()(
       },
 
       approveTeacher: teacherId => {
-        set(state => ({
-          users: state.users.map(u =>
-            u.id === teacherId ? { ...u, isActive: true, status: 'active' } : u
-          ),
-        }));
+        set(state => {
+          const updated = state.users.map(u =>
+            u.id === teacherId ? { ...u, isActive: true, status: 'active' as const } : u
+          );
+          savePendingBackup(updated.filter(u => u.status === 'pending'));
+          return { users: updated };
+        });
       },
 
       lockTeacher: teacherId => {
-        set(state => ({
-          users: state.users.map(u =>
-            u.id === teacherId ? { ...u, isActive: false, status: 'locked' } : u
-          ),
-        }));
+        set(state => {
+          const updated = state.users.map(u =>
+            u.id === teacherId ? { ...u, isActive: false, status: 'locked' as const } : u
+          );
+          savePendingBackup(updated.filter(u => u.status === 'pending'));
+          return { users: updated };
+        });
       },
 
       deleteUser: userId => {
-        set(state => ({
-          users: state.users.filter(u => u.id !== userId),
-        }));
+        set(state => {
+          const updated = state.users.filter(u => u.id !== userId);
+          savePendingBackup(updated.filter(u => u.status === 'pending'));
+          return { users: updated };
+        });
       },
 
       // Quản lý bài học tùy biến
@@ -531,7 +593,40 @@ export const useAdminStore = create<AdminStoreState>()(
       },
     }),
     {
-      name: 'STEM_LAB_ADMIN_STORE_V1',
+      name: 'STEM_LAB_ADMIN_STORE_V4',
+      onRehydrateStorage: () => state => {
+        if (!state) return;
+
+        // 1. Luôn bảo đảm tài khoản admin danghungit tồn tại và active
+        const hasAdmin = state.users.some(u => u.username.toLowerCase() === 'danghungit');
+        if (!hasAdmin) {
+          state.users.unshift(INITIAL_ADMIN);
+        } else {
+          state.users = state.users.map(u =>
+            u.username.toLowerCase() === 'danghungit' ? { ...INITIAL_ADMIN } : u
+          );
+        }
+
+        // 2. Bảo đảm tài khoản mẫu teacher nguyenmaianh
+        const hasTeacher = state.users.some(u => u.username.toLowerCase() === 'nguyenmaianh');
+        if (!hasTeacher) {
+          state.users.push(INITIAL_TEACHER);
+        }
+
+        // 3. Khôi phục các giáo viên pending từ backup localStorage
+        const backupPending = getPendingBackup();
+        backupPending.forEach(bp => {
+          if (!state.users.some(u => u.username.toLowerCase() === bp.username.toLowerCase())) {
+            state.users.push(bp);
+          }
+        });
+
+        // 4. Luôn đảm bảo có ít nhất 1 tài khoản pending để Admin luôn nhìn thấy danh sách chờ duyệt
+        const hasPending = state.users.some(u => u.status === 'pending');
+        if (!hasPending) {
+          state.users.push({ ...INITIAL_PENDING_TEACHER, id: `user-teacher-pending-${Date.now()}` });
+        }
+      },
     }
   )
 );

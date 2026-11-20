@@ -37,9 +37,53 @@ export interface QuizQuestion {
   explanation?: string;
 }
 
+export interface InteractiveLabParameter {
+  id: string;
+  name: string;
+  label: string;
+  unit: string;
+  min: number;
+  max: number;
+  defaultValue: number;
+  step: number;
+  description?: string;
+}
+
+export interface InteractiveLabOutput {
+  id: string;
+  label: string;
+  unit: string;
+  formulaDescription: string;
+}
+
+export interface InteractiveLabQuest {
+  id: string;
+  title: string;
+  prompt: string;
+  conditionDescription: string;
+  targetParameter?: string;
+  targetMin?: number;
+  targetMax?: number;
+  targetOutput?: string;
+  points: number;
+}
+
+export interface InteractiveLabSimulationData {
+  engineType: 'physics' | 'chemistry' | 'biology' | 'math' | 'technology' | 'english' | 'general';
+  objective: string;
+  phenomenon: string;
+  formula: string;
+  variables: string[];
+  parameters: InteractiveLabParameter[];
+  outputs: InteractiveLabOutput[];
+  quests: InteractiveLabQuest[];
+  diagramType?: 'pendulum' | 'circuit' | 'reaction' | 'cell' | 'optics' | 'flowchart' | 'wave' | 'graph';
+}
+
 export interface CustomLesson {
   id: string;
   title: string;
+  description?: string;
   sourceUrl?: string;
   subject: string;
   grade: number;
@@ -52,6 +96,7 @@ export interface CustomLesson {
     targetSimId?: string;
   }[];
   quizQuestions: QuizQuestion[];
+  simulationData?: InteractiveLabSimulationData;
   authorId: string;
   authorName: string;
   createdAt: string;

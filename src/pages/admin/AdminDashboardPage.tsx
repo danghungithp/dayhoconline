@@ -9,6 +9,8 @@ import {
   QuizQuestion,
 } from '../../types/admin.types';
 import { generateLessonFromUrl } from '../../services/lessonGeneratorService';
+import { generateLabSimulation } from '../../services/labSimulationGenerator';
+import { DynamicLabCanvas } from '../../core/components/DynamicLabCanvas';
 import {
   GraduationCap,
   Users,
@@ -40,6 +42,9 @@ import {
   Shield,
   ShieldCheck,
   UserPlus,
+  Sliders,
+  Layers,
+  HelpCircle,
 } from 'lucide-react';
 
 interface AdminDashboardPageProps {
@@ -59,6 +64,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
 
   const users = useAdminStore(state => state.users);
   const createTeacher = useAdminStore(state => state.createTeacher);
+  const addDemoPendingTeacher = useAdminStore(state => state.addDemoPendingTeacher);
   const toggleTeacherStatus = useAdminStore(state => state.toggleTeacherStatus);
   const approveTeacher = useAdminStore(state => state.approveTeacher);
   const lockTeacher = useAdminStore(state => state.lockTeacher);
@@ -125,9 +131,21 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
   const [gradingManualScore, setGradingManualScore] = useState<number>(3.0);
   const [gradingFeedback, setGradingFeedback] = useState<string>('');
 
+  // Chế độ tạo bài: 'ai-lab' (Tạo Lab từ Tên & Mô tả) | 'web-url' (Soạn bài từ Link Web)
+  const [labBuilderMode, setLabBuilderMode] = useState<'ai-lab' | 'web-url'>('ai-lab');
+
+  // Tạo bài thực hành Lab bằng AI (Chỉ cần nhập Tên & Mô tả)
+  const [inputLabTitle, setInputLabTitle] = useState('Khảo sát dao động con lắc đơn & Đo gia tốc trọng trường g');
+  const [inputLabDesc, setInputLabDesc] = useState(
+    'Học sinh thay đổi chiều dài dây treo l và khối lượng m để đo chu kỳ T, quan sát đồ thị và kiểm chứng sự bảo toàn cơ năng.'
+  );
+  const [inputLabSubject, setInputLabSubject] = useState('Vật lí');
+  const [inputLabGrade, setInputLabGrade] = useState(10);
+  const [isGeneratingLab, setIsGeneratingLab] = useState(false);
+
   // Soạn bài từ Link Web
   const [inputUrl, setInputUrl] = useState('https://giaokhoaonline.com/sach-giao-khoa/khoa-hoc-tu-nhien-8/');
-  const [inputType, setInputType] = useState<'lesson' | 'lab' | 'both'>('both');
+  const [inputType, setInputType] = useState<'lesson' | 'lab' | 'both'>('lab');
   const [inputUserNotes, setInputUserNotes] = useState('Soạn bài dạy thực hành kèm bộ câu hỏi kiểm tra năng lực');
   const [isGeneratingLesson, setIsGeneratingLesson] = useState(false);
   const [generatedLesson, setGeneratedLesson] = useState<CustomLesson | null>(null);
@@ -203,6 +221,33 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
       gradingFeedback.trim() || 'Cô đã chấm xong bài làm của em.'
     );
     setGradingContext(null);
+  };
+
+  // Xử lý tạo bài lab mô phỏng tự động từ Tên & Mô tả (Yêu cầu chính của Giáo viên/Admin)
+  const handleGenerateLabFromPrompt = async () => {
+    if (!inputLabTitle.trim()) {
+      alert('Vui lòng nhập tên bài thực hành Lab.');
+      return;
+    }
+    setIsGeneratingLab(true);
+    setGeneratedLesson(null);
+
+    try {
+      const newLab = await generateLabSimulation({
+        title: inputLabTitle.trim(),
+        description: inputLabDesc.trim() || 'Bài thực hành thí nghiệm mô phỏng tương tác',
+        subject: inputLabSubject,
+        grade: inputLabGrade,
+        authorId: currentUser?.id || 'admin',
+        authorName: currentUser?.fullName || 'Giáo viên phụ trách',
+      });
+      setGeneratedLesson(newLab);
+    } catch (e) {
+      console.error('Lỗi khi sinh bài lab:', e);
+      alert('Có lỗi xảy ra khi tạo bài lab. Vui lòng thử lại.');
+    } finally {
+      setIsGeneratingLab(false);
+    }
   };
 
   // Xử lý đọc link web và sinh bài dạy
@@ -347,6 +392,31 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
         </div>
       </header>
 
+      {/* BANNER THÔNG BÁO TÀI KHOẢN GIÁO VIÊN ĐANG CHỜ DUYỆT (TOÀN HỆ THỐNG) */}
+      {currentUser?.role === 'admin' && users.filter(u => u.status === 'pending').length > 0 && (
+        <div className="bg-gradient-to-r from-amber-950 via-slate-900 to-amber-950 border-b border-amber-500/60 px-4 py-2.5 shadow-lg">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
+            <div className="flex items-center gap-2.5 text-amber-200">
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping shrink-0" />
+              <span>
+                <strong>🔔 Yêu cầu xét duyệt mới:</strong> Có{' '}
+                <strong className="text-white underline">
+                  {users.filter(u => u.status === 'pending').length} tài khoản Giáo viên
+                </strong>{' '}
+                vừa đăng ký đang chờ bạn kích hoạt tài khoản!
+              </span>
+            </div>
+            <button
+              onClick={() => setActiveTab('teachers')}
+              className="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md transition shrink-0 flex items-center gap-1.5 active:scale-95"
+            >
+              <UserCheck className="w-3.5 h-3.5" />
+              <span>Xem & Kích Hoạt Ngay</span>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* 2. Navigation Tabs */}
       <div className="border-b border-slate-800 bg-slate-900/60 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto flex overflow-x-auto space-x-1 sm:space-x-2 py-2">
@@ -370,8 +440,8 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
             }`}
           >
-            <Globe className="w-4 h-4" />
-            <span>Soạn Bài Từ Link Web & Lab</span>
+            <FlaskConical className="w-4 h-4 text-cyan-400" />
+            <span>Tạo Bài Thực Hành Lab & Soạn Bài</span>
           </button>
 
           <button
@@ -615,227 +685,483 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
         )}
 
         {/* ==================================================================== */}
-        {/* TAB 2: SOẠN BÀI DẠY TỪ LINK WEB & THỰC HÀNH LAB */}
+        {/* TAB 2: TẠO BÀI THỰC HÀNH LAB & SOẠN BÀI GIẢNG */}
         {/* ==================================================================== */}
         {activeTab === 'web-builder' && (
           <div className="space-y-6">
-            <div>
-              <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                <span>🌐 Soạn Bài Dạy & Lab Tự Động Từ Link Web</span>
-                <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-950 border border-cyan-800 text-cyan-300">
-                  AI / Web Parser
-                </span>
-              </h2>
-              <p className="text-xs text-slate-400 mt-1">
-                Nhập đường dẫn bất kỳ từ <strong>giaokhoaonline.com</strong> hoặc trang web giáo dục, hệ thống sẽ phân tích nội dung để soạn bài giảng lý thuyết, quy trình thực hành Lab và bộ câu hỏi đánh giá theo chuẩn Công văn 5512/BGDĐT.
-              </p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                  <span>🧪 Tạo Bài Thực Hành Lab & Soạn Bài Giảng</span>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-950 border border-cyan-800 text-cyan-300 font-semibold">
+                    AI Simulation Engine
+                  </span>
+                </h2>
+                <p className="text-xs text-slate-400 mt-1">
+                  Giáo viên chỉ cần nhập <strong>Tên bài</strong> và <strong>Mô tả thí nghiệm</strong>, hệ thống AI sẽ tự động tạo bài Lab mô phỏng 60 FPS với thanh trượt tương tác, đồ thị, công thức và bộ câu hỏi đánh giá theo chuẩn GDPT 2018.
+                </p>
+              </div>
+
+              {/* Mode switch: AI Lab Creator vs Web URL Parser */}
+              <div className="flex rounded-xl bg-slate-900 p-1 border border-slate-800 self-start sm:self-auto shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setLabBuilderMode('ai-lab')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ${
+                    labBuilderMode === 'ai-lab'
+                      ? 'bg-gradient-to-r from-cyan-600 to-indigo-600 text-white shadow'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-cyan-300" />
+                  <span>Tạo Lab Bằng AI (Tên & Mô tả)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLabBuilderMode('web-url')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ${
+                    labBuilderMode === 'web-url'
+                      ? 'bg-cyan-600 text-white shadow'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <Globe className="w-3.5 h-3.5" />
+                  <span>Soạn Từ Link Web</span>
+                </button>
+              </div>
             </div>
 
-            {/* Form nhập link */}
-            <div className="p-5 bg-slate-900/90 border border-slate-800 rounded-2xl shadow-lg space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                  Đường dẫn (URL) bài học trên website:
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    type="url"
-                    value={inputUrl}
-                    onChange={e => setInputUrl(e.target.value)}
-                    placeholder="https://giaokhoaonline.com/sach-giao-khoa/khoa-hoc-tu-nhien-8/..."
-                    className="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
-                  />
+            {/* CHẾ ĐỘ 1: TẠO BÀI THỰC HÀNH LAB TỰ ĐỘNG BẰNG AI (CHỈ CẦN TÊN & MÔ TẢ) */}
+            {labBuilderMode === 'ai-lab' && (
+              <div className="p-5 sm:p-6 bg-slate-900/90 border border-cyan-800/80 rounded-2xl shadow-xl space-y-4 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none" />
+
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+                  {/* Tên bài thực hành */}
+                  <div className="md:col-span-8">
+                    <label className="block text-xs font-semibold text-slate-200 mb-1.5 flex items-center gap-1.5">
+                      <FlaskConical className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>Tên bài thực hành thí nghiệm Lab:</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={inputLabTitle}
+                      onChange={e => setInputLabTitle(e.target.value)}
+                      placeholder="VD: Khảo sát dao động con lắc đơn & Đo gia tốc trọng trường g"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 font-medium"
+                    />
+                  </div>
+
+                  {/* Môn học */}
+                  <div className="md:col-span-2">
+                    <label className="block text-xs font-semibold text-slate-200 mb-1.5">
+                      Môn học:
+                    </label>
+                    <select
+                      value={inputLabSubject}
+                      onChange={e => setInputLabSubject(e.target.value)}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-cyan-500"
+                    >
+                      <option value="Vật lí">Vật lí</option>
+                      <option value="Hóa học">Hóa học</option>
+                      <option value="Sinh học">Sinh học</option>
+                      <option value="Khoa học tự nhiên">Khoa học tự nhiên</option>
+                      <option value="Toán học">Toán học</option>
+                      <option value="Tin học">Tin học</option>
+                      <option value="Công nghệ">Công nghệ</option>
+                      <option value="Tiếng Anh">Tiếng Anh</option>
+                      <option value="Địa lý">Địa lý</option>
+                      <option value="Lịch sử">Lịch sử</option>
+                    </select>
+                  </div>
+
+                  {/* Khối lớp */}
+                  <div className="md:col-span-2">
+                    <label className="block text-xs font-semibold text-slate-200 mb-1.5">
+                      Khối lớp:
+                    </label>
+                    <select
+                      value={inputLabGrade}
+                      onChange={e => setInputLabGrade(Number(e.target.value))}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-cyan-500"
+                    >
+                      {[6, 7, 8, 9, 10, 11, 12].map(g => (
+                        <option key={g} value={g}>
+                          Lớp {g}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Mô tả bài thực hành */}
+                  <div className="md:col-span-12">
+                    <label className="block text-xs font-semibold text-slate-200 mb-1.5 flex items-center justify-between">
+                      <span>Mô tả bài thực hành (Mục tiêu, hiện tượng quan sát, biến số tương tác):</span>
+                      <span className="text-[11px] text-slate-400 font-normal">
+                        Càng chi tiết, hệ thống sinh mô phỏng và nhiệm vụ càng chính xác
+                      </span>
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={inputLabDesc}
+                      onChange={e => setInputLabDesc(e.target.value)}
+                      placeholder="Mô tả các đại lượng cần khảo sát, hiện tượng quan sát, các thông số có thể điều chỉnh trên phòng Lab ảo..."
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 leading-relaxed"
+                    />
+                  </div>
+                </div>
+
+                {/* Các mẫu gợi ý bài thực hành phổ biến */}
+                <div className="space-y-1.5 pt-1">
+                  <div className="text-[11px] text-slate-400 font-semibold flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 text-amber-400" />
+                    <span>Gợi ý mẫu bài thực hành nhanh:</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 text-xs">
+                    {[
+                      {
+                        title: 'Khảo sát dao động con lắc đơn & Đo gia tốc trọng trường g',
+                        desc: 'Học sinh thay đổi chiều dài dây l và khối lượng m để đo chu kỳ T, vẽ đồ thị T² theo l và xác định g.',
+                        subject: 'Vật lí',
+                        grade: 10,
+                      },
+                      {
+                        title: 'Định luật Ohm & Khảo sát đoạn mạch nối tiếp - song song',
+                        desc: 'Khảo sát sự phụ thuộc của cường độ dòng điện I vào hiệu điện thế U và điện trở R; đo công suất tiêu thụ.',
+                        subject: 'Khoa học tự nhiên',
+                        grade: 9,
+                      },
+                      {
+                        title: 'Chuẩn độ Axit - Bazơ & Thang đo chỉ số pH',
+                        desc: 'Chuẩn độ dung dịch HCl bằng dung dịch chuẩn NaOH với chất chỉ thị Phenolphthalein, xác định điểm tương đương.',
+                        subject: 'Hóa học',
+                        grade: 11,
+                      },
+                      {
+                        title: 'Quan sát các kỳ của nguyên phân & Phân chia tế bào',
+                        desc: 'Khảo sát hình thái nhiễm sắc thể qua 4 kỳ của nguyên phân (Đầu, Giữa, Sau, Cuối) và tính số tế bào con 2^k.',
+                        subject: 'Sinh học',
+                        grade: 10,
+                      },
+                      {
+                        title: 'Lưu đồ thuật toán Flowchart & Sắp xếp dữ liệu trực quan',
+                        desc: 'Mô phỏng từng bước thuật toán sắp xếp nổi bọt (Bubble Sort), quan sát con trỏ so sánh và hoán đổi vị trí.',
+                        subject: 'Tin học',
+                        grade: 10,
+                      },
+                      {
+                        title: 'Thiết kế hệ thống đèn thông minh Smart Home IoT',
+                        desc: 'Mô phỏng mạch điều khiển đèn tự động dùng cảm biến ánh sáng LDR và rơ-le đóng ngắt theo ngưỡng.',
+                        subject: 'Công nghệ',
+                        grade: 11,
+                      },
+                    ].map((sample, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => {
+                          setInputLabTitle(sample.title);
+                          setInputLabDesc(sample.desc);
+                          setInputLabSubject(sample.subject);
+                          setInputLabGrade(sample.grade);
+                        }}
+                        className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 hover:border-cyan-600 hover:text-cyan-300 text-[11px] text-slate-300 transition"
+                      >
+                        {sample.title.split('&')[0]} ({sample.subject})
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Nút hành động chính */}
+                <div className="pt-2 flex justify-end">
                   <button
-                    onClick={handleGenerateFromWeb}
-                    disabled={isGeneratingLesson}
-                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-bold text-xs shadow-md transition disabled:opacity-50 flex items-center gap-2 shrink-0"
+                    type="button"
+                    onClick={handleGenerateLabFromPrompt}
+                    disabled={isGeneratingLab}
+                    className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-bold text-xs shadow-xl shadow-cyan-950/50 transition active:scale-98 disabled:opacity-50 flex items-center justify-center gap-2"
                   >
-                    {isGeneratingLesson ? (
+                    {isGeneratingLab ? (
                       <>
-                        <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        <span>Đang phân tích & soạn bài...</span>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <span>Đang thiết kế mô phỏng 60 FPS & nhiệm vụ Lab...</span>
                       </>
                     ) : (
                       <>
                         <Sparkles className="w-4 h-4 text-cyan-300" />
-                        <span>🚀 Đọc & Soạn Bài Tự Động</span>
+                        <span>🚀 Tạo Bài Lab Mô Phỏng Tương Tác Bằng AI</span>
                       </>
                     )}
                   </button>
                 </div>
               </div>
+            )}
 
-              {/* Tùy chọn loại bài */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {/* CHẾ ĐỘ 2: SOẠN BÀI TỪ LINK WEB (GIAOKHOAONLINE.COM) */}
+            {labBuilderMode === 'web-url' && (
+              <div className="p-5 bg-slate-900/90 border border-slate-800 rounded-2xl shadow-lg space-y-4">
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1">Loại bài cần soạn:</label>
-                  <select
-                    value={inputType}
-                    onChange={e => setInputType(e.target.value as any)}
-                    className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs text-white"
-                  >
-                    <option value="both">Cả Bài giảng lý thuyết & Bài thực hành Lab</option>
-                    <option value="lesson">Chỉ Bài giảng lý thuyết</option>
-                    <option value="lab">Chỉ Bài thực hành Lab tương tác</option>
-                  </select>
-                </div>
-                <div className="sm:col-span-2">
-                  <label className="block text-xs text-slate-400 mb-1">Yêu cầu sư phạm bổ sung (tùy chọn):</label>
-                  <input
-                    type="text"
-                    value={inputUserNotes}
-                    onChange={e => setInputUserNotes(e.target.value)}
-                    placeholder="Nhấn mạnh vào định luật bảo toàn, tạo 3 câu trắc nghiệm và 1 câu tự luận..."
-                    className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs text-white"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Kết quả bài học được sinh ra */}
-            {generatedLesson && (
-              <div className="p-6 bg-slate-900 border border-cyan-800/80 rounded-2xl shadow-xl space-y-5 animate-in fade-in duration-300">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
-                  <div>
-                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-800 font-bold">
-                      {generatedLesson.subject} • Lớp {generatedLesson.grade}
-                    </span>
-                    <h3 className="text-lg font-bold text-white mt-1">{generatedLesson.title}</h3>
-                    <p className="text-xs text-slate-400">
-                      Nguồn phân tích: <span className="font-mono text-cyan-400">{generatedLesson.sourceUrl}</span>
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                    Đường dẫn (URL) bài học trên website:
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="url"
+                      value={inputUrl}
+                      onChange={e => setInputUrl(e.target.value)}
+                      placeholder="https://giaokhoaonline.com/sach-giao-khoa/khoa-hoc-tu-nhien-8/..."
+                      className="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+                    />
                     <button
-                      onClick={() => {
-                        saveCustomLesson(generatedLesson);
-                        alert('Đã lưu bài dạy vào Thư viện thành công!');
-                      }}
-                      className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow transition flex items-center gap-1.5"
+                      onClick={handleGenerateFromWeb}
+                      disabled={isGeneratingLesson}
+                      className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-bold text-xs shadow-md transition disabled:opacity-50 flex items-center gap-2 shrink-0"
                     >
-                      <Check className="w-3.5 h-3.5" />
-                      <span>Lưu Vào Kho Bài Dạy</span>
+                      {isGeneratingLesson ? (
+                        <>
+                          <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          <span>Đang phân tích & soạn bài...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-4 h-4 text-cyan-300" />
+                          <span>🚀 Đọc & Soạn Bài Tự Động</span>
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>
 
-                {/* Nội dung lý thuyết */}
-                <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs leading-relaxed text-slate-300 space-y-2 whitespace-pre-line">
-                  {generatedLesson.theoryContent}
-                </div>
-
-                {/* Các bước thực hành Lab */}
-                <div className="space-y-3">
-                  <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
-                    <FlaskConical className="w-4 h-4 text-cyan-400" />
-                    <span>Quy trình thực hành Lab tương tác:</span>
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    {generatedLesson.labSteps.map((step, idx) => (
-                      <div
-                        key={idx}
-                        className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2"
-                      >
-                        <div className="font-bold text-xs text-cyan-300">
-                          Bước {step.step}: {step.title}
-                        </div>
-                        <p className="text-[11px] text-slate-400 leading-normal">{step.instruction}</p>
-                        {step.targetSimId && (
-                          <button
-                            onClick={() => onOpenSimulation(step.targetSimId!)}
-                            className="text-[11px] text-cyan-400 hover:underline flex items-center gap-1 pt-1 font-semibold"
-                          >
-                            <Play className="w-3 h-3" />
-                            <span>Mở phòng Lab mô phỏng</span>
-                          </button>
-                        )}
-                      </div>
-                    ))}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-xs text-slate-400 mb-1">Loại bài cần soạn:</label>
+                    <select
+                      value={inputType}
+                      onChange={e => setInputType(e.target.value as any)}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs text-white"
+                    >
+                      <option value="both">Cả Bài giảng lý thuyết & Bài thực hành Lab</option>
+                      <option value="lesson">Chỉ Bài giảng lý thuyết</option>
+                      <option value="lab">Chỉ Bài thực hành Lab tương tác</option>
+                    </select>
                   </div>
-                </div>
-
-                {/* Bộ câu hỏi trắc nghiệm & tự luận kèm theo */}
-                <div className="space-y-3 pt-2">
-                  <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
-                    <FileText className="w-4 h-4 text-indigo-400" />
-                    <span>Bộ câu hỏi đánh giá năng lực học sinh ({generatedLesson.quizQuestions.length} câu):</span>
-                  </h4>
-                  <div className="space-y-2">
-                    {generatedLesson.quizQuestions.map((q, idx) => (
-                      <div
-                        key={idx}
-                        className="p-3 rounded-xl bg-slate-950/80 border border-slate-800/80 text-xs space-y-1.5"
-                      >
-                        <div className="font-semibold text-slate-200">
-                          Câu {idx + 1} ({q.type === 'multiple-choice' ? 'Trắc nghiệm' : 'Tự luận vận dụng'} -{' '}
-                          {q.points} điểm): {q.question}
-                        </div>
-                        {q.options && (
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pl-2 text-[11px] text-slate-400">
-                            {q.options.map((opt, optIdx) => (
-                              <div
-                                key={optIdx}
-                                className={`p-1.5 rounded ${
-                                  optIdx === q.correctAnswer
-                                    ? 'bg-emerald-950/60 border border-emerald-800 text-emerald-300 font-semibold'
-                                    : 'bg-slate-900 border border-slate-800'
-                                }`}
-                              >
-                                {String.fromCharCode(65 + optIdx)}. {opt}
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                        {q.explanation && (
-                          <div className="text-[11px] text-slate-500 italic pl-2">
-                            💡 Gợi ý / Đáp án: {q.explanation}
-                          </div>
-                        )}
-                      </div>
-                    ))}
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs text-slate-400 mb-1">Yêu cầu sư phạm bổ sung (tùy chọn):</label>
+                    <input
+                      type="text"
+                      value={inputUserNotes}
+                      onChange={e => setInputUserNotes(e.target.value)}
+                      placeholder="Nhấn mạnh vào định luật bảo toàn, tạo 3 câu trắc nghiệm và 1 câu tự luận..."
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs text-white"
+                    />
                   </div>
                 </div>
               </div>
             )}
 
-            {/* Kho các bài dạy tùy biến đã lưu */}
+            {/* HIỂN THỊ KẾT QUẢ BÀI LAB / BÀI GIẢNG ĐƯỢC TẠO RA */}
+            {generatedLesson && (
+              <div className="space-y-4 animate-in fade-in duration-300">
+                {/* 1. Nếu có SimulationData: Renders Live Dynamic 60 FPS Interactive Canvas */}
+                {generatedLesson.simulationData ? (
+                  <div className="space-y-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-slate-900 border border-cyan-800 rounded-2xl">
+                      <div>
+                        <span className="text-xs px-2.5 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-800 font-bold">
+                          {generatedLesson.subject} • Lớp {generatedLesson.grade}
+                        </span>
+                        <h3 className="text-lg font-bold text-white mt-1">{generatedLesson.title}</h3>
+                        <p className="text-xs text-slate-400">
+                          {generatedLesson.description || 'Phòng thực hành mô phỏng tương tác 60 FPS'}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            saveCustomLesson(generatedLesson);
+                            alert('Đã lưu bài Lab vào Thư viện thành công!');
+                          }}
+                          className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg transition flex items-center gap-1.5 active:scale-95"
+                        >
+                          <Check className="w-3.5 h-3.5" />
+                          <span>Lưu Vào Kho Bài Lab</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            saveCustomLesson(generatedLesson);
+                            onOpenSimulation(generatedLesson.labSteps[0]?.targetSimId || 'phys-dc-circuits-induction');
+                          }}
+                          className="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold shadow-lg transition flex items-center gap-1.5 active:scale-95"
+                        >
+                          <Play className="w-3.5 h-3.5" />
+                          <span>Mở Phòng Lab Thí Nghiệm</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <DynamicLabCanvas
+                      simulationData={generatedLesson.simulationData}
+                      title={generatedLesson.title}
+                      quizzes={generatedLesson.quizQuestions}
+                      onOpenInFullPlayer={() => {
+                        saveCustomLesson(generatedLesson);
+                        onOpenSimulation(generatedLesson.labSteps[0]?.targetSimId || 'phys-dc-circuits-induction');
+                      }}
+                    />
+                  </div>
+                ) : (
+                  /* Standard Lesson Preview */
+                  <div className="p-6 bg-slate-900 border border-cyan-800/80 rounded-2xl shadow-xl space-y-5">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
+                      <div>
+                        <span className="text-xs px-2.5 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-800 font-bold">
+                          {generatedLesson.subject} • Lớp {generatedLesson.grade}
+                        </span>
+                        <h3 className="text-lg font-bold text-white mt-1">{generatedLesson.title}</h3>
+                        {generatedLesson.sourceUrl && (
+                          <p className="text-xs text-slate-400">
+                            Nguồn phân tích: <span className="font-mono text-cyan-400">{generatedLesson.sourceUrl}</span>
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => {
+                            saveCustomLesson(generatedLesson);
+                            alert('Đã lưu bài dạy vào Thư viện thành công!');
+                          }}
+                          className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow transition flex items-center gap-1.5"
+                        >
+                          <Check className="w-3.5 h-3.5" />
+                          <span>Lưu Vào Kho Bài Dạy</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs leading-relaxed text-slate-300 space-y-2 whitespace-pre-line">
+                      {generatedLesson.theoryContent}
+                    </div>
+
+                    <div className="space-y-3">
+                      <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                        <FlaskConical className="w-4 h-4 text-cyan-400" />
+                        <span>Quy trình thực hành Lab tương tác:</span>
+                      </h4>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        {generatedLesson.labSteps.map((step, idx) => (
+                          <div
+                            key={idx}
+                            className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2"
+                          >
+                            <div className="font-bold text-xs text-cyan-300">
+                              Bước {step.step}: {step.title}
+                            </div>
+                            <p className="text-[11px] text-slate-400 leading-normal">{step.instruction}</p>
+                            {step.targetSimId && (
+                              <button
+                                onClick={() => onOpenSimulation(step.targetSimId!)}
+                                className="text-[11px] text-cyan-400 hover:underline flex items-center gap-1 pt-1 font-semibold"
+                              >
+                                <Play className="w-3 h-3" />
+                                <span>Mở phòng Lab mô phỏng</span>
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Kho các bài thực hành Lab & Bài dạy đã lưu */}
             <div className="space-y-3 pt-4">
-              <h3 className="text-sm font-bold text-slate-200">
-                📚 Kho bài dạy đã lưu trong hệ thống ({customLessons.length})
-              </h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
+                  <span>📚 Kho Bài Thực Hành Lab & Bài Dạy Đã Lưu</span>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-800 font-mono">
+                    {customLessons.length} bài
+                  </span>
+                </h3>
+              </div>
+
               {customLessons.length === 0 ? (
-                <div className="p-4 rounded-xl bg-slate-900/40 border border-slate-800 text-center text-xs text-slate-500">
-                  Chưa có bài dạy tùy biến nào được lưu. Bạn hãy nhập link và nhấn "Đọc & Soạn bài tự động" ở trên.
+                <div className="p-6 rounded-xl bg-slate-900/40 border border-slate-800 text-center text-xs text-slate-400 space-y-2">
+                  <p>Chưa có bài thực hành Lab hay bài dạy tùy biến nào được lưu.</p>
+                  <p className="text-[11px] text-slate-500">
+                    Hãy nhập tên và mô tả bài thực hành ở biểu mẫu trên, sau đó bấm <strong>"Tạo Bài Lab Mô Phỏng Tương Tác Bằng AI"</strong>.
+                  </p>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {customLessons.map(l => (
                     <div
                       key={l.id}
-                      className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2 flex flex-col justify-between"
+                      className="p-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 space-y-2.5 flex flex-col justify-between transition shadow-md"
                     >
                       <div>
                         <div className="flex items-center justify-between text-xs text-slate-400">
-                          <span>{l.subject} • Lớp {l.grade}</span>
-                          <span>{new Date(l.createdAt).toLocaleDateString('vi-VN')}</span>
+                          <div className="flex items-center gap-1.5">
+                            <span className="font-semibold text-cyan-300">{l.subject} • Lớp {l.grade}</span>
+                            {l.type === 'lab' || l.simulationData ? (
+                              <span className="px-2 py-0.2 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-800 text-[10px] font-bold">
+                                🧪 Lab Mô Phỏng
+                              </span>
+                            ) : (
+                              <span className="px-2 py-0.2 rounded-full bg-indigo-950 text-indigo-300 border border-indigo-800 text-[10px] font-bold">
+                                📘 Bài Giảng
+                              </span>
+                            )}
+                          </div>
+                          <span className="text-[11px] text-slate-500">
+                            {new Date(l.createdAt).toLocaleDateString('vi-VN')}
+                          </span>
                         </div>
-                        <h4 className="font-bold text-sm text-white mt-1">{l.title}</h4>
-                        <p className="text-xs text-slate-400 line-clamp-2 mt-1">
-                          {l.theoryContent.slice(0, 150)}...
+                        <h4 className="font-bold text-sm text-white mt-1.5">{l.title}</h4>
+                        <p className="text-xs text-slate-400 line-clamp-2 mt-1 leading-relaxed">
+                          {l.description || l.theoryContent.slice(0, 140)}...
                         </p>
                       </div>
-                      <div className="flex items-center justify-between pt-2 border-t border-slate-800 text-xs">
+
+                      <div className="flex items-center justify-between pt-2.5 border-t border-slate-800 text-xs">
                         <span className="text-slate-500 text-[11px]">Tác giả: {l.authorName}</span>
                         <div className="flex items-center gap-2">
+                          {(l.simulationData || l.labSteps[0]?.targetSimId) && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setGeneratedLesson(l);
+                                onOpenSimulation(l.labSteps[0]?.targetSimId || 'phys-dc-circuits-induction');
+                              }}
+                              className="px-2.5 py-1 rounded-lg bg-cyan-950 hover:bg-cyan-900 text-cyan-300 border border-cyan-800 text-[11px] font-semibold flex items-center gap-1 transition"
+                            >
+                              <Play className="w-3 h-3 text-cyan-400" />
+                              <span>Chạy Lab</span>
+                            </button>
+                          )}
                           <button
-                            onClick={() => setGeneratedLesson(l)}
-                            className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium"
+                            type="button"
+                            onClick={() => {
+                              setGeneratedLesson(l);
+                              window.scrollTo({ top: 300, behavior: 'smooth' });
+                            }}
+                            className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-medium transition"
                           >
                             Xem chi tiết
                           </button>
                           <button
-                            onClick={() => deleteCustomLesson(l.id)}
-                            className="p-1 text-slate-500 hover:text-rose-400"
+                            type="button"
+                            onClick={() => {
+                              if (window.confirm(`Bạn có chắc muốn xóa bài "${l.title}"?`)) {
+                                deleteCustomLesson(l.id);
+                              }
+                            }}
+                            className="p-1 text-slate-500 hover:text-rose-400 transition"
                             title="Xóa bài"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -1031,14 +1357,38 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
                     Yêu cầu đăng ký Giáo viên đang chờ duyệt ({users.filter(u => u.status === 'pending').length})
                   </h3>
                 </div>
-                <span className="text-[11px] text-slate-400">
-                  Cần Admin kích hoạt trước khi giáo viên có thể đăng nhập
-                </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      addDemoPendingTeacher();
+                      alert('Đã tạo một hồ sơ giáo viên mới chờ duyệt để bạn kiểm tra tính năng kích hoạt!');
+                    }}
+                    className="px-3 py-1.5 rounded-xl bg-amber-950/80 hover:bg-amber-900 border border-amber-700 text-amber-200 text-xs font-semibold flex items-center gap-1.5 transition active:scale-95"
+                  >
+                    <Plus className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Tạo hồ sơ giáo viên chờ duyệt (Demo test)</span>
+                  </button>
+                  <span className="text-[11px] text-slate-400 hidden md:inline">
+                    Cần Admin kích hoạt trước khi GV đăng nhập
+                  </span>
+                </div>
               </div>
 
               {users.filter(u => u.status === 'pending').length === 0 ? (
-                <div className="p-6 text-center text-xs text-slate-400 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">
-                  Hiện không có yêu cầu đăng ký giáo viên nào đang chờ duyệt. Tất cả tài khoản đã được xử lý.
+                <div className="p-6 text-center text-xs text-slate-400 bg-slate-950/40 rounded-xl border border-dashed border-slate-800 space-y-3">
+                  <p>Hiện không có yêu cầu đăng ký giáo viên nào đang chờ duyệt. Tất cả tài khoản đã được xử lý.</p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      addDemoPendingTeacher();
+                      alert('Đã tạo một hồ sơ giáo viên mới chờ duyệt để bạn kiểm tra tính năng kích hoạt!');
+                    }}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold text-xs shadow transition active:scale-95"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Tạo ngay 1 hồ sơ giáo viên đăng ký để kiểm tra</span>
+                  </button>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">

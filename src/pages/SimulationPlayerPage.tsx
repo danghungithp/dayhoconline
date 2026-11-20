@@ -10,6 +10,8 @@ import {
 } from '../utils/presetCodec';
 import { useTheme } from '../core/theme/themeContext';
 import { useLanguage } from '../core/i18n/i18nContext';
+import { useAdminStore } from '../core/store/adminStore';
+import { DynamicLabCanvas } from '../core/components/DynamicLabCanvas';
 import { 
   ArrowLeft, 
   Share2, 
@@ -68,6 +70,9 @@ export const SimulationPlayerPage: React.FC<SimulationPlayerPageProps> = ({
       return () => clearTimeout(timer);
     }
   }, []);
+
+  const customLessons = useAdminStore(state => state.customLessons);
+  const customLab = customLessons.find(l => l.id === activeSimId);
 
   const simulation = getSimulationById(activeSimId);
   const ActiveComponent = simulation?.component;
@@ -164,7 +169,15 @@ export const SimulationPlayerPage: React.FC<SimulationPlayerPageProps> = ({
 
       {/* 4. Nội Dung Chính Của Trình Phát Mô Phỏng */}
       <div className="flex-1 w-full h-full relative flex flex-col overflow-hidden">
-        {simulation && ActiveComponent ? (
+        {customLab && customLab.simulationData ? (
+          <div className="flex-1 w-full max-w-6xl mx-auto p-4 sm:p-6 overflow-y-auto">
+            <DynamicLabCanvas
+              simulationData={customLab.simulationData}
+              title={customLab.title}
+              quizzes={customLab.quizQuestions}
+            />
+          </div>
+        ) : simulation && ActiveComponent ? (
           <Suspense
             fallback={
               <div className="flex-1 flex flex-col items-center justify-center p-8 space-y-3 bg-slate-50 dark:bg-slate-950">

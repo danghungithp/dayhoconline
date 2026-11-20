@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { useAdminStore } from '../../core/store/adminStore';
 import { useTheme } from '../../core/theme/themeContext';
 import {
+  sendTeacherRegistrationEmail,
+  getMailtoUrlForAdminNotification,
+} from '../../services/emailService';
+import {
   ShieldCheck,
   Lock,
   User,
@@ -15,6 +19,8 @@ import {
   Mail,
   BookOpen,
   UserPlus,
+  Send,
+  ExternalLink,
 } from 'lucide-react';
 
 interface AdminLoginPageProps {
@@ -74,7 +80,9 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
   };
 
   // Xử lý đăng ký giáo viên
-  const handleRegisterSubmit = (e: React.FormEvent) => {
+  const [isSubmittingRegister, setIsSubmittingRegister] = useState(false);
+
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
     setSuccessMsg('');
@@ -94,20 +102,52 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
       return;
     }
 
-    const res = registerTeacher({
-      fullName: regFullName.trim(),
-      email: regEmail.trim(),
-      phone: regPhone.trim(),
-      subject: regSubject,
-      username: regUsername.trim(),
-      password: regPassword,
-    });
+    setIsSubmittingRegister(true);
 
-    if (res.success) {
-      setRegSubmittedSuccess(true);
-      setSuccessMsg(res.message);
-    } else {
-      setErrorMsg(res.message);
+    try {
+      // 1. Gửi email thông báo thực tế tới mcpsoftware@gmail.com
+      await sendTeacherRegistrationEmail({
+        fullName: regFullName.trim(),
+        email: regEmail.trim(),
+        phone: regPhone.trim(),
+        subject: regSubject,
+        username: regUsername.trim(),
+      });
+
+      // 2. Lưu giáo viên vào store ở trạng thái pending
+      const res = registerTeacher({
+        fullName: regFullName.trim(),
+        email: regEmail.trim(),
+        phone: regPhone.trim(),
+        subject: regSubject,
+        username: regUsername.trim(),
+        password: regPassword,
+      });
+
+      if (res.success) {
+        setRegSubmittedSuccess(true);
+        setSuccessMsg(res.message);
+      } else {
+        setErrorMsg(res.message);
+      }
+    } catch (err: any) {
+      console.warn('Lỗi khi đăng ký:', err);
+      // Vẫn đăng ký vào store nếu lỗi mạng
+      const res = registerTeacher({
+        fullName: regFullName.trim(),
+        email: regEmail.trim(),
+        phone: regPhone.trim(),
+        subject: regSubject,
+        username: regUsername.trim(),
+        password: regPassword,
+      });
+      if (res.success) {
+        setRegSubmittedSuccess(true);
+      } else {
+        setErrorMsg(res.message);
+      }
+    } finally {
+      setIsSubmittingRegister(false);
     }
   };
 
@@ -261,27 +301,74 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
         {activeTab === 'register' && (
           <div>
             {regSubmittedSuccess ? (
-              <div className="p-5 bg-slate-950/80 rounded-xl border border-emerald-800 text-center space-y-3">
-                <div className="w-12 h-12 bg-emerald-950 border border-emerald-500 rounded-full mx-auto flex items-center justify-center text-emerald-400">
-                  <CheckCircle className="w-6 h-6" />
+              <div className="p-5 bg-slate-950/90 rounded-2xl border border-emerald-700/80 text-center space-y-4 shadow-xl">
+                <div className="w-14 h-14 bg-emerald-950 border border-emerald-500 rounded-full mx-auto flex items-center justify-center text-emerald-400 shadow-lg shadow-emerald-950/50">
+                  <CheckCircle className="w-7 h-7" />
                 </div>
-                <h3 className="font-bold text-white text-base">Hồ Sơ Đã Được Gửi Phê Duyệt!</h3>
+                <div>
+                  <h3 className="font-bold text-white text-base">Hồ Sơ Đã Được Gửi Phê Duyệt!</h3>
+                  <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-amber-950 text-amber-300 border border-amber-800 font-bold inline-block mt-1">
+                    Trạng thái: Chờ duyệt kích hoạt
+                  </span>
+                </div>
+                
+                <div className="p-3 bg-slate-900 rounded-xl border border-slate-800 text-left text-xs space-y-1.5 text-slate-300">
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Giáo viên:</span>
+                    <span className="font-bold text-white">{regFullName}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Email:</span>
+                    <span className="text-cyan-300 font-mono">{regEmail}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Số điện thoại:</span>
+                    <span className="text-emerald-300 font-mono">{regPhone}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Môn giảng dạy:</span>
+                    <span className="text-amber-200">{regSubject}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Username đăng nhập:</span>
+                    <span className="text-white font-mono font-bold">{regUsername}</span>
+                  </div>
+                  <div className="flex justify-between pt-1 border-t border-slate-800 text-[11px]">
+                    <span className="text-slate-400">Hòm thư nhận thông báo:</span>
+                    <span className="text-cyan-400 font-mono font-bold">mcpsoftware@gmail.com</span>
+                  </div>
+                </div>
+
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  Thông tin đăng ký của thầy/cô <strong>{regFullName}</strong> (Email: {regEmail}, SĐT: {regPhone}) đã được chuyển tiếp đến Ban Quản Trị tại hộp thư: <strong className="text-cyan-400 font-mono"></strong>.
+                  Thông tin đăng ký của thầy/cô đã được chuyển tiếp đến Ban Quản Trị tại hộp thư: <strong className="text-cyan-400 font-mono">mcpsoftware@gmail.com</strong>. Quản trị viên <strong className="text-white">danghungit</strong> sẽ duyệt kích hoạt tài khoản trong mục Quản trị Users.
                 </p>
-                <p className="text-[11px] text-slate-400">
-                  Quản trị viên sẽ kiểm tra và kích hoạt tài khoản trong thời gian sớm nhất. Sau khi được duyệt, thầy/cô có thể đăng nhập vào hệ thống ngay.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setActiveTab('login');
-                    setRegSubmittedSuccess(false);
-                  }}
-                  className="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold shadow"
-                >
-                  Chuyển sang màn hình Đăng Nhập
-                </button>
+
+                <div className="flex flex-col sm:flex-row gap-2 pt-1">
+                  <a
+                    href={getMailtoUrlForAdminNotification({
+                      fullName: regFullName,
+                      email: regEmail,
+                      phone: regPhone,
+                      subject: regSubject,
+                      username: regUsername,
+                    })}
+                    className="flex-1 py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold flex items-center justify-center gap-1.5 transition"
+                  >
+                    <Mail className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Mở ứng dụng Email gửi Admin</span>
+                  </a>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveTab('login');
+                      setRegSubmittedSuccess(false);
+                    }}
+                    className="flex-1 py-2 px-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold shadow transition"
+                  >
+                    Về Màn Hình Đăng Nhập
+                  </button>
+                </div>
               </div>
             ) : (
               <form onSubmit={handleRegisterSubmit} className="space-y-3 text-xs">
@@ -426,14 +513,22 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
                 </div>
 
                 <div className="p-2.5 bg-slate-950/60 rounded-xl border border-slate-800 text-[11px] text-slate-400">
-                  ℹ️ Sau khi nhấn đăng ký, hệ thống sẽ tự động gửi email thông báo tới <strong className="text-cyan-300">Quản trị</strong> để kích hoạt tài khoản của thầy/cô.
+                  ℹ️ Sau khi nhấn đăng ký, hệ thống sẽ tự động gửi email thông báo tới <strong className="text-cyan-300">mcpsoftware@gmail.com</strong> để kích hoạt tài khoản của thầy/cô.
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full py-2.5 px-4 bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-cyan-950/50 transition active:scale-98"
+                  disabled={isSubmittingRegister}
+                  className="w-full py-2.5 px-4 bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-bold text-sm rounded-xl shadow-lg shadow-cyan-950/50 transition active:scale-98 disabled:opacity-50 flex items-center justify-center gap-2"
                 >
-                  Gửi Hồ Sơ Đăng Ký Giáo Viên
+                  {isSubmittingRegister ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>Đang gửi hồ sơ & email thông báo...</span>
+                    </>
+                  ) : (
+                    <span>Gửi Hồ Sơ Đăng Ký Giáo Viên</span>
+                  )}
                 </button>
               </form>
             )}
