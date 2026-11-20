@@ -40,6 +40,7 @@ const DissociationPhModule = lazy(() => import('../../simulations/chemistry/diss
 const AlgorithmsFlowchartModule = lazy(() => import('../../simulations/informatics/algorithms-flowchart'));
 const CellDivisionMitosisModule = lazy(() => import('../../simulations/biology/cell-division-mitosis'));
 const SmartHomeCircuitsModule = lazy(() => import('../../simulations/technology/smart-home-circuits'));
+const OrbitalsBondingModule = lazy(() => import('../../simulations/chemistry/orbitals-bonding'));
 
 // Mapping module đã triển khai vào catalog
 export const SIMULATION_REGISTRY: SimulationMetadata[] = CURRICULUM_CATALOG.map(item => {
@@ -216,6 +217,13 @@ export const SIMULATION_REGISTRY: SimulationMetadata[] = CURRICULUM_CATALOG.map(
       ...item,
       isImplemented: true,
       component: SmartHomeCircuitsModule,
+    };
+  }
+  if (item.id === 'chem-orbitals-bonding') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: OrbitalsBondingModule,
     };
   }
   return item;
