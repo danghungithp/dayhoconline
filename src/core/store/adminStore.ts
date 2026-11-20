@@ -28,8 +28,20 @@ export interface AdminStoreState {
   logout: () => void;
 
   // Teacher management actions
-  createTeacher: (data: Omit<UserAccount, 'id' | 'role' | 'createdAt' | 'isActive'>) => boolean;
+  createTeacher: (data: Omit<UserAccount, 'id' | 'role' | 'createdAt' | 'isActive' | 'status'>) => boolean;
+  registerTeacher: (data: {
+    fullName: string;
+    username: string;
+    password: string;
+    email: string;
+    phone: string;
+    subject: string;
+    gradeLevels?: number[];
+  }) => { success: boolean; message: string };
   toggleTeacherStatus: (teacherId: string) => void;
+  approveTeacher: (teacherId: string) => void;
+  lockTeacher: (teacherId: string) => void;
+  deleteUser: (userId: string) => void;
 
   // Lesson actions
   saveCustomLesson: (lesson: CustomLesson) => void;
@@ -84,9 +96,11 @@ const INITIAL_ADMIN: UserAccount = {
   fullName: 'Đặng Hùng (Quản trị viên Hệ thống)',
   role: 'admin',
   email: 'danghungit@stemlab.edu.vn',
+  phone: '0988888888',
   subject: 'Toàn quyền Quản trị STEM & Lab',
   createdAt: '2026-01-01T00:00:00.000Z',
   isActive: true,
+  status: 'active',
 };
 
 const INITIAL_TEACHER: UserAccount = {
@@ -96,10 +110,27 @@ const INITIAL_TEACHER: UserAccount = {
   fullName: 'Cô Nguyễn Mai Anh',
   role: 'teacher',
   email: 'maianh.nguyen@thcs-demo.edu.vn',
+  phone: '0912345678',
   subject: 'Khoa học tự nhiên & Hóa học',
   gradeLevels: [7, 8],
   createdAt: '2026-02-15T08:00:00.000Z',
   isActive: true,
+  status: 'active',
+};
+
+const INITIAL_PENDING_TEACHER: UserAccount = {
+  id: 'user-teacher-lequanghuy',
+  username: 'lequanghuy',
+  password: 'Teacher@123',
+  fullName: 'Thầy Lê Quang Huy',
+  role: 'teacher',
+  email: 'huy.le@truongthcs.edu.vn',
+  phone: '0987654321',
+  subject: 'Toán học & Tin học',
+  gradeLevels: [8, 9],
+  createdAt: '2026-11-20T08:00:00.000Z',
+  isActive: false,
+  status: 'pending',
 };
 
 const INITIAL_CLASSROOM: VirtualClassroom = {
@@ -198,7 +229,7 @@ export const useAdminStore = create<AdminStoreState>()(
   persist(
     (set, get) => ({
       currentUser: null,
-      users: [INITIAL_ADMIN, INITIAL_TEACHER],
+      users: [INITIAL_ADMIN, INITIAL_TEACHER, INITIAL_PENDING_TEACHER],
       customLessons: [],
       classrooms: [INITIAL_CLASSROOM],
       emailLogs: [],
@@ -211,8 +242,14 @@ export const useAdminStore = create<AdminStoreState>()(
         if (!user) {
           return { success: false, message: 'Sai tên đăng nhập hoặc mật khẩu.' };
         }
-        if (!user.isActive) {
-          return { success: false, message: 'Tài khoản này hiện đang bị khóa. Vui lòng liên hệ Admin.' };
+        if (user.status === 'pending' || !user.isActive) {
+          return {
+            success: false,
+            message:
+              user.status === 'pending'
+                ? 'Tài khoản của bạn đang chờ Ban Quản Trị (mcpsoftware@gmail.com) phê duyệt và kích hoạt.'
+                : 'Tài khoản này hiện đang bị khóa. Vui lòng liên hệ Admin.',
+          };
         }
         set({ currentUser: user });
         return { success: true, message: `Xin chào ${user.fullName}!` };
@@ -237,14 +274,88 @@ export const useAdminStore = create<AdminStoreState>()(
           role: 'teacher',
           createdAt: new Date().toISOString(),
           isActive: true,
+          status: 'active',
         };
         set(state => ({ users: [...state.users, newTeacher] }));
         return true;
       },
 
+      registerTeacher: data => {
+        const existing = get().users.find(
+          u => u.username.toLowerCase() === data.username.toLowerCase() || u.email.toLowerCase() === data.email.toLowerCase()
+        );
+        if (existing) {
+          return { success: false, message: 'Tên đăng nhập hoặc email này đã tồn tại trong hệ thống.' };
+        }
+
+        const newTeacher: UserAccount = {
+          id: `user-teacher-${Date.now()}`,
+          username: data.username.trim(),
+          password: data.password,
+          fullName: data.fullName.trim(),
+          role: 'teacher',
+          email: data.email.trim(),
+          phone: data.phone.trim(),
+          subject: data.subject,
+          gradeLevels: data.gradeLevels || [6, 7, 8, 9],
+          createdAt: new Date().toISOString(),
+          isActive: false, // Chờ duyệt
+          status: 'pending',
+        };
+
+        // Gửi email thông báo tự động tới mcpsoftware@gmail.com
+        const emailNotice: Omit<EmailLog, 'id' | 'sentAt'> = {
+          senderName: 'Hệ thống Đăng Ký Giáo Viên',
+          recipients: ['mcpsoftware@gmail.com'],
+          subject: `[ĐĂNG KÝ GIÁO VIÊN MỚI] - ${newTeacher.fullName} (${newTeacher.subject})`,
+          content: `Kính gửi Ban Quản Trị Hệ Thống,\n\nHệ thống STEM & English Interactive Lab vừa nhận được đơn đăng ký tài khoản giáo viên mới:\n\n- Họ và tên giáo viên: ${newTeacher.fullName}\n- Email: ${newTeacher.email}\n- Số điện thoại: ${newTeacher.phone}\n- Môn giảng dạy: ${newTeacher.subject}\n- Tên đăng nhập: ${newTeacher.username}\n- Thời gian đăng ký: ${new Date().toLocaleString('vi-VN')}\n\nVui lòng đăng nhập vào mục "Quản trị Users" với tài khoản danghungit để kiểm tra, kích hoạt tài khoản hoặc khóa tài khoản.\n\nTrân trọng,\nSTEM & English Lab System`,
+          itemType: 'classroom',
+          itemTitle: `Đăng ký GV: ${newTeacher.fullName}`,
+        };
+
+        get().logEmail(emailNotice);
+
+        set(state => ({ users: [...state.users, newTeacher] }));
+        return {
+          success: true,
+          message:
+            'Đăng ký thành công! Thông tin tài khoản của bạn đã được gửi thông báo tới Ban Quản Trị (mcpsoftware@gmail.com) để xét duyệt và kích hoạt.',
+        };
+      },
+
       toggleTeacherStatus: teacherId => {
         set(state => ({
-          users: state.users.map(u => (u.id === teacherId ? { ...u, isActive: !u.isActive } : u)),
+          users: state.users.map(u => {
+            if (u.id !== teacherId) return u;
+            const newActive = !u.isActive;
+            return {
+              ...u,
+              isActive: newActive,
+              status: newActive ? 'active' : 'locked',
+            };
+          }),
+        }));
+      },
+
+      approveTeacher: teacherId => {
+        set(state => ({
+          users: state.users.map(u =>
+            u.id === teacherId ? { ...u, isActive: true, status: 'active' } : u
+          ),
+        }));
+      },
+
+      lockTeacher: teacherId => {
+        set(state => ({
+          users: state.users.map(u =>
+            u.id === teacherId ? { ...u, isActive: false, status: 'locked' } : u
+          ),
+        }));
+      },
+
+      deleteUser: userId => {
+        set(state => ({
+          users: state.users.filter(u => u.id !== userId),
         }));
       },
 

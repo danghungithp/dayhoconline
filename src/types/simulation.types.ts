@@ -14,6 +14,12 @@ export type SubjectId =
   | 'khtn'       // Khoa học Tự nhiên (THCS: Lý - Hóa - Sinh tích hợp)
   | 'vat-ly'     // Vật lý (THPT)
   | 'hoa-hoc'    // Hóa học (THPT & Hóa chuyên sâu THCS)
+  | 'sinh-hoc'   // Sinh học (Di truyền, Tế bào, Sinh thái)
+  | 'tin-hoc'    // Tin học (Nhị phân, Thuật toán, Cổng Logic, Lập trình)
+  | 'dia-ly'     // Địa lý (Trái Đất, Khí hậu, Bản đồ, Kinh tế - Xã hội)
+  | 'lich-su'    // Lịch sử (Tiến trình lịch sử Việt Nam & Thế giới)
+  | 'cong-nghe'  // Công nghệ & STEM Engineering
+  | 'gdkt-pl'    // Giáo dục Kinh tế & Pháp luật
   | 'tieng-anh';  // Tiếng Anh (Ngữ pháp trực quan, Giao tiếp, Phát âm)
 
 export type SimulationTechnology = 

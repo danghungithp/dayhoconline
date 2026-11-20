@@ -101,6 +101,12 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     'subject.khtn': 'KHTN',
     'subject.vat-ly': 'Vật lý',
     'subject.hoa-hoc': 'Hóa học',
+    'subject.sinh-hoc': 'Sinh học',
+    'subject.tin-hoc': 'Tin học',
+    'subject.dia-ly': 'Địa lý',
+    'subject.lich-su': 'Lịch sử',
+    'subject.cong-nghe': 'Công nghệ',
+    'subject.gdkt-pl': 'GDKT & PL',
     'subject.tieng-anh': 'Tiếng Anh',
 
     // Tech
@@ -193,6 +199,12 @@ export const TRANSLATIONS: Record<Language, Record<string, string>> = {
     'subject.khtn': 'Natural Sciences',
     'subject.vat-ly': 'Physics',
     'subject.hoa-hoc': 'Chemistry',
+    'subject.sinh-hoc': 'Biology',
+    'subject.tin-hoc': 'Informatics',
+    'subject.dia-ly': 'Geography',
+    'subject.lich-su': 'History',
+    'subject.cong-nghe': 'Technology',
+    'subject.gdkt-pl': 'Economics & Law',
     'subject.tieng-anh': 'English',
 
     // Tech

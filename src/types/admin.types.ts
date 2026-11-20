@@ -1,5 +1,7 @@
 export type UserRole = 'admin' | 'teacher';
 
+export type UserStatus = 'pending' | 'active' | 'locked';
+
 export interface UserAccount {
   id: string;
   username: string;
@@ -7,10 +9,22 @@ export interface UserAccount {
   fullName: string;
   role: UserRole;
   email: string;
+  phone?: string;
   subject?: string;
   gradeLevels?: number[];
   createdAt: string;
   isActive: boolean;
+  status: UserStatus;
+}
+
+export interface TeacherRegistrationForm {
+  fullName: string;
+  email: string;
+  phone: string;
+  username: string;
+  password: string;
+  subject: string;
+  gradeLevels?: number[];
 }
 
 export interface QuizQuestion {

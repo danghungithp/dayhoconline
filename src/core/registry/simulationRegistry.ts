@@ -29,6 +29,11 @@ const IdentitiesLinearFuncModule = lazy(() => import('../../simulations/math/ide
 // Modules THPT (Lớp 10)
 const InequalitiesTrigCircleModule = lazy(() => import('../../simulations/math/inequalities-trig-circle'));
 
+// Modules Môn học mới (Sinh học, Tin học, Địa lý)
+const GeneticsMendelModule = lazy(() => import('../../simulations/biology/genetics-mendel'));
+const BinaryLogicModule = lazy(() => import('../../simulations/informatics/binary-logic'));
+const EarthSeasonsModule = lazy(() => import('../../simulations/geography/earth-seasons'));
+
 // Mapping module đã triển khai vào catalog
 export const SIMULATION_REGISTRY: SimulationMetadata[] = CURRICULUM_CATALOG.map(item => {
   if (item.id === 'chem-atom-builder') {
@@ -150,6 +155,27 @@ export const SIMULATION_REGISTRY: SimulationMetadata[] = CURRICULUM_CATALOG.map(
       component: InequalitiesTrigCircleModule,
     };
   }
+  if (item.id === 'bio-genetics-mendel') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: GeneticsMendelModule,
+    };
+  }
+  if (item.id === 'cs-binary-logic-gates') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: BinaryLogicModule,
+    };
+  }
+  if (item.id === 'geo-earth-rotation-seasons') {
+    return {
+      ...item,
+      isImplemented: true,
+      component: EarthSeasonsModule,
+    };
+  }
   return item;
 });
 
@@ -218,6 +244,12 @@ export function getCurriculumStats() {
     'khtn': SIMULATION_REGISTRY.filter(s => s.subject === 'khtn').length,
     'vat-ly': SIMULATION_REGISTRY.filter(s => s.subject === 'vat-ly').length,
     'hoa-hoc': SIMULATION_REGISTRY.filter(s => s.subject === 'hoa-hoc').length,
+    'sinh-hoc': SIMULATION_REGISTRY.filter(s => s.subject === 'sinh-hoc').length,
+    'tin-hoc': SIMULATION_REGISTRY.filter(s => s.subject === 'tin-hoc').length,
+    'dia-ly': SIMULATION_REGISTRY.filter(s => s.subject === 'dia-ly').length,
+    'lich-su': SIMULATION_REGISTRY.filter(s => s.subject === 'lich-su').length,
+    'cong-nghe': SIMULATION_REGISTRY.filter(s => s.subject === 'cong-nghe').length,
+    'gdkt-pl': SIMULATION_REGISTRY.filter(s => s.subject === 'gdkt-pl').length,
     'tieng-anh': SIMULATION_REGISTRY.filter(s => s.subject === 'tieng-anh').length,
   };
 

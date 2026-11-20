@@ -657,6 +657,82 @@ ${uncompleted.length > 0 ? `🎯 **Gợi ý nhiệm vụ:** *${uncompleted[0].ti
     }
   }
 
+  // Xử lý bài Sinh học 9: Di truyền Men-đen & Cấu tạo Tế bào
+  if (simulationId === 'bio-genetics-mendel') {
+    const { mode = 'mendel', p1Alleles = ['A', 'a'], p2Alleles = ['A', 'a'], selectedOrganelle = 'nucleus' } = currentState;
+    const uncompleted = activeQuests.filter(q => !q.completed);
+
+    if (mode === 'mendel') {
+      const p1 = Array.isArray(p1Alleles) ? p1Alleles.join('') : 'Aa';
+      const p2 = Array.isArray(p2Alleles) ? p2Alleles.join('') : 'Aa';
+      return `### 🧬 Gia sư Sinh học (Di truyền học Men-đen):
+Em đang thực hiện phép lai bố mẹ: **P: ${p1} × ${p2}**:
+- **Quy luật Men-đen:** Các nhân tố di truyền (alen) phân li độc lập trong quá trình phát sinh giao tử và tổ hợp tự do trong thụ tinh.
+- **Phân tích:** 
+  * Nếu $Aa \\times Aa$, thế hệ F2 phân li theo tỉ lệ **1 AA : 2 Aa : 1 aa** (3 Trội : 1 Lặn).
+  * Nếu $Aa \\times aa$ (Phép lai phân tích), đời con phân li tỉ lệ **1 Aa : 1 aa** (1 Trội : 1 Lặn).
+  * Alen trội biểu hiện tính trạng lấn át hoàn toàn alen lặn ở trạng thái dị hợp tử ($Aa$).
+
+${uncompleted.length > 0 ? `🎯 **Thử thách tiếp theo:** *${uncompleted[0].title}*!` : '🎉 Xuất sắc! Em đã nắm chắc quy luật Men-đen!'}`;
+    } else {
+      return `### 🔬 Gia sư Sinh học (Cấu tạo vi thể tế bào):
+Em đang khảo sát bào quan: **${selectedOrganelle === 'nucleus' ? 'Nhân Tế Bào (Nucleus)' : selectedOrganelle === 'mitochondria' ? 'Ty Thể (Mitochondria)' : 'Lục Lạp (Chloroplast)'}**:
+- **Nhân ADN:** Mang thông tin di truyền, trung tâm điều khiển mọi chuyển hóa vật chất trong tế bào.
+- **Ty thể:** Hô hấp tế bào giải phóng năng lượng ATP ($C_6H_{12}O_6 + 6O_2 \\to 6CO_2 + 6H_2O + 38 ATP$).
+- **Lục lạp:** Chứa chất diệp lục hấp thu ánh sáng thực hiện quang hợp ở thực vật.
+
+${uncompleted.length > 0 ? `🎯 **Gợi ý nhiệm vụ:** *${uncompleted[0].title}*!` : '🎉 Tuyệt vời!'}`;
+    }
+  }
+
+  // Xử lý bài Tin học 8: Hệ nhị phân 8-Bit & Cổng Logic
+  if (simulationId === 'cs-binary-logic-gates') {
+    const { mode = 'binary-converter', bits = [], gateType = 'AND', inputA = true, inputB = true } = currentState;
+    const uncompleted = activeQuests.filter(q => !q.completed);
+
+    if (mode === 'binary-converter') {
+      return `### 💻 Gia sư Tin học (Hệ đếm nhị phân 8-bit & Mã ASCII):
+- Máy tính chỉ hiểu hai trạng thái điện áp: **0 (Tắt/Low)** và **1 (Bật/High)**.
+- Mỗi vị trí bit từ phải sang trái có trọng số tăng gấp đôi ($2^0=1, 2^1=2, 2^2=4, \\dots, 2^7=128$).
+- Một byte (8 bit) có thể biểu diễn được $2^8 = 256$ trạng thái khác nhau (từ số 0 đến 255).
+- Bảng mã **ASCII** gán mỗi số thập phân từ 0–127 cho một ký tự chữ hoặc dấu trong văn bản (ví dụ số 65 = 'A', số 66 = 'B', số 48 = '0').
+
+${uncompleted.length > 0 ? `🎯 **Thử thách:** *${uncompleted[0].title}*!` : '🎉 Quá chuẩn! Em đã thành thạo hệ nhị phân!'}`;
+    } else {
+      return `### ⚡ Gia sư Tin học (Mạch logic số & Cổng ${gateType}):
+Em đang thử nghiệm cổng logic **${gateType}** với đầu vào $A = ${inputA ? 1 : 0}, B = ${inputB ? 1 : 0}$:
+- **AND:** Chỉ cho mức 1 khi CẢ HAI đầu vào đều bằng 1.
+- **OR:** Cho mức 1 khi CÓ ÍT NHẤT một đầu vào bằng 1.
+- **NOT:** Đảo ngược tín hiệu ($1 \\to 0, 0 \\to 1$).
+- **XOR:** Cho mức 1 khi HAI TÍN HIỆU ĐẦU VÀO KHÁC NHAU ($1 \\oplus 0 = 1, 0 \\oplus 1 = 1$). Đây là cổng cốt lõi tạo ra bộ làm toán cộng (Full Adder) của CPU!
+
+${uncompleted.length > 0 ? `🎯 **Gợi ý nhiệm vụ:** *${uncompleted[0].title}*!` : '🎉 Em đã làm chủ các cổng logic số!'}`;
+    }
+  }
+
+  // Xử lý bài Địa lý 6: Chuyển động Trái Đất & 4 Mùa
+  if (simulationId === 'geo-earth-rotation-seasons') {
+    const { mode = 'seasons-orbit', orbitAngleDeg = 90, rotationHour = 12 } = currentState;
+    const uncompleted = activeQuests.filter(q => !q.completed);
+
+    if (mode === 'seasons-orbit') {
+      return `### 🌍 Gia sư Địa lý (Chuyển động Trái Đất quanh Mặt Trời & 4 Mùa):
+Trái Đất quay quanh Mặt Trời trên quỹ đạo elip với trục nghiêng không đổi **23°27′**:
+- **Tại ngày Hạ chí (22/6):** Tia sáng Mặt Trời chiếu vuông góc vào Chí tuyến Bắc ($23^\\circ 27' B$). Bắc bán cầu (có Việt Nam) ngả nhiều nhất về phía Mặt Trời nên nhận được nhiều nhiệt ➔ Mùa Hạ (Ngày dài hơn đêm, nóng bức).
+- **Tại ngày Đông chí (22/12):** Tia sáng chiếu thẳng vào Chí tuyến Nam ➔ Bắc bán cầu là Mùa Đông (Đêm dài hơn ngày, lạnh giá).
+- **Xuân phân (21/3) & Thu phân (23/9):** Tia sáng vuông góc với Xích đạo ➔ Ngày và đêm dài bằng nhau khắp địa cầu!
+
+${uncompleted.length > 0 ? `🎯 **Nhiệm vụ:** *${uncompleted[0].title}*!` : '🎉 Em đã hiểu sâu sắc hiện tượng 4 mùa!'}`;
+    } else {
+      return `### ⏰ Gia sư Địa lý (Trái Đất tự quay quanh trục & Múi giờ):
+- Trái Đất tự quay quanh trục từ **Tây sang Đông** với chu kỳ 1 vòng = 24 giờ.
+- Hiện tượng sinh ra: **Ngày đêm luân phiên** liên tục, và **giờ địa phương** khác nhau giữa các kinh độ.
+- Trái Đất được chia làm 24 múi giờ (mỗi múi rộng 15° kinh tuyến). Việt Nam nằm trọn vẹn trong múi giờ thứ 7 (**GMT+7**), đi trước giờ gốc London (GMT+0) đúng 7 tiếng!
+
+${uncompleted.length > 0 ? `🎯 **Nhiệm vụ:** *${uncompleted[0].title}*!` : '🎉 Tuyệt vời! Em đã nắm rõ múi giờ thế giới!'}`;
+    }
+  }
+
   // Phản hồi mẫu chung cho các bài học khác
   return `### 🎓 Gia sư STEM & English Lab
 Em đang thao tác bài **${context.simulationTitle}** (Lớp ${context.grade}).

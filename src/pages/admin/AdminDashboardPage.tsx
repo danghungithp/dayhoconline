@@ -36,6 +36,10 @@ import {
   UserX,
   Play,
   Share2,
+  Phone,
+  Shield,
+  ShieldCheck,
+  UserPlus,
 } from 'lucide-react';
 
 interface AdminDashboardPageProps {
@@ -56,6 +60,9 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
   const users = useAdminStore(state => state.users);
   const createTeacher = useAdminStore(state => state.createTeacher);
   const toggleTeacherStatus = useAdminStore(state => state.toggleTeacherStatus);
+  const approveTeacher = useAdminStore(state => state.approveTeacher);
+  const lockTeacher = useAdminStore(state => state.lockTeacher);
+  const deleteUser = useAdminStore(state => state.deleteUser);
 
   const classrooms = useAdminStore(state => state.classrooms);
   const createClassroom = useAdminStore(state => state.createClassroom);
@@ -137,6 +144,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
   const [newTeacherUser, setNewTeacherUser] = useState('');
   const [newTeacherPass, setNewTeacherPass] = useState('Teacher@2025');
   const [newTeacherEmail, setNewTeacherEmail] = useState('');
+  const [newTeacherPhone, setNewTeacherPhone] = useState('');
   const [newTeacherSubject, setNewTeacherSubject] = useState('Toán học & Hình học');
   const [teacherCreateMsg, setTeacherCreateMsg] = useState<{ success: boolean; text: string } | null>(null);
 
@@ -261,6 +269,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
       username: newTeacherUser.trim(),
       password: newTeacherPass,
       email: newTeacherEmail.trim() || `${newTeacherUser.trim()}@truong.edu.vn`,
+      phone: newTeacherPhone.trim() || '0912345678',
       subject: newTeacherSubject,
       gradeLevels: [6, 7, 8, 9],
     });
@@ -270,6 +279,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
       setNewTeacherName('');
       setNewTeacherUser('');
       setNewTeacherEmail('');
+      setNewTeacherPhone('');
     } else {
       setTeacherCreateMsg({ success: false, text: 'Tên đăng nhập hoặc email này đã tồn tại trong hệ thống.' });
     }
@@ -387,6 +397,11 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
             >
               <UserCheck className="w-4 h-4" />
               <span>Quản Lý Giáo Viên ({users.filter(u => u.role === 'teacher').length})</span>
+              {users.filter(u => u.status === 'pending').length > 0 && (
+                <span className="px-1.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-bold text-[10px] animate-pulse">
+                  {users.filter(u => u.status === 'pending').length} chờ duyệt
+                </span>
+              )}
             </button>
           )}
         </div>
@@ -978,6 +993,22 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
               </p>
             </div>
 
+            {/* Hộp thông báo email đăng ký mới gửi tới mcpsoftware@gmail.com */}
+            <div className="p-4 rounded-2xl bg-cyan-950/40 border border-cyan-800/80 text-xs text-cyan-200 flex items-start gap-3 shadow-md">
+              <Mail className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <div className="font-bold text-white flex items-center gap-2">
+                  <span>Thông báo đăng ký Giáo viên tự động:</span>
+                  <span className="px-2 py-0.5 rounded-full bg-cyan-900 border border-cyan-700 text-cyan-200 font-mono text-[11px]">
+                    mcpsoftware@gmail.com
+                  </span>
+                </div>
+                <p className="text-slate-300 leading-relaxed">
+                  Mỗi khi có giáo viên đăng ký từ cổng đăng nhập, hệ thống tự động ghi nhật ký và gửi email thông báo tới <b className="text-cyan-300">mcpsoftware@gmail.com</b> kèm số điện thoại, email và môn giảng dạy. Quản trị viên <b className="text-white">danghungit</b> xem xét duyệt kích hoạt tài khoản bên dưới để giáo viên có thể đăng nhập.
+                </p>
+              </div>
+            </div>
+
             {teacherCreateMsg && (
               <div
                 className={`p-3 rounded-xl text-xs flex items-center gap-2 border ${
@@ -991,14 +1022,116 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
               </div>
             )}
 
-            {/* Form tạo giáo viên mới */}
+            {/* DANH SÁCH GIÁO VIÊN ĐĂNG KÝ ĐANG CHỜ DUYỆT (PENDING) */}
+            <div className="bg-slate-900 border border-amber-800/50 rounded-2xl p-5 shadow-lg space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-800">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-amber-400 animate-ping" />
+                  <h3 className="font-bold text-sm text-amber-200">
+                    Yêu cầu đăng ký Giáo viên đang chờ duyệt ({users.filter(u => u.status === 'pending').length})
+                  </h3>
+                </div>
+                <span className="text-[11px] text-slate-400">
+                  Cần Admin kích hoạt trước khi giáo viên có thể đăng nhập
+                </span>
+              </div>
+
+              {users.filter(u => u.status === 'pending').length === 0 ? (
+                <div className="p-6 text-center text-xs text-slate-400 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">
+                  Hiện không có yêu cầu đăng ký giáo viên nào đang chờ duyệt. Tất cả tài khoản đã được xử lý.
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                  {users
+                    .filter(u => u.status === 'pending')
+                    .map(pendingUser => (
+                      <div
+                        key={pendingUser.id}
+                        className="p-4 rounded-xl bg-slate-950 border border-amber-900/40 hover:border-amber-700/60 transition shadow flex flex-col justify-between gap-3"
+                      >
+                        <div className="space-y-1.5 text-xs">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-white text-sm">{pendingUser.fullName}</span>
+                            <span className="px-2 py-0.5 rounded-full bg-amber-950 text-amber-300 border border-amber-800 text-[10px] font-bold">
+                              Chờ duyệt
+                            </span>
+                          </div>
+                          <div className="text-slate-400 flex items-center gap-1.5">
+                            <UserCheck className="w-3.5 h-3.5 text-cyan-400" />
+                            <span>Username:</span>
+                            <span className="font-mono text-cyan-300 font-bold">{pendingUser.username}</span>
+                          </div>
+                          <div className="text-slate-400 flex items-center gap-1.5">
+                            <Phone className="w-3.5 h-3.5 text-emerald-400" />
+                            <span>Số điện thoại:</span>
+                            <span className="font-bold text-emerald-300">{pendingUser.phone || 'Chưa cung cấp'}</span>
+                          </div>
+                          <div className="text-slate-400 flex items-center gap-1.5">
+                            <Mail className="w-3.5 h-3.5 text-blue-400" />
+                            <span>Email:</span>
+                            <span className="text-slate-200">{pendingUser.email}</span>
+                          </div>
+                          <div className="text-slate-400 flex items-center gap-1.5">
+                            <BookOpen className="w-3.5 h-3.5 text-amber-400" />
+                            <span>Môn phụ trách:</span>
+                            <span className="text-amber-200 font-medium">{pendingUser.subject || 'Đa môn'}</span>
+                          </div>
+                          {pendingUser.createdAt && (
+                            <div className="text-[10px] text-slate-500 pt-1">
+                              Đăng ký lúc: {new Date(pendingUser.createdAt).toLocaleString('vi-VN')}
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="flex items-center gap-2 pt-2 border-t border-slate-800 text-xs">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              approveTeacher(pendingUser.id);
+                              alert(`Đã kích hoạt tài khoản cho giáo viên "${pendingUser.fullName}" thành công!`);
+                            }}
+                            className="flex-1 py-1.5 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition flex items-center justify-center gap-1.5 active:scale-95 shadow"
+                          >
+                            <Check className="w-3.5 h-3.5" />
+                            <span>Kích hoạt tài khoản</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              lockTeacher(pendingUser.id);
+                            }}
+                            className="py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold transition"
+                            title="Khóa tài khoản"
+                          >
+                            <UserX className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (window.confirm(`Bạn có chắc muốn xóa yêu cầu đăng ký của "${pendingUser.fullName}"?`)) {
+                                deleteUser(pendingUser.id);
+                              }
+                            }}
+                            className="py-1.5 px-2.5 rounded-lg bg-rose-950/60 hover:bg-rose-900 border border-rose-800 text-rose-300 transition"
+                            title="Xóa yêu cầu"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              )}
+            </div>
+
+            {/* Form tạo giáo viên mới thủ công */}
             <form
               onSubmit={handleCreateTeacher}
               className="p-5 bg-slate-900/90 border border-slate-800 rounded-2xl shadow-lg space-y-4"
             >
               <div className="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
                 <Plus className="w-4 h-4 text-cyan-400" />
-                <span>Thêm tài khoản Giáo viên mới:</span>
+                <span>Thêm tài khoản Giáo viên mới thủ công:</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs">
@@ -1045,6 +1178,16 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
                   />
                 </div>
                 <div>
+                  <label className="block text-slate-300 mb-1">Số điện thoại (SĐT):</label>
+                  <input
+                    type="tel"
+                    value={newTeacherPhone}
+                    onChange={e => setNewTeacherPhone(e.target.value)}
+                    placeholder="0912 345 678"
+                    className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-white font-mono"
+                  />
+                </div>
+                <div>
                   <label className="block text-slate-300 mb-1">Môn phụ trách:</label>
                   <input
                     type="text"
@@ -1054,18 +1197,18 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
                     className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-white"
                   />
                 </div>
-                <div className="flex items-end">
+                <div className="sm:col-span-2 md:col-span-3 flex justify-end">
                   <button
                     type="submit"
-                    className="w-full py-2 px-4 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs shadow transition active:scale-95"
+                    className="py-2.5 px-6 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs shadow transition active:scale-95"
                   >
-                    + Tạo Tài Khoản Giáo Viên
+                    + Tạo Tài Khoản Giáo Viên (Kích hoạt ngay)
                   </button>
                 </div>
               </div>
             </form>
 
-            {/* Bảng danh sách giáo viên */}
+            {/* Bảng danh sách tất cả người dùng */}
             <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
               <div className="p-4 border-b border-slate-800 flex justify-between items-center">
                 <h3 className="font-bold text-sm text-white">Danh sách người dùng hệ thống</h3>
@@ -1079,9 +1222,10 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
                       <th className="p-3.5">Tên đăng nhập</th>
                       <th className="p-3.5">Mật khẩu</th>
                       <th className="p-3.5">Vai trò</th>
+                      <th className="p-3.5">SĐT & Email</th>
                       <th className="p-3.5">Môn phụ trách</th>
-                      <th className="p-3.5">Email</th>
-                      <th className="p-3.5 text-right">Trạng thái</th>
+                      <th className="p-3.5 text-center">Trạng thái</th>
+                      <th className="p-3.5 text-right">Thao tác</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800">
@@ -1101,20 +1245,59 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
                             {u.role === 'admin' ? 'Quản trị viên' : 'Giáo viên'}
                           </span>
                         </td>
+                        <td className="p-3.5 text-slate-300">
+                          <div>{u.email}</div>
+                          {u.phone && <div className="text-[10px] text-emerald-400 font-mono mt-0.5">📞 {u.phone}</div>}
+                        </td>
                         <td className="p-3.5 text-slate-300">{u.subject || '—'}</td>
-                        <td className="p-3.5 text-slate-400">{u.email}</td>
-                        <td className="p-3.5 text-right">
+                        <td className="p-3.5 text-center">
+                          {u.status === 'pending' ? (
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-950 text-amber-300 border border-amber-800">
+                              Chờ duyệt
+                            </span>
+                          ) : u.isActive ? (
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-800">
+                              Đang hoạt động
+                            </span>
+                          ) : (
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-950 text-rose-300 border border-rose-800">
+                              Đã khóa
+                            </span>
+                          )}
+                        </td>
+                        <td className="p-3.5 text-right space-x-1.5 whitespace-nowrap">
                           {u.role !== 'admin' && (
-                            <button
-                              onClick={() => toggleTeacherStatus(u.id)}
-                              className={`px-2 py-1 rounded text-[10px] font-bold transition ${
-                                u.isActive
-                                  ? 'bg-emerald-950 text-emerald-300 border border-emerald-800 hover:bg-rose-950 hover:text-rose-300'
-                                  : 'bg-rose-950 text-rose-300 border border-rose-800 hover:bg-emerald-950 hover:text-emerald-300'
-                              }`}
-                            >
-                              {u.isActive ? 'Đang hoạt động' : 'Đã khóa'}
-                            </button>
+                            <>
+                              {u.status === 'pending' || !u.isActive ? (
+                                <button
+                                  type="button"
+                                  onClick={() => approveTeacher(u.id)}
+                                  className="px-2 py-1 rounded text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-800 hover:bg-emerald-900 transition"
+                                >
+                                  Kích hoạt
+                                </button>
+                              ) : (
+                                <button
+                                  type="button"
+                                  onClick={() => lockTeacher(u.id)}
+                                  className="px-2 py-1 rounded text-[10px] font-bold bg-rose-950 text-rose-300 border border-rose-800 hover:bg-rose-900 transition"
+                                >
+                                  Khóa
+                                </button>
+                              )}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (window.confirm(`Bạn có chắc muốn xóa tài khoản "${u.fullName}"?`)) {
+                                    deleteUser(u.id);
+                                  }
+                                }}
+                                className="px-2 py-1 rounded text-[10px] font-bold bg-slate-800 text-rose-400 hover:bg-rose-950 hover:border hover:border-rose-800 transition"
+                                title="Xóa tài khoản"
+                              >
+                                Xóa
+                              </button>
+                            </>
                           )}
                         </td>
                       </tr>

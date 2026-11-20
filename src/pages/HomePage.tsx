@@ -139,6 +139,18 @@ export const HomePage: React.FC<HomePageProps> = ({
       case 'hoa-hoc':
       case 'khtn':
         return 'bg-cyan-950/80 text-cyan-400 border-cyan-800/60 dark:bg-cyan-950/80 dark:text-cyan-400 dark:border-cyan-800/60 light:bg-cyan-50 light:text-cyan-700 light:border-cyan-200';
+      case 'sinh-hoc':
+        return 'bg-emerald-950/80 text-emerald-400 border-emerald-800/60 dark:bg-emerald-950/80 dark:text-emerald-400 dark:border-emerald-800/60 light:bg-emerald-50 light:text-emerald-700 light:border-emerald-200';
+      case 'tin-hoc':
+        return 'bg-purple-950/80 text-purple-400 border-purple-800/60 dark:bg-purple-950/80 dark:text-purple-400 dark:border-purple-800/60 light:bg-purple-50 light:text-purple-700 light:border-purple-200';
+      case 'dia-ly':
+        return 'bg-teal-950/80 text-teal-400 border-teal-800/60 dark:bg-teal-950/80 dark:text-teal-400 dark:border-teal-800/60 light:bg-teal-50 light:text-teal-700 light:border-teal-200';
+      case 'lich-su':
+        return 'bg-orange-950/80 text-orange-400 border-orange-800/60 dark:bg-orange-950/80 dark:text-orange-400 dark:border-orange-800/60 light:bg-orange-50 light:text-orange-700 light:border-orange-200';
+      case 'cong-nghe':
+        return 'bg-sky-950/80 text-sky-400 border-sky-800/60 dark:bg-sky-950/80 dark:text-sky-400 dark:border-sky-800/60 light:bg-sky-50 light:text-sky-700 light:border-sky-200';
+      case 'gdkt-pl':
+        return 'bg-fuchsia-950/80 text-fuchsia-400 border-fuchsia-800/60 dark:bg-fuchsia-950/80 dark:text-fuchsia-400 dark:border-fuchsia-800/60 light:bg-fuchsia-50 light:text-fuchsia-700 light:border-fuchsia-200';
       case 'tieng-anh':
         return 'bg-rose-950/80 text-rose-400 border-rose-800/60 dark:bg-rose-950/80 dark:text-rose-400 dark:border-rose-800/60 light:bg-rose-50 light:text-rose-700 light:border-rose-200';
       default:
@@ -369,6 +381,12 @@ export const HomePage: React.FC<HomePageProps> = ({
                 { id: 'khtn', nameKey: 'subject.khtn' },
                 { id: 'vat-ly', nameKey: 'subject.vat-ly' },
                 { id: 'hoa-hoc', nameKey: 'subject.hoa-hoc' },
+                { id: 'sinh-hoc', nameKey: 'subject.sinh-hoc' },
+                { id: 'tin-hoc', nameKey: 'subject.tin-hoc' },
+                { id: 'dia-ly', nameKey: 'subject.dia-ly' },
+                { id: 'lich-su', nameKey: 'subject.lich-su' },
+                { id: 'cong-nghe', nameKey: 'subject.cong-nghe' },
+                { id: 'gdkt-pl', nameKey: 'subject.gdkt-pl' },
                 { id: 'tieng-anh', nameKey: 'subject.tieng-anh' },
               ].map(sub => (
                 <button
