@@ -147,7 +147,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
           <p className="text-xs text-slate-400 mt-1">
             {activeTab === 'login'
               ? 'Dành cho Quản trị viên và Giáo viên phụ trách biên soạn & chấm bài'
-              : 'Tạo tài khoản giáo viên mới. Hồ sơ sẽ được gửi đến Ban Quản Trị (mcpsoftware@gmail.com) để xét duyệt'}
+              : 'Tạo tài khoản giáo viên mới. Hồ sơ sẽ được gửi đến Ban Quản Trị để xét duyệt'}
           </p>
         </div>
 
@@ -267,7 +267,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
                 </div>
                 <h3 className="font-bold text-white text-base">Hồ Sơ Đã Được Gửi Phê Duyệt!</h3>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  Thông tin đăng ký của thầy/cô <strong>{regFullName}</strong> (Email: {regEmail}, SĐT: {regPhone}) đã được chuyển tiếp đến Ban Quản Trị tại hộp thư: <strong className="text-cyan-400 font-mono">mcpsoftware@gmail.com</strong>.
+                  Thông tin đăng ký của thầy/cô <strong>{regFullName}</strong> (Email: {regEmail}, SĐT: {regPhone}) đã được chuyển tiếp đến Ban Quản Trị tại hộp thư: <strong className="text-cyan-400 font-mono"></strong>.
                 </p>
                 <p className="text-[11px] text-slate-400">
                   Quản trị viên sẽ kiểm tra và kích hoạt tài khoản trong thời gian sớm nhất. Sau khi được duyệt, thầy/cô có thể đăng nhập vào hệ thống ngay.
@@ -426,7 +426,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
                 </div>
 
                 <div className="p-2.5 bg-slate-950/60 rounded-xl border border-slate-800 text-[11px] text-slate-400">
-                  ℹ️ Sau khi nhấn đăng ký, hệ thống sẽ tự động gửi email thông báo tới <strong className="text-cyan-300">mcpsoftware@gmail.com</strong> để kích hoạt tài khoản của thầy/cô.
+                  ℹ️ Sau khi nhấn đăng ký, hệ thống sẽ tự động gửi email thông báo tới <strong className="text-cyan-300">Quản trị</strong> để kích hoạt tài khoản của thầy/cô.
                 </div>
 
                 <button

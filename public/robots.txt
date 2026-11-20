@@ -1,5 +1,9 @@
+# Robots.txt - STEM & English Interactive Lab
 User-agent: *
 Allow: /
+Allow: /lab/
+Allow: /mon/
+Disallow: /?view=admin
 Disallow: /api/
 
 Sitemap: https://dayhoconlineliart.vercel.app/sitemap.xml

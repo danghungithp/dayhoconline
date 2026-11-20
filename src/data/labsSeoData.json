@@ -1,0 +1,510 @@
+[
+  {
+    "id": "chem-atom-builder",
+    "slug": "mo-phong-cau-tao-nguyen-tu-hoa-hoc-7",
+    "title": "Mô phỏng Cấu tạo Nguyên tử, Ion & Ghép Phân tử — Hóa học Lớp 7 (GDPT 2018)",
+    "titleEn": "Visual Atom Builder, Isotopes, Ions & Molecule Formation - Chemistry Grade 7",
+    "subject": "khtn",
+    "subjectName": "Khoa học Tự nhiên (Hóa học)",
+    "grade": 7,
+    "level": "THCS",
+    "textbooks": ["Kết nối tri thức", "Chân trời sáng tạo", "Cánh diều"],
+    "description": "Thí nghiệm ảo lắp ráp Proton, Neutron, Electron. Xác định số hiệu Z, số khối A, điện tích ion và mô hình phân tử H2O, CO2, NaCl chuẩn GDPT 2018.",
+    "curriculumCode": "GDPT2018-KHTN7-C2",
+    "isImplemented": true,
+    "technology": "canvas2d",
+    "seoContent": {
+      "objective": "Học sinh nắm vững thành phần cấu tạo nguyên tử gồm hạt nhân (Proton mang điện dương, Neutron không mang điện) và lớp vỏ Electron mang điện âm; hiểu khái niệm số hiệu nguyên tử Z, số khối A, nguyên tử trung hòa về điện và sự hình thành Ion / Liên kết hóa học.",
+      "variables": [
+        "Số hạt Proton (1 đến 20) trong hạt nhân",
+        "Số hạt Neutron trong hạt nhân (xác định đồng vị & độ bền)",
+        "Số hạt Electron ở các lớp vỏ K, L, M, N (tối đa 2, 8, 8, 2)",
+        "Chế độ xem phân tử mẫu: H2, O2, H2O, CO2, CH4, NH3, NaCl"
+      ],
+      "phenomenon": "Khi số proton thay đổi, tên nguyên tố hóa học và tính chất hóa học thay đổi hoàn toàn. Khi số electron khác số proton, nguyên tử mất cân bằng điện tích và trở thành Cation (mất bớt e, điện tích dương) hoặc Anion (nhận thêm e, điện tích âm). Hạt nhân chỉ bền vững khi tỉ lệ nơtron/proton thỏa mãn điều kiện ổn định 1 <= N/Z <= 1.5.",
+      "formulaOrGrammar": "Số khối: A = Z + N (với Z = số proton = số electron trong nguyên tử trung hòa). Điện tích hạt nhân: q = +Z. Điện tích ion: Q = (Số Proton) - (Số Electron). Cấu hình vỏ electron tối đa lớp n: 2n^2.",
+      "commonMistakes": "Học sinh thường nhầm lẫn giữa điện tích hạt nhân (+Z) với số khối (A = Z + N); hoặc quên rằng khối lượng nguyên tử tập trung chủ yếu ở hạt nhân do khối lượng electron cực nhỏ."
+    },
+    "quizzes": [
+      {
+        "question": "Một nguyên tử có 8 proton, 8 neutron và 8 electron. Số khối A và tên nguyên tố này là gì?",
+        "options": [
+          "A = 8, Nguyên tố Cacbon (C)",
+          "A = 16, Nguyên tố Oxi (O)",
+          "A = 24, Nguyên tố Magiê (Mg)",
+          "A = 16, Nguyên tố Nitơ (N)"
+        ],
+        "answer": "A = 16, Nguyên tố Oxi (O)",
+        "explanation": "Số hiệu nguyên tử Z = 8 là nguyên tố Oxi (O). Số khối A = số proton + số neutron = 8 + 8 = 16."
+      },
+      {
+        "question": "Khi nguyên tử Natri (Na, Z = 11) nhường đi 1 electron ở lớp vỏ ngoài cùng, ion thu được có điện tích là bao nhiêu?",
+        "options": ["Điện tích 1-", "Điện tích 1+ (Na⁺)", "Điện tích 2+", "Trung hòa về điện"],
+        "answer": "Điện tích 1+ (Na⁺)",
+        "explanation": "Số proton = 11 (+11), số electron còn lại = 10 (-10). Điện tích tổng cộng = +11 - 10 = +1. Ion tạo thành là cation Na⁺."
+      },
+      {
+        "question": "Lớp electron thứ hai (lớp L) chứa tối đa bao nhiêu electron?",
+        "options": ["2 electron", "8 electron", "18 electron", "32 electron"],
+        "answer": "8 electron",
+        "explanation": "Theo quy tắc phân bố vỏ electron, lớp thứ nhất (K) chứa tối đa 2 electron, lớp thứ hai (L) chứa tối đa 8 electron."
+      }
+    ],
+    "relatedSlugs": [
+      "mo-phong-can-bang-phuong-trinh-hoa-hoc-bao-toan-khoi-luong-8",
+      "mo-phong-lai-men-den-punnett-cau-tao-te-bao-sinh-hoc-9"
+    ],
+    "updatedAt": "2026-11-20"
+  },
+  {
+    "id": "geom-quadrilaterals-thales-pyramids",
+    "slug": "mo-phong-hinh-hoc-khong-gian-3d-trai-phang-toan-8",
+    "title": "Mô phỏng Hình học Không gian 3D & Trải phẳng (Net Unfolding) — Toán Lớp 8 (GDPT 2018)",
+    "titleEn": "3D Spatial Geometry & Interactive Net Unfolding - Mathematics Grade 8",
+    "subject": "hinh-hoc",
+    "subjectName": "Hình học & Đo lường",
+    "grade": 8,
+    "level": "THCS",
+    "textbooks": ["Kết nối tri thức", "Chân trời sáng tạo", "Cánh diều"],
+    "description": "Mô phỏng 3D hình chóp tam giác đều, chóp tứ giác đều, hình nón, hình lăng trụ. Tương tác trải phẳng 2D, tính diện tích xung quanh và thể tích.",
+    "curriculumCode": "GDPT2018-TOAN8-HH",
+    "isImplemented": true,
+    "technology": "three3d",
+    "seoContent": {
+      "objective": "Nhận biết đỉnh, cạnh bên, mặt đáy, chiều cao và trung đoạn của hình chóp tam giác đều, chóp tứ giác đều; trực quan hóa quá trình mở phẳng các mặt bên sang dạng lưới 2D (Net Unfolding) để hiểu bản chất công thức diện tích xung quanh và thể tích.",
+      "variables": [
+        "Loại hình khối: Chóp tứ giác đều, Chóp tam giác đều, Lăng trụ đứng, Hình nón, Hình trụ",
+        "Kích thước cạnh đáy a (từ 2 đến 10 cm)",
+        "Chiều cao khối hình h (từ 3 đến 12 cm)",
+        "Thanh trượt mở phẳng trải lưới 3D sang 2D (0% đến 100%)",
+        "Chế độ xoay 360 độ góc nhìn không gian"
+      ],
+      "phenomenon": "Khi trải phẳng một khối đa diện 3D thành hình khai triển 2D, diện tích toàn phần của khối hình chính bằng tổng diện tích các đa giác phẳng thành phần cấu thành nên lưới đó. Đối với các khối có 1 đỉnh chóp, thể tích luôn bằng 1/3 thể tích của khối lăng trụ có cùng diện tích đáy và chiều cao.",
+      "formulaOrGrammar": "Thể tích hình chóp đều: V = (1/3) * S_đáy * h. Diện tích xung quanh: S_xq = p * d (p là nửa chu vi đáy, d là trung đoạn). Diện tích toàn phần: S_tp = S_xq + S_đáy.",
+      "commonMistakes": "Học sinh rất hay nhầm lẫn giữa chiều cao khối chóp h (khoảng cách từ đỉnh tới tâm đáy) với trung đoạn d (đường cao xuất phát từ đỉnh của mỗi mặt bên tam giác)."
+    },
+    "quizzes": [
+      {
+        "question": "Một hình chóp tứ giác đều có cạnh đáy bằng 6 cm và chiều cao h = 4 cm. Thể tích của hình chóp đó là bao nhiêu?",
+        "options": ["144 cm³", "48 cm³", "24 cm³", "72 cm³"],
+        "answer": "48 cm³",
+        "explanation": "Diện tích đáy hình vuông là S_đáy = 6 * 6 = 36 cm². Thể tích V = (1/3) * 36 * 4 = 48 cm³."
+      },
+      {
+        "question": "Trung đoạn của hình chóp tam giác đều là đường gì?",
+        "options": [
+          "Đường cao của mặt đáy",
+          "Đường cao kẻ từ đỉnh của một mặt bên tam giác",
+          "Đường nối đỉnh tới trọng tâm đáy",
+          "Cạnh bên của khối chóp"
+        ],
+        "answer": "Đường cao kẻ từ đỉnh của một mặt bên tam giác",
+        "explanation": "Trung đoạn là đường cao kẻ từ đỉnh của hình chóp đều hạ vuông góc xuống một cạnh đáy của mặt bên."
+      },
+      {
+        "question": "Khi trải phẳng hoàn toàn 2D một hình chóp tứ giác đều, hình khai triển gồm những hình phẳng nào?",
+        "options": [
+          "4 hình chữ nhật và 1 hình vuông",
+          "1 hình vuông ở giữa và 4 hình tam giác cân xung quanh",
+          "2 hình vuông và 4 hình tam giác",
+          "5 hình tam giác đều"
+        ],
+        "answer": "1 hình vuông ở giữa và 4 hình tam giác cân xung quanh",
+        "explanation": "Mặt đáy là 1 hình vuông, 4 mặt bên là 4 hình tam giác cân bằng nhau gắn liền với 4 cạnh của hình vuông đáy."
+      }
+    ],
+    "relatedSlugs": [
+      "mo-phong-do-thi-parabol-phuong-trinh-bac-hai-toan-9",
+      "mo-phong-chuyen-dong-nem-xien-bao-toan-co-nang-vat-ly-10"
+    ],
+    "updatedAt": "2026-11-20"
+  },
+  {
+    "id": "phys-projectile-collision-energy",
+    "slug": "mo-phong-chuyen-dong-nem-xien-bao-toan-co-nang-vat-ly-10",
+    "title": "Mô phỏng Chuyển động Ném xiên & Bảo toàn Cơ năng — Vật lý Lớp 10 (GDPT 2018)",
+    "titleEn": "Projectile Motion, Trajectory Equations & Conservation of Mechanical Energy - Physics Grade 10",
+    "subject": "vat-ly",
+    "subjectName": "Vật lý",
+    "grade": 10,
+    "level": "THPT",
+    "textbooks": ["Kết nối tri thức", "Chân trời sáng tạo", "Cánh diều"],
+    "description": "Thí nghiệm ảo chuyển động ném xiên và ném ngang. Khảo sát góc ném tối ưu 45 độ, tầm bay xa, tầm bay cao và định luật bảo toàn cơ năng.",
+    "curriculumCode": "GDPT2018-VATLY10-C2",
+    "isImplemented": true,
+    "technology": "canvas2d",
+    "seoContent": {
+      "objective": "Phân tích chuyển động ném xiên thành hai thành phần độc lập: chuyển động thẳng đều theo phương ngang Ox và chuyển động biến đổi đều theo phương thẳng đứng Oy; kiểm chứng góc ném 45° cho tầm bay xa cực đại.",
+      "variables": [
+        "Vận tốc ném ban đầu v0 (5 đến 50 m/s)",
+        "Góc ném alpha (0 đến 90 độ)",
+        "Gia tốc trọng trường g (Trái Đất 9.8 m/s², Mặt Trăng 1.62 m/s², Sao Hỏa 3.7 m/s²)",
+        "Hệ số lực cản không khí k",
+        "Vị trí bia mục tiêu xTarget (m)"
+      ],
+      "phenomenon": "Quỹ đạo chuyển động ném trong trọng trường là một nhánh parabol. Tại điểm cao nhất, vận tốc đứng vy = 0 nhưng vận tốc ngang vx = v0 * cos(alpha) != 0. Cơ năng toàn phần được bảo toàn khi bỏ qua lực cản.",
+      "formulaOrGrammar": "Tầm cao cực đại: H = (v0^2 * sin^2(alpha)) / (2g). Tầm bay xa: L = (v0^2 * sin(2*alpha)) / g. Cơ năng: W = 0.5 * m * v^2 + m * g * y = const.",
+      "commonMistakes": "Nhiều học sinh lầm tưởng rằng tại điểm cao nhất của quỹ đạo ném xiên thì vận tốc của vật bằng 0."
+    },
+    "quizzes": [
+      {
+        "question": "Trong điều kiện bỏ qua lực cản của không khí, góc ném ban đầu alpha bằng bao nhiêu để vật đạt tầm bay xa lớn nhất?",
+        "options": ["alpha = 30°", "alpha = 45°", "alpha = 60°", "alpha = 90°"],
+        "answer": "alpha = 45°",
+        "explanation": "Tầm bay xa L = (v0^2 * sin(2*alpha)) / g. Để L lớn nhất thì sin(2*alpha) = 1 <=> alpha = 45°."
+      },
+      {
+        "question": "Tại điểm cao nhất của quỹ đạo chuyển động ném xiên, đại lượng nào sau đây triệt tiêu (bằng 0)?",
+        "options": [
+          "Gia tốc của vật",
+          "Vận tốc thành phần theo phương thẳng đứng (vy)",
+          "Vận tốc thành phần theo phương ngang (vx)",
+          "Động năng của vật"
+        ],
+        "answer": "Vận tốc thành phần theo phương thẳng đứng (vy)",
+        "explanation": "Tại đỉnh quỹ đạo vy = 0 nhưng vx = v0 * cos(alpha) vẫn khác 0."
+      },
+      {
+        "question": "Nếu tăng vận tốc ban đầu v0 lên gấp 2 lần (giữ nguyên góc ném), tầm bay xa L sẽ thay đổi như thế nào?",
+        "options": ["Tăng lên 2 lần", "Tăng lên 4 lần", "Không đổi", "Giảm đi 2 lần"],
+        "answer": "Tăng lên 4 lần",
+        "explanation": "Tầm bay xa L tỉ lệ với v0 bình phương, do đó khi v0 tăng 2 lần thì L tăng 4 lần."
+      }
+    ],
+    "relatedSlugs": [
+      "mo-phong-do-thi-parabol-phuong-trinh-bac-hai-toan-9",
+      "mo-phong-dinh-luat-phan-xa-anh-sang-song-am-khtn-7"
+    ],
+    "updatedAt": "2026-11-20"
+  },
+  {
+    "id": "eng-present-simple-continuous",
+    "slug": "mo-phong-12-thi-tieng-anh-truc-quan-cau-bi-dong",
+    "title": "Mô phỏng Trực quan 12 Thì Tiếng Anh & Chuyển đổi Câu Bị Động (Passive Voice)",
+    "titleEn": "Visual 12 English Tenses Timeline & Passive Voice Transformer",
+    "subject": "tieng-anh",
+    "subjectName": "Tiếng Anh",
+    "grade": 8,
+    "level": "THCS",
+    "textbooks": ["Global Success", "Friends Plus", "English Discovery", "i-Learn Smart World"],
+    "description": "Học 12 thì tiếng Anh qua trục thời gian tương tác trực quan. Chuyển đổi linh hoạt câu Chủ động - Bị động và kiểm tra phát âm với Web Speech AI.",
+    "curriculumCode": "GDPT2018-ENG8-U3",
+    "isImplemented": true,
+    "technology": "speech-ai",
+    "seoContent": {
+      "objective": "Trực quan hóa cấu trúc và ngữ nghĩa thời gian của các thì tiếng Anh; nắm chắc quy tắc chuyển đổi câu chủ động sang câu bị động với cấu trúc Be + V3/V-ed.",
+      "variables": [
+        "Lựa chọn 1 trong 12 thì tiếng Anh trên ma trận thời gian",
+        "Động từ gốc tương tác: write, build, teach, play, eat, paint",
+        "Chế độ chuyển đổi Chủ động (Active) sang Bị động (Passive Voice)",
+        "Nhận diện giọng nói Web Speech API kiểm tra phát âm tiếng Anh"
+      ],
+      "phenomenon": "Câu bị động được sử dụng khi đối tượng chịu tác động của hành động quan trọng hơn người thực hiện. Trục thời gian trực quan giúp học sinh thấy rõ thời điểm xảy ra và tính liên tục/hoàn tất của hành động.",
+      "formulaOrGrammar": "Công thức tổng quát câu bị động: S + be (chia theo thì) + V3/V-ed + (by O). Ví dụ: Present Simple: am/is/are + V3; Past Simple: was/were + V3.",
+      "commonMistakes": "Học sinh thường quên chia động từ 'to be' theo đúng thì của câu chủ động hoặc nhầm số ít/số nhiều của tân ngữ mới chuyển thành chủ ngữ."
+    },
+    "quizzes": [
+      {
+        "question": "Chuyển câu sau sang thể bị động: 'Shakespeare wrote Romeo and Juliet in 1597.'",
+        "options": [
+          "Romeo and Juliet is written by Shakespeare in 1597.",
+          "Romeo and Juliet was written by Shakespeare in 1597.",
+          "Romeo and Juliet had been written by Shakespeare.",
+          "Romeo and Juliet was being written by Shakespeare in 1597."
+        ],
+        "answer": "Romeo and Juliet was written by Shakespeare in 1597.",
+        "explanation": "Câu gốc dùng thì quá khứ đơn (wrote) và tân ngữ 'Romeo and Juliet' là danh từ số ít, nên thể bị động là 'was written'."
+      },
+      {
+        "question": "Dấu hiệu nhận biết đặc trưng của thì Hiện tại Hoàn thành (Present Perfect) là từ nào sau đây?",
+        "options": ["yesterday", "already / since / for", "tomorrow", "at the moment"],
+        "answer": "already / since / for",
+        "explanation": "Already, since, for, just, yet là những trạng từ chỉ thời gian điển hình đi cùng thì Hiện tại hoàn thành."
+      }
+    ],
+    "relatedSlugs": [
+      "mo-phong-cau-tao-nguyen-tu-hoa-hoc-7",
+      "mo-phong-he-nhi-phan-8-bit-mach-cong-logic-tin-hoc-8"
+    ],
+    "updatedAt": "2026-11-20"
+  },
+  {
+    "id": "math-quadratic-parabola",
+    "slug": "mo-phong-do-thi-parabol-phuong-trinh-bac-hai-toan-9",
+    "title": "Mô phỏng Đồ thị Parabol & Nghiệm Phương trình bậc hai — Toán Lớp 9 (GDPT 2018)",
+    "titleEn": "Interactive Parabola Grapher & Quadratic Equation Roots Explorer - Math Grade 9",
+    "subject": "toan",
+    "subjectName": "Toán học (Đại số)",
+    "grade": 9,
+    "level": "THCS",
+    "textbooks": ["Kết nối tri thức", "Chân trời sáng tạo", "Cánh diều"],
+    "description": "Vẽ đồ thị hàm số bậc hai y = ax² + bx + c trực quan. Thay đổi hệ số a, b, c quan sát tọa độ đỉnh, trục đối xứng và số giao điểm với trục hoành theo biệt thức Delta.",
+    "curriculumCode": "GDPT2018-TOAN9-DS",
+    "isImplemented": true,
+    "technology": "graph",
+    "seoContent": {
+      "objective": "Hiểu mối liên hệ hình học giữa đồ thị hàm số bậc hai parabol y = ax^2 + bx + c với nghiệm của phương trình bậc hai tương ứng thông qua dấu của biệt thức Delta = b^2 - 4ac.",
+      "variables": [
+        "Hệ số a (từ -5 đến 5, a ≠ 0)",
+        "Hệ số b (từ -10 đến 10)",
+        "Hệ số c (từ -10 đến 10)",
+        "Hiển thị tọa độ đỉnh Parabol I và phương trình trục đối xứng"
+      ],
+      "phenomenon": "Khi a > 0 bề lõm hướng lên; khi a < 0 bề lõm hướng xuống. Số giao điểm của parabol với trục hoành Ox bằng chính xác số nghiệm phân biệt của phương trình bậc hai.",
+      "formulaOrGrammar": "Biệt thức: Delta = b^2 - 4ac. Đỉnh: I(-b/(2a), -Delta/(4a)). Trục đối xứng: x = -b/(2a). Nghiệm: x = (-b +- sqrt(Delta)) / (2a).",
+      "commonMistakes": "Học sinh hay quên điều kiện a != 0 hoặc nhầm dấu hoành độ đỉnh x_I = -b/(2a) thành +b/(2a)."
+    },
+    "quizzes": [
+      {
+        "question": "Đồ thị hàm số y = 2x² - 4x + 1 có tọa độ đỉnh I là điểm nào?",
+        "options": ["I(1; -1)", "I(-1; 7)", "I(2; 1)", "I(1; 1)"],
+        "answer": "I(1; -1)",
+        "explanation": "Hoành độ đỉnh x_I = -(-4)/(2*2) = 1. Tung độ y_I = 2(1)^2 - 4(1) + 1 = -1."
+      },
+      {
+        "question": "Khi biệt thức Delta < 0, đồ thị hàm số y = ax² + bx + c có mối quan hệ như thế nào với trục hoành Ox?",
+        "options": [
+          "Cắt trục hoành tại 2 điểm phân biệt",
+          "Tiếp xúc với trục hoành tại đúng 1 điểm",
+          "Không cắt và không có điểm chung với trục hoành Ox",
+          "Trùng với trục hoành"
+        ],
+        "answer": "Không cắt và không có điểm chung với trục hoành Ox",
+        "explanation": "Khi Delta < 0 phương trình vô nghiệm thực, parabol nằm hoàn toàn về một phía so với trục Ox."
+      }
+    ],
+    "relatedSlugs": [
+      "mo-phong-chuyen-dong-nem-xien-bao-toan-co-nang-vat-ly-10",
+      "mo-phong-hinh-hoc-khong-gian-3d-trai-phang-toan-8"
+    ],
+    "updatedAt": "2026-11-20"
+  },
+  {
+    "id": "phys-light-optics-sound",
+    "slug": "mo-phong-dinh-luat-phan-xa-anh-sang-song-am-khtn-7",
+    "title": "Mô phỏng Định luật Phản xạ Ánh sáng & Sóng âm — KHTN Lớp 7 (GDPT 2018)",
+    "titleEn": "Law of Reflection, Flat/Curved Mirrors & Acoustic Wave Generator - Science Grade 7",
+    "subject": "khtn",
+    "subjectName": "Khoa học Tự nhiên (Vật lý)",
+    "grade": 7,
+    "level": "THCS",
+    "textbooks": ["Kết nối tri thức", "Chân trời sáng tạo", "Cánh diều"],
+    "description": "Thí nghiệm ảo chiếu tia sáng đến gương phẳng, gương cầu lồi, gương cầu lõm đo góc tới i = góc phản xạ i'. Phát sóng âm thanh thực nghiệm Web Audio.",
+    "curriculumCode": "GDPT2018-KHTN7-P2",
+    "isImplemented": true,
+    "technology": "canvas2d",
+    "seoContent": {
+      "objective": "Kiểm chứng định luật phản xạ ánh sáng (i' = i); khảo sát sự truyền âm thanh, mối quan hệ giữa tần số với độ cao và biên độ với độ to của âm thanh.",
+      "variables": [
+        "Loại gương: Gương phẳng, Gương cầu lồi, Gương cầu lõm",
+        "Góc tới i của tia laser (0 đến 85 độ)",
+        "Tần số sóng âm f (100 Hz đến 2000 Hz)",
+        "Biên độ dao động âm thanh (0 đến 100%)"
+      ],
+      "phenomenon": "Tia phản xạ nằm trong mặt phẳng tới và góc phản xạ bằng góc tới. Tần số dao động quyết định độ cao của âm; biên độ dao động quyết định độ to.",
+      "formulaOrGrammar": "Định luật phản xạ: i' = i. Vận tốc âm thanh trong không khí: v ≈ 343 m/s ở 20°C. Bước sóng: lambda = v / f.",
+      "commonMistakes": "Xác định nhầm góc tới là góc giữa tia sáng với mặt phẳng gương thay vì góc giữa tia tới và pháp tuyến."
+    },
+    "quizzes": [
+      {
+        "question": "Chiếu một tia sáng laser tới mặt gương phẳng sao cho góc tạo bởi tia tới và mặt gương bằng 30°. Góc phản xạ i' bằng bao nhiêu?",
+        "options": ["30°", "60°", "90°", "45°"],
+        "answer": "60°",
+        "explanation": "Góc tới i = 90° - 30° = 60°. Do đó góc phản xạ i' = i = 60°."
+      },
+      {
+        "question": "Âm thanh không thể truyền qua môi trường nào sau đây?",
+        "options": ["Nước biển", "Chân không", "Thanh thép", "Khí quyển"],
+        "answer": "Chân không",
+        "explanation": "Sóng âm cần các hạt vật chất môi trường để lan truyền dao động, do đó không truyền được trong chân không."
+      }
+    ],
+    "relatedSlugs": [
+      "mo-phong-chuyen-dong-nem-xien-bao-toan-co-nang-vat-ly-10"
+    ],
+    "updatedAt": "2026-11-20"
+  },
+  {
+    "id": "chem-balancing-reactions",
+    "slug": "mo-phong-can-bang-phuong-trinh-hoa-hoc-bao-toan-khoi-luong-8",
+    "title": "Mô phỏng Cân bằng Phương trình Hóa học & Định luật Bảo toàn Khối lượng — KHTN 8",
+    "titleEn": "Visual Chemical Equation Balancing & Law of Conservation of Mass - Chemistry Grade 8",
+    "subject": "khtn",
+    "subjectName": "Khoa học Tự nhiên (Hóa học)",
+    "grade": 8,
+    "level": "THCS",
+    "textbooks": ["Kết nối tri thức", "Chân trời sáng tạo", "Cánh diều"],
+    "description": "Thí nghiệm ảo cân đĩa hai bên đối chiếu khối lượng chất tham gia và sản phẩm. Đếm số nguyên tử thời gian thực để cân bằng phương trình hóa học trực quan.",
+    "curriculumCode": "GDPT2018-KHTN8-C1",
+    "isImplemented": true,
+    "technology": "canvas2d",
+    "seoContent": {
+      "objective": "Kiểm chứng Định luật bảo toàn khối lượng; rèn luyện kỹ năng cân bằng phương trình hóa học bằng cách điều chỉnh hệ số để số lượng nguyên tử mỗi nguyên tố ở hai vế bằng nhau.",
+      "variables": [
+        "Chọn phản ứng mẫu: H2 + O2, CH4 + O2, Fe + O2, N2 + H2",
+        "Điều chỉnh hệ số nguyên trước mỗi chất",
+        "Bật/tắt cân đĩa khối lượng đối chiếu",
+        "Hiển thị bộ đếm số lượng nguyên tử thời gian thực"
+      ],
+      "phenomenon": "Trong phản ứng hóa học chỉ có liên kết giữa các nguyên tử thay đổi, số nguyên tử mỗi nguyên tố được bảo toàn. Do đó tổng khối lượng chất tham gia bằng tổng khối lượng sản phẩm.",
+      "formulaOrGrammar": "Định luật bảo toàn khối lượng: m_A + m_B = m_C + m_D.",
+      "commonMistakes": "Tự ý thay đổi chỉ số chân của công thức hóa học thay vì thay đổi hệ số trước công thức."
+    },
+    "quizzes": [
+      {
+        "question": "Hệ số nguyên tối giản lần lượt để cân bằng phương trình sau là gì: __ Fe + __ O2 -> __ Fe3O4?",
+        "options": ["3, 2, 1", "1, 2, 3", "3, 4, 1", "2, 3, 1"],
+        "answer": "3, 2, 1",
+        "explanation": "3Fe + 2O2 -> Fe3O4 có 3 nguyên tử Fe và 4 nguyên tử O ở cả hai vế."
+      },
+      {
+        "question": "Đốt cháy hoàn toàn 12 gam than trong không khí thu được 44 gam CO2. Khối lượng khí oxi (O2) đã phản ứng là bao nhiêu?",
+        "options": ["56 gam", "32 gam", "24 gam", "16 gam"],
+        "answer": "32 gam",
+        "explanation": "m_O2 = m_CO2 - m_C = 44 - 12 = 32 gam."
+      }
+    ],
+    "relatedSlugs": [
+      "mo-phong-cau-tao-nguyen-tu-hoa-hoc-7"
+    ],
+    "updatedAt": "2026-11-20"
+  },
+  {
+    "id": "bio-genetics-mendel",
+    "slug": "mo-phong-lai-men-den-punnett-cau-tao-te-bao-sinh-hoc-9",
+    "title": "Mô phỏng Phép lai Men-đen (Punnett) & Cấu tạo Tế bào — Sinh học Lớp 9 (GDPT 2018)",
+    "titleEn": "Mendelian Genetics, Punnett Square & Cell Anatomy - Biology Grade 9",
+    "subject": "sinh-hoc",
+    "subjectName": "Sinh học",
+    "grade": 9,
+    "level": "THCS",
+    "textbooks": ["Kết nối tri thức", "Chân trời sáng tạo", "Cánh diều"],
+    "description": "Thí nghiệm ảo lai Men-đen: Bảng Punnett 2x2 tính tỉ lệ kiểu gen 1:2:1 và kiểu hình 3:1. Khám phá giải phẫu tế bào thực vật (Nhân ADN, Ty thể, Lục lạp).",
+    "curriculumCode": "GDPT2018-SINH9-C1",
+    "isImplemented": true,
+    "technology": "canvas2d",
+    "seoContent": {
+      "objective": "Hiểu quy luật phân li độc lập của Men-đen qua bảng Punnett; quan sát cấu tạo hiển vi tế bào thực vật gồm Nhân chứa ADN, Ty thể tạo năng lượng và Lục lạp quang hợp.",
+      "variables": [
+        "Tính trạng: Màu hoa (A tím > a trắng) hoặc Dạng hạt (B vàng trơn > b xanh nhăn)",
+        "Kiểu gen Bố P và Mẹ P",
+        "Chế độ: Lai Men-đen (Punnett) hoặc Cấu tạo Tế bào (Cell Anatomy)",
+        "Xem chi tiết bào quan: Nhân, Ty thể, Lục lạp, Không bào, Vách tế bào"
+      ],
+      "phenomenon": "Mỗi nhân tố di truyền phân li về một giao tử và tổ hợp tự do khi thụ tinh. F2 cho tỉ lệ kiểu hình phân li 3 Trội : 1 Lặn khi P là Aa x Aa.",
+      "formulaOrGrammar": "F2 (Aa x Aa): Kiểu gen 1 AA : 2 Aa : 1 aa. Kiểu hình 3 Trội : 1 Lặn.",
+      "commonMistakes": "Nhầm lẫn giữa kiểu gen (AA, Aa, aa) và kiểu hình (hoa tím, hoa trắng)."
+    },
+    "quizzes": [
+      {
+        "question": "Cho hai cây đậu Hà Lan dị hợp tử hoa tím (Aa) tự thụ phấn với nhau. Tỉ lệ kiểu hình phân li ở thế hệ con F2 là bao nhiêu?",
+        "options": ["100% Hoa tím", "3 Hoa tím : 1 Hoa trắng", "1 Hoa tím : 1 Hoa trắng", "9 Hoa tím : 7 Hoa trắng"],
+        "answer": "3 Hoa tím : 1 Hoa trắng",
+        "explanation": "Aa x Aa cho tỉ lệ kiểu gen 1AA : 2Aa : 1aa tương ứng kiểu hình 3 hoa tím : 1 hoa trắng."
+      },
+      {
+        "question": "Bào quan nào trong tế bào thực vật có vai trò quang hợp?",
+        "options": ["Nhân tế bào", "Ty thể", "Lục lạp (Chloroplast)", "Không bào"],
+        "answer": "Lục lạp (Chloroplast)",
+        "explanation": "Lục lạp chứa chất diệp lục hấp thu năng lượng ánh sáng để tổng hợp tinh bột."
+      }
+    ],
+    "relatedSlugs": [
+      "mo-phong-cau-tao-nguyen-tu-hoa-hoc-7",
+      "mo-phong-chuyen-dong-trai-dat-4-mua-ngay-dem-dia-ly-6"
+    ],
+    "updatedAt": "2026-11-20"
+  },
+  {
+    "id": "cs-binary-logic-gates",
+    "slug": "mo-phong-he-nhi-phan-8-bit-mach-cong-logic-tin-hoc-8",
+    "title": "Mô phỏng Hệ nhị phân 8-Bit & Mạch cổng Logic (AND, OR, NOT, XOR) — Tin học 8",
+    "titleEn": "8-Bit Binary Byte Converter & Digital Logic Gates Circuit Simulator - Computer Science Grade 8",
+    "subject": "tin-hoc",
+    "subjectName": "Tin học",
+    "grade": 8,
+    "level": "THCS",
+    "textbooks": ["Kết nối tri thức", "Chân trời sáng tạo", "Cánh diều"],
+    "description": "Thực hành chuyển đổi nhị phân 8-bit sang Thập phân, Hex và ASCII. Đấu nối các cổng logic số AND, OR, NOT, XOR với bóng đèn sáng và bảng chân lý trực quan.",
+    "curriculumCode": "GDPT2018-TIN8-C1",
+    "isImplemented": true,
+    "technology": "canvas2d",
+    "seoContent": {
+      "objective": "Hiểu nguyên lý biểu diễn nhị phân trong máy tính; chuyển đổi giữa hệ nhị phân, thập phân, hex và ASCII; khảo sát nguyên lý hoạt động của các cổng logic số cơ bản.",
+      "variables": [
+        "8 bit nhị phân với trọng số 128, 64, 32, 16, 8, 4, 2, 1",
+        "Chế độ: Chuyển đổi nhị phân hoặc Mạch cổng Logic",
+        "Loại cổng: AND, OR, NOT, XOR, NAND",
+        "Công tắc đầu vào A và B (0 hoặc 1)"
+      ],
+      "phenomenon": "Dữ liệu được số hóa thành bit 0 và 1 tương ứng mức điện áp Low và High. Các cổng logic thực hiện đại số Boole để xử lý tín hiệu.",
+      "formulaOrGrammar": "Chuyển đổi: N = b7*128 + b6*64 + ... + b0*1. Cổng XOR: Y = A xor B (ra 1 khi A != B).",
+      "commonMistakes": "Tính sai thứ tự trọng số các bit hoặc nhầm lẫn giữa cổng OR và cổng XOR."
+    },
+    "quizzes": [
+      {
+        "question": "Dãy 8-bit nhị phân 01000001 tương ứng với giá trị thập phân nào?",
+        "options": ["41", "65", "129", "33"],
+        "answer": "65",
+        "explanation": "64 + 1 = 65, đây là mã ASCII của chữ cái 'A'."
+      },
+      {
+        "question": "Cổng logic nào chỉ cho đầu ra mức 1 khi CẢ HAI đầu vào A và B đồng thời ở mức 1?",
+        "options": ["Cổng OR", "Cổng AND", "Cổng NOT", "Cổng XOR"],
+        "answer": "Cổng AND",
+        "explanation": "Cổng AND (Và) yêu cầu cả hai đầu vào đều bằng 1."
+      }
+    ],
+    "relatedSlugs": [
+      "mo-phong-cau-tao-nguyen-tu-hoa-hoc-7",
+      "mo-phong-chuyen-dong-trai-dat-4-mua-ngay-dem-dia-ly-6"
+    ],
+    "updatedAt": "2026-11-20"
+  },
+  {
+    "id": "geo-earth-rotation-seasons",
+    "slug": "mo-phong-chuyen-dong-trai-dat-4-mua-ngay-dem-dia-ly-6",
+    "title": "Mô phỏng Chuyển động Trái Đất, 4 Mùa & Ngày Đêm Luân Phiên — Địa lý Lớp 6 (GDPT 2018)",
+    "titleEn": "Earth Orbit, 23.5° Tilt, Four Seasons & International Time Zones - Geography Grade 6",
+    "subject": "dia-ly",
+    "subjectName": "Địa lý",
+    "grade": 6,
+    "level": "THCS",
+    "textbooks": ["Kết nối tri thức", "Chân trời sáng tạo", "Cánh diều"],
+    "description": "Mô phỏng Trái Đất tự quay quanh trục nghiêng 23°27′ sinh ra ngày đêm luân phiên và chênh lệch múi giờ. Chuyển động quanh Mặt Trời sinh ra 4 Mùa và hiện tượng ngày đêm dài ngắn.",
+    "curriculumCode": "GDPT2018-DIALY6-C1",
+    "isImplemented": true,
+    "technology": "canvas2d",
+    "seoContent": {
+      "objective": "Giải thích được các hệ quả chuyển động của Trái Đất: tự quay quanh trục sinh ra ngày đêm luân phiên và giờ; chuyển động quanh Mặt Trời với trục nghiêng không đổi sinh ra 4 mùa.",
+      "variables": [
+        "Góc quay quỹ đạo quanh Mặt Trời (0 đến 360 độ)",
+        "Chuyển nhanh đến 4 tiết khí: Hạ chí, Đông chí, Xuân phân, Thu phân",
+        "Góc tự quay quanh trục (0 đến 24 giờ)",
+        "Bật/tắt đường Xích đạo, Chí tuyến và bóng tối"
+      ],
+      "phenomenon": "Trục Trái Đất nghiêng 23°27' không đổi hướng khi quay quanh Mặt Trời làm cho Bắc và Nam bán cầu luân phiên nhận lượng nhiệt khác nhau, sinh ra 4 mùa.",
+      "formulaOrGrammar": "Chu kỳ tự quay: 24 giờ. 24 múi giờ, mỗi múi rộng 15° kinh độ. Giờ Việt Nam: UTC+7.",
+      "commonMistakes": "Lầm tưởng 4 mùa do khoảng cách xa gần Mặt Trời thay đổi, thay vì do trục nghiêng 23.5°."
+    },
+    "quizzes": [
+      {
+        "question": "Vào ngày Hạ chí (22 tháng 6), tia sáng Mặt Trời chiếu vuông góc với mặt đất tại đường vĩ tuyến nào?",
+        "options": ["Đường Xích đạo (0°)", "Chí tuyến Bắc (23°27′ B)", "Chí tuyến Nam (23°27′ N)", "Vòng cực Bắc (66°33′ B)"],
+        "answer": "Chí tuyến Bắc (23°27′ B)",
+        "explanation": "Ngày 22/6 Bắc bán cầu ngả nhiều nhất về phía Mặt Trời, tia sáng vuông góc với Chí tuyến Bắc."
+      },
+      {
+        "question": "Nếu ở Luân Đôn (London - múi giờ gốc GMT+0) đang là 05:00 sáng thì ở Hà Nội (múi giờ GMT+7) đang là mấy giờ?",
+        "options": ["12:00 trưa cùng ngày", "22:00 tối hôm trước", "10:00 sáng cùng ngày", "14:00 chiều cùng ngày"],
+        "answer": "12:00 trưa cùng ngày",
+        "explanation": "05:00 + 7 tiếng = 12:00 trưa cùng ngày."
+      }
+    ],
+    "relatedSlugs": [
+      "mo-phong-cau-tao-nguyen-tu-hoa-hoc-7",
+      "mo-phong-he-nhi-phan-8-bit-mach-cong-logic-tin-hoc-8"
+    ],
+    "updatedAt": "2026-11-20"
+  }
+]

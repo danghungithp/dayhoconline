@@ -10,6 +10,7 @@ import {
   getFilteredSimulations, 
   getCurriculumStats 
 } from '../core/registry/simulationRegistry';
+import { getLabById } from '../data/labsSeoData';
 import { useTheme } from '../core/theme/themeContext';
 import { useLanguage } from '../core/i18n/i18nContext';
 import { 
@@ -549,23 +550,39 @@ export const HomePage: React.FC<HomePageProps> = ({
                     {sim.curriculumCode}
                   </span>
 
-                  {sim.isImplemented ? (
-                    <button
-                      onClick={() => onSelectSimulation(sim.id)}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs shadow-md shadow-cyan-950/20 hover:shadow-cyan-600/30 transition group-hover:scale-105 active:scale-95"
-                    >
-                      <Play className="w-3.5 h-3.5 fill-current" />
-                      <span>{t('card.enterLab')}</span>
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => setModalSim(sim)}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-medium transition"
-                    >
-                      <Info className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
-                      <span>{t('card.objectives')}</span>
-                    </button>
-                  )}
+                  <div className="flex items-center gap-2">
+                    {getLabById(sim.id) && (
+                      <a
+                        href={`/lab/${getLabById(sim.id)!.slug}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          window.history.pushState({}, '', `/lab/${getLabById(sim.id)!.slug}`);
+                          window.dispatchEvent(new PopStateEvent('popstate'));
+                        }}
+                        className="text-[11px] text-cyan-600 dark:text-cyan-400 hover:underline font-semibold"
+                        title="Xem trang chi tiết học thuật & trắc nghiệm chuẩn SEO"
+                      >
+                        Bài học SEO
+                      </a>
+                    )}
+                    {sim.isImplemented ? (
+                      <button
+                        onClick={() => onSelectSimulation(sim.id)}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs shadow-md shadow-cyan-950/20 hover:shadow-cyan-600/30 transition group-hover:scale-105 active:scale-95"
+                      >
+                        <Play className="w-3.5 h-3.5 fill-current" />
+                        <span>{t('card.enterLab')}</span>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => setModalSim(sim)}
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-medium transition"
+                      >
+                        <Info className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
+                        <span>{t('card.objectives')}</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
