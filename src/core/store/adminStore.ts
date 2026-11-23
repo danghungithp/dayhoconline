@@ -343,7 +343,7 @@ export const useAdminStore = create<AdminStoreState>()(
           senderName: 'Hệ thống Đăng Ký Giáo Viên',
           recipients: ['mcpsoftware@gmail.com'],
           subject: `[ĐĂNG KÝ GIÁO VIÊN MỚI] - ${newTeacher.fullName} (${newTeacher.subject})`,
-          content: `Kính gửi Ban Quản Trị Hệ Thống,\n\nHệ thống STEM & English Interactive Lab vừa nhận được đơn đăng ký tài khoản giáo viên mới:\n\n- Họ và tên giáo viên: ${newTeacher.fullName}\n- Email: ${newTeacher.email}\n- Số điện thoại: ${newTeacher.phone}\n- Môn giảng dạy: ${newTeacher.subject}\n- Tên đăng nhập: ${newTeacher.username}\n- Thời gian đăng ký: ${new Date().toLocaleString('vi-VN')}\n\nVui lòng đăng nhập vào mục "Quản trị Users" với tài khoản danghungit để kiểm tra, kích hoạt tài khoản hoặc khóa tài khoản.\n\nTrân trọng,\nSTEM & English Lab System`,
+          content: `Kính gửi Ban Quản Trị Hệ Thống,\n\nHệ thống STEM & English Interactive Lab vừa nhận được đơn đăng ký tài khoản giáo viên mới:\n\n- Họ và tên giáo viên: ${newTeacher.fullName}\n- Email: ${newTeacher.email}\n- Số điện thoại: ${newTeacher.phone}\n- Môn giảng dạy: ${newTeacher.subject}\n- Tên đăng nhập: ${newTeacher.username}\n- Thời gian đăng ký: ${new Date().toLocaleString('vi-VN')}\n\nVui lòng đăng nhập vào mục "Quản trị Users" với tài khoản Quản trị viên để kiểm tra, kích hoạt tài khoản hoặc khóa tài khoản.\n\nTrân trọng,\nSTEM & English Lab System`,
           itemType: 'classroom',
           itemTitle: `Đăng ký GV: ${newTeacher.fullName}`,
         };

@@ -39,8 +39,8 @@ Hệ thống vừa tiếp nhận yêu cầu đăng ký tài khoản Giáo viên 
 --------------------------------------------------------------------------------
 
 HƯỚNG DẪN DÀNH CHO QUẢN TRỊ VIÊN:
-1. Đăng nhập vào hệ thống tại: https://dayhoconlineliart.vercel.app/
-2. Đăng nhập với tài khoản Admin: danghungit
+1. Đăng nhập vào hệ thống tại: https://lab.coffeestockvn.cafe/
+2. Đăng nhập với tài khoản Quản trị viên
 3. Vào tab "Quản Lý Giáo Viên" -> Mục "Yêu cầu đăng ký Giáo viên đang chờ duyệt"
 4. Bấm nút "Kích hoạt tài khoản" để cho phép giáo viên đăng nhập và sử dụng hệ thống.
 
@@ -66,7 +66,7 @@ Hệ Thống Quản Trị STEM & English Lab
         'Môn phụ trách': data.subject,
         'Tên đăng nhập': data.username,
         'Thời gian đăng ký': registeredTime,
-        'Trạng thái': 'Đang chờ Admin danghungit kích hoạt',
+        'Trạng thái': 'Đang chờ Ban Quản Trị kích hoạt',
         'Nội dung thông báo': emailBodyText,
       }),
     });

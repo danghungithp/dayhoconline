@@ -252,7 +252,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
                 <User className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
-                  autoComplete="username"
+                  autoComplete="off"
                   value={username}
                   onChange={e => setUsername(e.target.value)}
                   placeholder="Nhập tên đăng nhập của bạn"
@@ -269,7 +269,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
                 <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  autoComplete="current-password"
+                  autoComplete="new-password"
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   placeholder="Nhập mật khẩu"
@@ -340,7 +340,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
                 </div>
 
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  Thông tin đăng ký của thầy/cô đã được chuyển tiếp đến Ban Quản Trị tại hộp thư: <strong className="text-cyan-400 font-mono">mcpsoftware@gmail.com</strong>. Quản trị viên <strong className="text-white">danghungit</strong> sẽ duyệt kích hoạt tài khoản trong mục Quản trị Users.
+                  Thông tin đăng ký của thầy/cô đã được chuyển tiếp đến Ban Quản Trị tại hộp thư: <strong className="text-cyan-400 font-mono">mcpsoftware@gmail.com</strong>. Quản trị viên hệ thống sẽ duyệt kích hoạt tài khoản trong mục Quản trị Users.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-2 pt-1">

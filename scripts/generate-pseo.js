@@ -13,7 +13,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
-const BASE_URL = 'https://dayhoconlineliart.vercel.app';
+const BASE_URL = 'https://lab.coffeestockvn.cafe';
+const INDEXNOW_KEY = '57a07ea2b7244eb1a47348981f332c91';
 const TODAY = new Date().toISOString().split('T')[0];
 
 // Load labs data
@@ -126,6 +127,13 @@ Sitemap: ${BASE_URL}/sitemap.xml
     fs.writeFileSync(path.join(distDir, 'robots.txt'), content, 'utf-8');
   }
   console.log('✅ Updated robots.txt pointing directly to sitemap.xml.');
+
+  // IndexNow verification key file
+  fs.writeFileSync(path.join(rootDir, 'public', `${INDEXNOW_KEY}.txt`), INDEXNOW_KEY, 'utf-8');
+  if (fs.existsSync(distDir)) {
+    fs.writeFileSync(path.join(distDir, `${INDEXNOW_KEY}.txt`), INDEXNOW_KEY, 'utf-8');
+  }
+  console.log(`✅ Generated IndexNow key file: ${INDEXNOW_KEY}.txt`);
 }
 
 // =========================================================================

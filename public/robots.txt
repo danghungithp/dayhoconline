@@ -6,4 +6,4 @@ Allow: /mon/
 Disallow: /?view=admin
 Disallow: /api/
 
-Sitemap: https://dayhoconlineliart.vercel.app/sitemap.xml
+Sitemap: https://lab.coffeestockvn.cafe/sitemap.xml

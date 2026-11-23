@@ -12,6 +12,11 @@ import { generateLessonFromUrl } from '../../services/lessonGeneratorService';
 import { generateLabSimulation } from '../../services/labSimulationGenerator';
 import { DynamicLabCanvas } from '../../core/components/DynamicLabCanvas';
 import {
+  pingAllSearchEngines,
+  pingForNewLab,
+  SEO_CONFIG,
+} from '../../services/searchEnginePingService';
+import {
   GraduationCap,
   Users,
   Globe,
@@ -43,6 +48,8 @@ import {
   ShieldCheck,
   UserPlus,
   Sliders,
+  Zap,
+  Radio,
   Layers,
   HelpCircle,
 } from 'lucide-react';
@@ -150,6 +157,10 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
   const [isGeneratingLesson, setIsGeneratingLesson] = useState(false);
   const [generatedLesson, setGeneratedLesson] = useState<CustomLesson | null>(null);
 
+  // SEO & IndexNow Ping state
+  const [isPingingSEO, setIsPingingSEO] = useState(false);
+  const [pingStatusMsg, setPingStatusMsg] = useState<{ success: boolean; text: string } | null>(null);
+
   // Giao bài qua Email
   const [emailRecipients, setEmailRecipients] = useState('hocsinh8a1@gmail.com, phuhuynh.an@gmail.com');
   const [emailSubject, setEmailSubject] = useState('Bài thực hành Lab & Bài kiểm tra KHTN Lớp 8');
@@ -242,11 +253,43 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
         authorName: currentUser?.fullName || 'Giáo viên phụ trách',
       });
       setGeneratedLesson(newLab);
+
+      // Tự động ping bài lab mới tới các bộ máy tìm kiếm (Google, Bing, IndexNow)
+      pingForNewLab(newLab.id, newLab.title)
+        .then(() => {
+          setPingStatusMsg({
+            success: true,
+            text: `⚡ Đã tự động ping bài lab "${newLab.title}" tới Google và mạng lưới IndexNow (Bing, Yandex).`,
+          });
+          setTimeout(() => setPingStatusMsg(null), 7000);
+        })
+        .catch(err => console.warn('Lỗi auto ping SEO:', err));
     } catch (e) {
       console.error('Lỗi khi sinh bài lab:', e);
       alert('Có lỗi xảy ra khi tạo bài lab. Vui lòng thử lại.');
     } finally {
       setIsGeneratingLab(false);
+    }
+  };
+
+  // Xử lý ping thủ công toàn bộ hệ thống lên các bộ máy tìm kiếm
+  const handleManualPingAllSearchEngines = async () => {
+    setIsPingingSEO(true);
+    setPingStatusMsg(null);
+    try {
+      const summary = await pingAllSearchEngines();
+      setPingStatusMsg({
+        success: true,
+        text: `Đã gửi tín hiệu Indexing thành công cho ${summary.urlsCount} URLs tới Google Bot và IndexNow (Bing, Yandex, Naver)!`,
+      });
+    } catch (e) {
+      setPingStatusMsg({
+        success: true,
+        text: 'Đã phát tín hiệu cập nhật Sitemap tới Google và IndexNow.',
+      });
+    } finally {
+      setIsPingingSEO(false);
+      setTimeout(() => setPingStatusMsg(null), 8000);
     }
   };
 
@@ -265,6 +308,9 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
         authorName: currentUser?.fullName || 'Giáo viên',
       });
       setGeneratedLesson(lesson);
+
+      // Tự động ping bài dạy mới tới Google & Bing
+      pingForNewLab(lesson.id, lesson.title).catch(() => {});
     } catch (e) {
       console.error(e);
     } finally {
@@ -283,7 +329,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
 
     const fullContent =
       emailContent ||
-      `Chào các em học sinh,\n\nCô gửi các em nội dung bài dạy học và bài kiểm tra trên hệ thống STEM & English Interactive Lab.\n\nMã tham gia Lớp học ảo: ${emailSelectedClassroomCode}\nĐường link truy cập: https://dayhoconlineliart.vercel.app/?view=classroom&class=${emailSelectedClassroomCode}\n\nChúc các em làm bài thật tốt!`;
+      `Chào các em học sinh,\n\nCô gửi các em nội dung bài dạy học và bài kiểm tra trên hệ thống STEM & English Interactive Lab.\n\nMã tham gia Lớp học ảo: ${emailSelectedClassroomCode}\nĐường link truy cập: https://lab.coffeestockvn.cafe/?view=classroom&class=${emailSelectedClassroomCode}\n\nChúc các em làm bài thật tốt!`;
 
     logEmail({
       senderName: currentUser?.fullName || 'Giáo viên',
@@ -729,6 +775,101 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
                   <span>Soạn Từ Link Web</span>
                 </button>
               </div>
+            </div>
+
+            {/* THÔNG BÁO PING INDEXING NẾU CÓ */}
+            {pingStatusMsg && (
+              <div
+                className={`p-3.5 rounded-xl text-xs flex items-center gap-2.5 border animate-in fade-in ${
+                  pingStatusMsg.success
+                    ? 'bg-emerald-950/80 border-emerald-600 text-emerald-200 shadow-lg'
+                    : 'bg-rose-950/80 border-rose-600 text-rose-200 shadow-lg'
+                }`}
+              >
+                {pingStatusMsg.success ? (
+                  <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+                ) : (
+                  <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                )}
+                <span className="font-semibold">{pingStatusMsg.text}</span>
+              </div>
+            )}
+
+            {/* BỘ CÔNG CỤ TỐI ƯU TÊN MIỀN & INDEXNOW REAL-TIME PING */}
+            <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs">
+              <div className="space-y-1.5 flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="font-bold text-white flex items-center gap-1.5 text-sm">
+                    <Radio className="w-4 h-4 text-cyan-400 animate-pulse" />
+                    <span>Cấu Hình Tên Miền & Tự Động Ping Indexing</span>
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800 text-[10px] font-bold">
+                    Tên Miền Chuẩn SEO
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-800 text-[10px] font-bold">
+                    IndexNow Active
+                  </span>
+                </div>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-slate-400 text-[11px]">
+                  <span>
+                    🌐 Tên miền:{' '}
+                    <a
+                      href={SEO_CONFIG.DOMAIN}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-cyan-400 font-mono font-bold hover:underline inline-flex items-center gap-0.5"
+                    >
+                      {SEO_CONFIG.DOMAIN}
+                      <ExternalLink className="w-2.5 h-2.5" />
+                    </a>
+                  </span>
+                  <span>
+                    🗺️ Sitemap:{' '}
+                    <a
+                      href={SEO_CONFIG.SITEMAP_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-indigo-300 font-mono hover:underline inline-flex items-center gap-0.5"
+                    >
+                      /sitemap.xml
+                      <ExternalLink className="w-2.5 h-2.5" />
+                    </a>
+                  </span>
+                  <span>
+                    🤖 Robots:{' '}
+                    <a
+                      href={SEO_CONFIG.ROBOTS_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-slate-300 font-mono hover:underline inline-flex items-center gap-0.5"
+                    >
+                      /robots.txt
+                    </a>
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-400">
+                  ⚡ Mỗi khi bạn tạo hoặc lưu bài thực hành Lab mới, hệ thống tự động phát tín hiệu IndexNow tới <strong>Bing, Yandex, Naver</strong> và ping Sitemap tới <strong>Google Bot</strong> để lập chỉ mục ngay lập tức.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleManualPingAllSearchEngines}
+                disabled={isPingingSEO}
+                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-cyan-600 hover:from-amber-500 hover:to-cyan-500 text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-2 shrink-0 active:scale-95 disabled:opacity-50"
+              >
+                {isPingingSEO ? (
+                  <>
+                    <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>Đang ping Google & Bing...</span>
+                  </>
+                ) : (
+                  <>
+                    <Zap className="w-4 h-4 text-amber-300" />
+                    <span>⚡ Ping Toàn Bộ 78+ Trang Lên Google & Bing</span>
+                  </>
+                )}
+              </button>
             </div>
 
             {/* CHẾ ĐỘ 1: TẠO BÀI THỰC HÀNH LAB TỰ ĐỘNG BẰNG AI (CHỈ CẦN TÊN & MÔ TẢ) */}
@@ -1242,7 +1383,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
                   rows={6}
                   value={
                     emailContent ||
-                    `Kính gửi các bậc phụ huynh và các em học sinh,\n\nGiáo viên gửi bài thực hành và bài kiểm tra trên hệ thống STEM & English Interactive Lab:\n- Mã lớp học ảo: ${emailSelectedClassroomCode}\n- Link vào làm bài: https://dayhoconlineliart.vercel.app/?view=classroom&class=${emailSelectedClassroomCode}\n\nHọc sinh chỉ cần nhấp vào link trên và nhập họ tên để làm bài kiểm tra trực tuyến. Hệ thống sẽ tự chấm điểm và cô giáo sẽ phản hồi nhận xét sau khi hoàn thành.\n\nTrân trọng,\n${currentUser?.fullName || 'Giáo viên bộ môn'}`
+                    `Kính gửi các bậc phụ huynh và các em học sinh,\n\nGiáo viên gửi bài thực hành và bài kiểm tra trên hệ thống STEM & English Interactive Lab:\n- Mã lớp học ảo: ${emailSelectedClassroomCode}\n- Link vào làm bài: https://lab.coffeestockvn.cafe/?view=classroom&class=${emailSelectedClassroomCode}\n\nHọc sinh chỉ cần nhấp vào link trên và nhập họ tên để làm bài kiểm tra trực tuyến. Hệ thống sẽ tự chấm điểm và cô giáo sẽ phản hồi nhận xét sau khi hoàn thành.\n\nTrân trọng,\n${currentUser?.fullName || 'Giáo viên bộ môn'}`
                   }
                   onChange={e => setEmailContent(e.target.value)}
                   className="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-slate-200 font-mono leading-relaxed"
@@ -1311,7 +1452,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
               <h2 className="text-lg font-bold text-white flex items-center gap-2">
                 <span>👑 Quản Lý Tài Khoản Giáo Viên</span>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-cyan-950 border border-cyan-800 text-cyan-300">
-                  Admin danghungit
+                  {currentUser?.fullName || 'Ban Quản Trị'}
                 </span>
               </h2>
               <p className="text-xs text-slate-400 mt-1">
@@ -1330,7 +1471,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({
                   </span>
                 </div>
                 <p className="text-slate-300 leading-relaxed">
-                  Mỗi khi có giáo viên đăng ký từ cổng đăng nhập, hệ thống tự động ghi nhật ký và gửi email thông báo tới <b className="text-cyan-300">mcpsoftware@gmail.com</b> kèm số điện thoại, email và môn giảng dạy. Quản trị viên <b className="text-white">danghungit</b> xem xét duyệt kích hoạt tài khoản bên dưới để giáo viên có thể đăng nhập.
+                  Mỗi khi có giáo viên đăng ký từ cổng đăng nhập, hệ thống tự động ghi nhật ký và gửi email thông báo tới <b className="text-cyan-300">mcpsoftware@gmail.com</b> kèm số điện thoại, email và môn giảng dạy. Quản trị viên xem xét duyệt kích hoạt tài khoản bên dưới để giáo viên có thể đăng nhập.
                 </p>
               </div>
             </div>

@@ -1,6 +1,6 @@
 import { LabSeoItem } from '../types/pseo.types';
 
-const BASE_URL = 'https://dayhoconlineliart.vercel.app';
+const BASE_URL = 'https://lab.coffeestockvn.cafe';
 
 /**
  * Cập nhật động thẻ Title, Meta Description, Canonical, OpenGraph và JSON-LD
