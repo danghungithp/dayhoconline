@@ -11,6 +11,7 @@ import {
   getCurriculumStats 
 } from '../core/registry/simulationRegistry';
 import { getLabById } from '../data/labsSeoData';
+import { Footer } from '../core/components/Footer';
 import { useTheme } from '../core/theme/themeContext';
 import { useLanguage } from '../core/i18n/i18nContext';
 import { 
@@ -589,6 +590,9 @@ export const HomePage: React.FC<HomePageProps> = ({
           </div>
         )}
       </main>
+
+      {/* SEO Footer */}
+      <Footer />
 
       {/* 4. Modal Chi Tiết Mục Tiêu Học Tập GDPT (Đối với các bài đang cập nhật) */}
       {modalSim && (

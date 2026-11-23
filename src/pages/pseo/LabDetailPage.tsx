@@ -4,6 +4,7 @@ import { getLabBySlug, LABS_PSEO_DATA } from '../../data/labsSeoData';
 import { SIMULATION_REGISTRY } from '../../core/registry/simulationRegistry';
 import { updateDocumentMeta, generateLabStructuredData } from '../../utils/seoHelpers';
 import { useTheme } from '../../core/theme/themeContext';
+import { Footer } from '../../core/components/Footer';
 import {
   BookOpen,
   CheckCircle2,
@@ -424,6 +425,9 @@ export const LabDetailPage: React.FC<LabDetailPageProps> = ({
           </aside>
         </section>
       </main>
+
+      {/* SEO Ecosystem Footer */}
+      <Footer />
     </div>
   );
 };

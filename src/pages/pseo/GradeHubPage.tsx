@@ -2,6 +2,7 @@ import React, { useMemo, useEffect } from 'react';
 import { SubjectId, GradeLevel } from '../../types/simulation.types';
 import { SUBJECT_SEO_LIST, getLabsBySubjectAndGrade, getLabsBySubject } from '../../data/labsSeoData';
 import { updateDocumentMeta, generateBreadcrumbSchema } from '../../utils/seoHelpers';
+import { Footer } from '../../core/components/Footer';
 import {
   ChevronRight,
   BookOpen,
@@ -188,6 +189,9 @@ export const GradeHubPage: React.FC<GradeHubPageProps> = ({ subject, grade, onNa
           </div>
         )}
       </main>
+
+      {/* SEO Ecosystem Footer */}
+      <Footer />
     </div>
   );
 };

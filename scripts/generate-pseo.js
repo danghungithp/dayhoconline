@@ -195,6 +195,36 @@ function prerenderPages() {
           acceptedAnswer: { '@type': 'Answer', text: q.answer, comment: q.explanation },
         })),
       },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: `Mục tiêu bài thực hành ${lab.title} là gì?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: lab.seoContent.objective,
+            },
+          },
+          {
+            '@type': 'Question',
+            name: `Bản chất khoa học và hiện tượng chính trong bài này là gì?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: lab.seoContent.phenomenon,
+            },
+          },
+          {
+            '@type': 'Question',
+            name: `Học sinh cần lưu ý những lỗi sai phổ biến nào khi học bài này?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: lab.seoContent.commonMistakes,
+            },
+          },
+        ],
+      },
     ];
 
     // Semantic HTML Content for Googlebot
@@ -268,6 +298,31 @@ function prerenderPages() {
             )
             .join('')}
         </section>
+
+        <footer class="mt-12 pt-8 border-t border-slate-800 text-xs text-slate-400 space-y-4">
+          <div class="flex flex-wrap justify-between items-center gap-4">
+            <div>
+              <span class="font-bold text-white">STEM & English Interactive Lab</span> • Phòng Thí Nghiệm Ảo GDPT 2018 (Lớp 6 - 12)
+            </div>
+            <div class="flex gap-4">
+              <a href="/mon/vat-ly" class="hover:text-cyan-400">Vật lý</a>
+              <a href="/mon/hoa-hoc" class="hover:text-cyan-400">Hóa học</a>
+              <a href="/mon/sinh-hoc" class="hover:text-cyan-400">Sinh học</a>
+              <a href="/mon/khtn" class="hover:text-cyan-400">KHTN</a>
+              <a href="/mon/toan" class="hover:text-cyan-400">Toán học</a>
+              <a href="/mon/tieng-anh" class="hover:text-cyan-400">Tiếng Anh</a>
+            </div>
+          </div>
+          <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 flex items-center justify-between flex-wrap gap-2">
+            <span>🌐 Nền tảng liên kết hệ sinh thái:</span>
+            <a href="https://coffeestockvn.cafe/" target="_blank" rel="noopener" class="text-cyan-400 hover:underline font-semibold flex items-center gap-1">
+              ☕ CoffeeStockVN — Phân tích Kỹ thuật, Toán học định lượng & Dữ liệu Chứng khoán Việt Nam
+            </a>
+          </div>
+          <p class="text-[11px] text-slate-500 text-center">
+            Mô phỏng phục vụ mục đích học tập trực quan bám sát 3 bộ SGK: Kết nối tri thức, Chân trời sáng tạo, Cánh diều.
+          </p>
+        </footer>
       </div>
     `;
 
@@ -331,6 +386,31 @@ function prerenderPages() {
             )
             .join('')}
         </section>
+
+        <footer class="mt-12 pt-8 border-t border-slate-800 text-xs text-slate-400 space-y-4">
+          <div class="flex flex-wrap justify-between items-center gap-4">
+            <div>
+              <span class="font-bold text-white">STEM & English Interactive Lab</span> • Phòng Thí Nghiệm Ảo GDPT 2018 (Lớp 6 - 12)
+            </div>
+            <div class="flex gap-4">
+              <a href="/mon/vat-ly" class="hover:text-cyan-400">Vật lý</a>
+              <a href="/mon/hoa-hoc" class="hover:text-cyan-400">Hóa học</a>
+              <a href="/mon/sinh-hoc" class="hover:text-cyan-400">Sinh học</a>
+              <a href="/mon/khtn" class="hover:text-cyan-400">KHTN</a>
+              <a href="/mon/toan" class="hover:text-cyan-400">Toán học</a>
+              <a href="/mon/tieng-anh" class="hover:text-cyan-400">Tiếng Anh</a>
+            </div>
+          </div>
+          <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 flex items-center justify-between flex-wrap gap-2">
+            <span>🌐 Nền tảng liên kết hệ sinh thái:</span>
+            <a href="https://coffeestockvn.cafe/" target="_blank" rel="noopener" class="text-cyan-400 hover:underline font-semibold flex items-center gap-1">
+              ☕ CoffeeStockVN — Phân tích Kỹ thuật, Toán học định lượng & Dữ liệu Chứng khoán Việt Nam
+            </a>
+          </div>
+          <p class="text-[11px] text-slate-500 text-center">
+            Mô phỏng phục vụ mục đích học tập trực quan bám sát 3 bộ SGK: Kết nối tri thức, Chân trời sáng tạo, Cánh diều.
+          </p>
+        </footer>
       </div>
     `;
 
